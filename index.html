@@ -10838,10 +10838,14 @@ mat-row.eg-lgqhide{display:none!important}
 .eg-lgbar .eg-lgacts{display:flex;align-items:center;gap:8px}
 .eg-lgbar .eg-lgsearch{width:320px;min-width:0;height:40px;box-sizing:border-box}
 .eg-lgbar .eg-lvf{position:relative;display:inline-flex}
-.eg-lgbar .eg-lvf .eg-lvfbtn.eg-lgfbtn{width:auto!important;height:36px!important;padding:0 15px!important;color:rgb(0,105,92)!important;border:1px solid rgb(0,105,92)!important;border-radius:4px;gap:6px}
+.eg-lgbar .eg-lvf .eg-lvfbtn.eg-lgfbtn{width:auto!important;height:40px!important;padding:0 15px!important;color:rgb(0,105,92)!important;border:1px solid rgb(0,105,92)!important;border-radius:4px;gap:6px}
 .eg-lgbar .eg-lvf.on .eg-lvfbtn.eg-lgfbtn{background:rgba(0,105,92,.06)!important;border-radius:4px!important}
 .eg-lgbar .eg-lvf .eg-lvfbtn.eg-lgfbtn .mat-icon{font-size:18px!important;width:18px!important;height:18px!important}
-.eg-lgbar .eg-lvfpop{left:0;right:auto;top:42px}
+.eg-lgbar .eg-lvfpop{left:0;right:auto;top:46px}
+/* Pause / Download: full outlined buttons, as tall as the search field and Filter (40px) */
+.eg-lgbar .eg-lgbtn.eg-lgbtn{height:40px!important;padding:0 15px!important;gap:6px;color:rgb(0,105,92)!important;border:1px solid rgb(0,105,92)!important;border-radius:4px;display:inline-flex!important;align-items:center}
+.eg-lgbar .eg-lgbtn .mat-icon{font-size:18px!important;width:18px!important;height:18px!important;line-height:18px!important}
+html.eg-cvw .eg-lgbar .eg-lgbtn.eg-lgbtn{border-radius:8px!important}
 html.eg-cvw .eg-lgbar :is(.eg-lgfbtn.eg-lgfbtn,.eg-lgsearch,.eg-lvf.on .eg-lvfbtn.eg-lgfbtn){border-radius:8px!important}
 /* the frame takes the height of its content (no blank space under a short notifications list) */
 .eg-pagecard.eg-sidev .eg-sidemain .eg-grid4.eg-grid4>.eg-gridcell.eg-gridcell:has(>.eg-lgtabbed),#egDrawer .eg-grid4.eg-grid4>.eg-gridcell.eg-gridcell:has(>.eg-lgtabbed),.eg-gridcell.eg-gridcell:has(>.eg-lgtabbed){height:auto!important;min-height:0!important}
@@ -11071,7 +11075,8 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
       var bar=document.createElement("div");bar.className="eg-lgbar";
       var la=document.createElement("div");la.className="eg-lgacts eg-lgacts-logs eg-loginl";la.innerHTML=srch("Search logs");
       if(lvf){var ob=lvf.querySelector(".eg-lvfbtn");if(ob)ob.outerHTML=fbtn("Filter by level");la.appendChild(lvf)}
-      la.insertAdjacentHTML("beforeend",'<span class="flex-1"></span>'+ib("pause","pause","Pause live tail")+ib("dl","download","Download logs"));
+      var obtn=function(k,ic,l,t){return '<button class="mdc-button mat-mdc-button-base mdc-button--outlined mat-mdc-outlined-button mat-primary eg-lgbtn" data-lgx="'+k+'" title="'+t+'"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span>'+mi(ic)+'<span class="mdc-button__label">'+l+'</span><span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></button>'};
+      la.insertAdjacentHTML("beforeend",'<span class="flex-1"></span>'+obtn("pause","pause","Pause","Pause live tail")+obtn("dl","download","Download","Download logs"));
       var na=document.createElement("div");na.className="eg-lgacts eg-lgacts-notes eg-loginl";
       na.innerHTML=srch("Search notifications")+'<span class="eg-lvf">'+fbtn("Filter by severity")+'<div class="eg-lvfpop"><div class="eg-lvfpop-t">Severity</div><div class="tb-toggle-header" data-seg><span class="tb-toggle checked" data-ntlv="0">All</span><span class="tb-toggle" data-ntlv="1">Warn+</span><span class="tb-toggle" data-ntlv="2">Error</span></div></div></span>';
       bar.appendChild(la);bar.appendChild(na);ih.parentNode.insertBefore(bar,ih.nextSibling);
@@ -11095,7 +11100,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
     var b=t.closest&&t.closest(".eg-lgacts [data-lgx]");if(!b)return;ev.preventDefault();ev.stopPropagation();var k=b.getAttribute("data-lgx"),acts=b.closest(".eg-lgacts");
     if(k==="search"){if(!acts.querySelector(".eg-lgq"))b.insertAdjacentHTML("afterend",'<label class="eg-lgq">'+mi("search")+'<input placeholder="'+(acts.classList.contains("eg-lgacts-notes")?"Search notifications":"Search logs")+'"><button class="eg-lgqx" type="button" title="Clear">'+mi("close")+'</button></label>');acts.classList.add("eg-lgqon");acts.querySelector(".eg-lgq input").focus();return}
     if(k==="pause"){var pn=acts.closest(".eg-lgtabbed"),p=!pn.classList.contains("eg-paused");pn.classList.toggle("eg-paused",p); /* the live tail skips panels inside .eg-paused: no new lines */
-      b.querySelector(".mat-icon").textContent=p?"play_arrow":"pause";b.title=p?"Resume live tail":"Pause live tail";
+      b.querySelector(".mat-icon").textContent=p?"play_arrow":"pause";b.title=p?"Resume live tail":"Pause live tail";var bl=b.querySelector(".mdc-button__label");if(bl)bl.textContent=p?"Resume":"Pause";
       var lv=pn.querySelector(".eg-lglive .live");if(lv){lv.classList.toggle("eg-lgpaused",p);lv.lastChild.textContent=p?"Paused":"Live"}return}
     if(k==="dl"){var tp2=pane(acts),n=tp2?tp2.querySelectorAll("mat-row").length:0;(window.egToast||function(){})("Downloading "+n+" log lines (.log)");return}
   },true);
