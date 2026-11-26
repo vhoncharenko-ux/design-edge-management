@@ -10834,6 +10834,8 @@ mat-row.eg-lgqhide{display:none!important}
 .eg-lgtabbed .eg-lgpane[data-lgp="notes"] mat-row{cursor:default}
 :is(#egDrawer,.eg-pagecard) .eg-lgtabbed .eg-lgpane.eg-lgpane[data-lgp="notes"] mat-row.mat-mdc-row{min-height:36px!important;height:36px!important}
 .eg-lgtabbed .eg-lgpane[data-lgp="notes"] mat-header-row.mat-mdc-header-row{min-height:36px!important;height:36px!important}
+/* chart legend: lines and failures in one row (no forced break before the failure chips) */
+.eg-dotlegend .eg-legbr{display:none!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -10915,7 +10917,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
 <script id="pd-fx25-js">
-/* 26.11 charts: a series sweeps in from the left edge to the right when it appears (data loaded, legend chip on) and sweeps out the same way when it is turned off */
+/* 26.11 charts: a series sweeps in from the left edge to the right when it appears (data loaded, legend chip on); turned off, it disappears at once */
 (function(){var D=700,E="cubic-bezier(.4,0,.2,1)";
   function sweepIn(el){try{if(el.tagName.toLowerCase()==="rect"){el.animate([{opacity:0},{opacity:1}],{duration:D,easing:E});return}
     el.animate([{clipPath:"inset(-20px 100% -20px 0)"},{clipPath:"inset(-20px 0 -20px 0)"}],{duration:D,easing:E})}catch(e){}}
@@ -10925,7 +10927,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
   window.egChartIn=function(w){[].forEach.call(w.querySelectorAll("svg [data-s]"),sweepIn)};
   document.addEventListener("click",function(ev){var it=ev.target.closest&&ev.target.closest(".eg-lgt[data-xs],.eg-lgt[data-s]");if(!it)return;var pn=it.closest(".tb-form-panel");if(!pn)return;
     var xs=it.hasAttribute("data-xs"),k=it.getAttribute(xs?"data-xs":"data-s"),cls=(xs?"eg-xoff-":"eg-off-")+k,was=pn.classList.contains(cls);
-    setTimeout(function(){var now=pn.classList.contains(cls);if(now===was)return;[].forEach.call(pn.querySelectorAll('svg [data-s="'+k+'"]'),now?sweepOut:sweepIn)},0)},true);
+    setTimeout(function(){var now=pn.classList.contains(cls);if(now===was)return;if(!now)[].forEach.call(pn.querySelectorAll('svg [data-s="'+k+'"]'),sweepIn) /* turned off: gone at once, no animation */},0)},true);
 })();
 </script>
 <script id="pd-fx23-js">
