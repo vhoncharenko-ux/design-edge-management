@@ -10869,6 +10869,12 @@ html.eg-cvw .eg-screen.on .eg-chframe.eg-chframe :is(.eg-chsec-h,.eg-substack,.e
 /* …and the chart section between the dividers gets one even side inset, title included */
 html.eg-cvw .eg-screen.on .tb-form-panel.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe{padding-left:12px!important;padding-right:12px!important}
 html.eg-cvw .eg-ent.eg-ent{border-radius:12px!important}
+/* style 2: dialogs follow the same corners — 12px frame, 8px for buttons, fields, info boxes and code blocks inside */
+html.eg-cvw .eg-dlg.eg-dlg{border-radius:12px!important;overflow:hidden}
+html.eg-cvw .eg-dlg :is(.mdc-button:not(.mdc-icon-button),.mdc-button .mat-mdc-button-persistent-ripple,.eg-iinfo,.eg-ifield,.eg-console,.eg-ofield,.eg-icode,pre){border-radius:8px!important}
+html.eg-cvw .eg-dlg .mdc-notched-outline__leading{border-radius:8px 0 0 8px!important;width:12px!important}
+html.eg-cvw .eg-dlg .mdc-notched-outline__trailing{border-radius:0 8px 8px 0!important}
+html.eg-cvw .eg-console{border-radius:8px!important}
 /* style 2: buttons in empty states (Install with Agent / Link to an existing agent app) — same 8px corners as the action row */
 html.eg-cvw .eg-empty .acts .mdc-button.mdc-button,html.eg-cvw .eg-empty .acts .mat-mdc-button-base.mat-mdc-button-base{border-radius:8px!important}
 html.eg-cvw .eg-empty .acts .mdc-button .mat-mdc-button-persistent-ripple{border-radius:8px!important}
