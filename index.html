@@ -10861,8 +10861,13 @@ mat-row.eg-lgqhide{display:none!important}
 .pd .pd-vis button:hover{color:#fff;background:rgba(255,255,255,.08)}
 .pd .pd-vis button.on{background:#f2f2f3;color:rgb(28,29,32)}
 .pd.folded .pd-vis{display:none}
-/* style 2 (white canvas) with 8px corners */
-html.eg-cvw.eg-r8 .tb-form-panel.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe,html.eg-cvw.eg-r8 #egDrawer .tb-form-panel.eg-chframe.eg-chframe.eg-chframe.eg-chframe,html.eg-cvw.eg-r8 .eg-actbell.eg-actbell>.eg-gridcell.eg-gridlogs.eg-gridlogs.eg-gridlogs,html.eg-cvw.eg-r8 .eg-pagecard.eg-pagecard aside.eg-sidecol.eg-sidecol,html.eg-cvw.eg-r8 .eg-pagecard .eg-detcards.eg-detcards{border-radius:8px!important}
+/* style 2 (white canvas): 12px corners (S.rad follows the style), pill buttons, charts split by dividers instead of frames,
+   grey canvas back on the other tabs (Manage entities, Attributes …) where the content sits in its own frame */
+html.eg-cvw .eg-genacts .eg-ga.eg-ga{border-radius:18px}
+html.eg-cvw .eg-ent.eg-ent{border-radius:12px!important}
+html.eg-cvw .eg-screen.on .tb-form-panel.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe{border:0!important;border-top:1px solid rgba(0,0,0,.12)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding-left:0!important;padding-right:0!important}
+html.eg-cvw .tb-workarea:has(.eg-screen.on .eg-tabph:not([style*="none"])){background:rgb(247,247,248)!important}
+html.eg-cvw .eg-screen.on .eg-pagecard:has(.eg-tabph:not([style*="none"])),html.eg-cvw .eg-screen.on .eg-pagecard:has(.eg-tabph:not([style*="none"])) :is(.eg-pagecol,.tb-page-body,.tb-entity-table-content){background:transparent!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -10949,7 +10954,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
   function mark(){var v=(window.egS&&egS().cvs)||"grey";[].forEach.call(document.querySelectorAll("#pdVis [data-vis]"),function(b){b.classList.toggle("on",b.getAttribute("data-vis")===v)});
     document.documentElement.classList.toggle("eg-cvw",v==="white")}
   document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("#pdVis [data-vis]");if(!b)return;ev.preventDefault();ev.stopPropagation();
-    egS().cvs=b.getAttribute("data-vis");egSave();mark();egShow();(window.egRenderControls||function(){})()},true);
+    egS().cvs=b.getAttribute("data-vis");egS().rad=egS().cvs==="white"?"12":"8"; /* style 2: 12px corners, style 1: 8px */egSave();mark();egShow();(window.egRenderControls||function(){})()},true);
   /* sits at the bottom-left of the content area, clear of the platform navigation (follows its open / collapsed width) */
   function pos(){var el=document.getElementById("pdVis"),m=document.querySelector(".tb-main");if(!el||!m)return;el.style.left=(Math.round(m.getBoundingClientRect().left)+16)+"px"}
   try{new ResizeObserver(pos).observe(document.querySelector(".tb-main"))}catch(e){}addEventListener("resize",pos);
