@@ -10821,6 +10821,19 @@ html.eg-r8 :is(#egDrawer,.eg-pagecard.eg-pagecard.eg-pagecard) .eg-lnbar.eg-lnba
 mat-row.eg-lgqhide{display:none!important}
 .live.eg-lgpaused{background:rgba(0,0,0,.08)!important;color:rgba(0,0,0,.76)!important}
 .live.eg-lgpaused i{background:rgba(0,0,0,.38)!important;animation:none!important}
+/* Logs "In the table": tabs in the logs frame header, tools of the active tab on the right */
+.eg-lgtabbed>.eg-inhdr{min-height:48px;padding-top:0!important;padding-bottom:0!important;align-items:stretch!important}
+.eg-lgtabbed>.eg-inhdr>.eg-panel-acts{align-self:center}
+.eg-lgtabs{display:flex;align-self:stretch;margin-left:-16px}
+.eg-lgtabs>a.mdc-tab{height:48px;padding:0 24px;flex:none;cursor:pointer}
+.eg-lgtabs .eg-lgtn{display:inline-block;min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;margin-left:8px;border-radius:10px;background:rgba(0,0,0,.08);font:500 12px/20px Roboto,sans-serif;color:rgba(0,0,0,.76);text-align:center}
+.eg-lgtabbed[data-cur="logs"] [data-lgp="notes"],.eg-lgtabbed[data-cur="notes"] [data-lgp="logs"],.eg-lgtabbed[data-cur="logs"] .eg-lgacts-notes,.eg-lgtabbed[data-cur="notes"] .eg-lgacts-logs{display:none!important}
+.eg-lglive{display:inline-flex;align-items:center;gap:4px}
+.eg-lglive .live{margin-right:4px}
+.eg-lgtabbed-g>.eg-gridcell:not(.eg-gridlogs),.eg-lgtabbed-g .eg-actnote{display:none!important}
+.eg-lgtabbed .eg-lgpane[data-lgp="notes"] mat-row{cursor:default}
+:is(#egDrawer,.eg-pagecard) .eg-lgtabbed .eg-lgpane.eg-lgpane[data-lgp="notes"] mat-row.mat-mdc-row{min-height:36px!important;height:36px!important}
+.eg-lgtabbed .eg-lgpane[data-lgp="notes"] mat-header-row.mat-mdc-header-row{min-height:36px!important;height:36px!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -10901,33 +10914,72 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
+<script id="pd-fx25-js">
+/* 26.11 charts: a series sweeps in from the left edge to the right when it appears (data loaded, legend chip on) and sweeps out the same way when it is turned off */
+(function(){var D=700,E="cubic-bezier(.4,0,.2,1)";
+  function sweepIn(el){try{if(el.tagName.toLowerCase()==="rect"){el.animate([{opacity:0},{opacity:1}],{duration:D,easing:E});return}
+    el.animate([{clipPath:"inset(-20px 100% -20px 0)"},{clipPath:"inset(-20px 0 -20px 0)"}],{duration:D,easing:E})}catch(e){}}
+  function sweepOut(el){try{el.style.setProperty("display","inline","important");
+    var a=el.tagName.toLowerCase()==="rect"?el.animate([{opacity:1},{opacity:0}],{duration:D*.6,easing:E}):el.animate([{clipPath:"inset(-20px 0 -20px 0)"},{clipPath:"inset(-20px 0 -20px 100%)"}],{duration:D,easing:E});
+    a.onfinish=a.oncancel=function(){el.style.removeProperty("display")}}catch(e){el.style.removeProperty("display")}}
+  window.egChartIn=function(w){[].forEach.call(w.querySelectorAll("svg [data-s]"),sweepIn)};
+  document.addEventListener("click",function(ev){var it=ev.target.closest&&ev.target.closest(".eg-lgt[data-xs],.eg-lgt[data-s]");if(!it)return;var pn=it.closest(".tb-form-panel");if(!pn)return;
+    var xs=it.hasAttribute("data-xs"),k=it.getAttribute(xs?"data-xs":"data-s"),cls=(xs?"eg-xoff-":"eg-off-")+k,was=pn.classList.contains(cls);
+    setTimeout(function(){var now=pn.classList.contains(cls);if(now===was)return;[].forEach.call(pn.querySelectorAll('svg [data-s="'+k+'"]'),now?sweepOut:sweepIn)},0)},true);
+})();
+</script>
 <script id="pd-fx23-js">
-/* 26.11 Logs variant: "Viewer page" (default, Open log viewer opens a separate page) or "In the table" (the viewer's tools in the Overview logs table) */
+/* 26.11 Logs variant: "Viewer page" (default: Open log viewer opens a separate page) or "In the table":
+   Activity is one frame with tabs Application logs | Notifications; the header row holds the tools of the active tab —
+   search, filter (level / severity switches inside), live status, pause (stops new lines) and download */
 (function(){
   var mi=function(n){return '<mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">'+n+'</mat-icon>'};
   var ib=function(k,ic,t){return '<button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base eg-lgx mat-unthemed" data-lgx="'+k+'" title="'+t+'"><span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>'+mi(ic)+'<span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></button>'};
+  var tab=function(k,l,on){return '<a class="mdc-tab mat-mdc-tab-link mat-mdc-focus-indicator'+(on?' mdc-tab--active':'')+'" data-lgt="'+k+'"><span class="mdc-tab__content"><span class="mdc-tab__text-label">'+l+'</span></span><span class="mdc-tab-indicator'+(on?' mdc-tab-indicator--active':'')+'"><span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span></span></a>'};
+  var CUR="logs";
   function mode(){return (window.egS&&egS().logv)||"page"}
-  function scope(el){return el.closest(".eg-grid4,.eg-vc2,.tb-form-panel")||el.parentElement}
-  function table(el){var sc=scope(el);return sc&&sc.querySelector(".eg-logtable:not(.eg-lvtable)")}
-  function live(el){var sc=scope(el);return sc&&sc.querySelector(".live")}
+  function setTab(pn,k){CUR=k;pn.setAttribute("data-cur",k);[].forEach.call(pn.querySelectorAll(".eg-lgtabs>a"),function(a){var on=a.getAttribute("data-lgt")===k;a.classList.toggle("mdc-tab--active",on);a.querySelector(".mdc-tab-indicator").classList.toggle("mdc-tab-indicator--active",on)})}
   window.egLogDecor=function(){var on=mode()==="inline";
     var seg=document.getElementById("pdLogSeg");if(seg)[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-logv")===mode())});
-    [].forEach.call(document.querySelectorAll(".eg-logviewer"),function(v){var acts=v.parentElement;if(!acts||v.closest(".eg-subpage"))return;
-      if(!on){acts.classList.remove("eg-loginl","eg-lgqon");[].forEach.call(acts.querySelectorAll("[data-lgx],.eg-lgq"),function(x){x.remove()});return}
-      if(acts.classList.contains("eg-loginl"))return;acts.classList.add("eg-loginl");
-      v.insertAdjacentHTML("beforebegin",ib("search","search","Search logs")+ib("pause","pause","Pause live tail")+ib("dl","download","Download logs"))})};
-  function filter(acts){var i=acts.querySelector(".eg-lgq input"),q=i?i.value.trim().toLowerCase():"",t=table(acts);if(!t)return;
+    if(!on)return;
+    [].forEach.call(document.querySelectorAll(".eg-grid4"),function(g){
+      var lc=g.querySelector(":scope>.eg-gridcell.eg-gridlogs"),pn=lc&&lc.querySelector(":scope>.tb-form-panel"),ih=pn&&pn.querySelector(":scope>.eg-inhdr");
+      if(!ih||pn.getAttribute("data-lgtab"))return;pn.setAttribute("data-lgtab","1");
+      var ttl=ih.querySelector(".t"),lv=ih.querySelector(".live"),pa=ih.querySelector(".eg-panel-acts"),lt=pn.querySelector(".eg-subtable.eg-logtable"),meta=pn.querySelector(".eg-logmeta");
+      var nc=g.querySelector(":scope>.eg-gridcell:not(.eg-gridlogs)"),nt=nc&&nc.querySelector(".eg-subtable"),nN=nt?nt.querySelectorAll("mat-row").length:0;
+      var nav=document.createElement("nav");nav.className="eg-lgtabs mat-mdc-tab-nav-bar mat-mdc-tab-header mat-primary";nav.innerHTML=tab("logs","Application logs",CUR==="logs")+tab("notes",'Notifications'+(nN?'<span class="eg-lgtn">'+nN+'</span>':''),CUR==="notes");
+      if(ttl)ih.replaceChild(nav,ttl);else ih.insertBefore(nav,ih.firstChild);
+      if(pa){pa.classList.add("eg-loginl","eg-lgacts","eg-lgacts-logs");pa.insertAdjacentHTML("afterbegin",ib("search","search","Search logs"));
+        var lvf=pa.querySelector(".eg-lvf"),anchor=lvf||pa.querySelector("[data-lgx=search]");
+        var tail=document.createElement("span");tail.className="eg-lglive";if(lv)tail.appendChild(lv);tail.insertAdjacentHTML("beforeend",ib("pause","pause","Pause live tail")+ib("dl","download","Download logs"));
+        anchor.parentNode.insertBefore(tail,anchor.nextSibling)}
+      var na=document.createElement("span");na.className="eg-panel-acts eg-loginl eg-lgacts eg-lgacts-notes";
+      na.innerHTML=ib("search","search","Search notifications")+'<span class="eg-lvf"><button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base eg-lvfbtn mat-unthemed" title="Filter by severity"><span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>'+mi("filter_list")+'<i class="eg-lvfdot"></i><span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></button><div class="eg-lvfpop"><div class="eg-lvfpop-t">Severity</div><div class="tb-toggle-header" data-seg><span class="tb-toggle checked" data-ntlv="0">All</span><span class="tb-toggle" data-ntlv="1">Warn+</span><span class="tb-toggle" data-ntlv="2">Error</span></div></div></span>';
+      if(pa)pa.parentNode.insertBefore(na,pa.nextSibling);else ih.appendChild(na);
+      if(lt){lt.classList.add("eg-lgpane");lt.setAttribute("data-lgp","logs")}if(meta){meta.classList.add("eg-lgpane");meta.setAttribute("data-lgp","logs")}
+      if(nt){nt.classList.add("eg-lgpane");nt.setAttribute("data-lgp","notes");pn.appendChild(nt)}
+      pn.classList.add("eg-lgtabbed");g.classList.add("eg-lgtabbed-g");setTab(pn,CUR)})};
+  function pane(acts){var pn=acts.closest(".eg-lgtabbed");return pn&&pn.querySelector('.eg-lgpane.eg-subtable[data-lgp="'+(acts.classList.contains("eg-lgacts-notes")?"notes":"logs")+'"]')}
+  function filter(acts){var i=acts.querySelector(".eg-lgq input"),q=i?i.value.trim().toLowerCase():"",t=pane(acts);if(!t)return;
     [].forEach.call(t.querySelectorAll("mat-row"),function(r){r.classList.toggle("eg-lgqhide",!!q&&r.textContent.toLowerCase().indexOf(q)<0)})}
+  /* the logs frame header (.eg-inhdr) is built by another observer after the render: build the tabs once it is there */
+  var dT=0;new MutationObserver(function(){if(mode()!=="inline")return;clearTimeout(dT);dT=setTimeout(function(){try{window.egLogDecor()}catch(e){}},0)}).observe(document.body,{childList:true,subtree:true});
+  /* new lines keep the search applied */
+  new MutationObserver(function(){[].forEach.call(document.querySelectorAll(".eg-lgacts .eg-lgq input"),function(i){if(i.value.trim())filter(i.closest(".eg-lgacts"))})}).observe(document.body,{childList:true,subtree:true});
   document.addEventListener("click",function(ev){var t=ev.target;
-    var sg=t.closest&&t.closest("[data-logv]");if(sg){ev.preventDefault();ev.stopPropagation();egS().logv=sg.getAttribute("data-logv");egSave();window.egLogDecor();return}
-    var x=t.closest&&t.closest(".eg-lgqx");if(x){ev.stopPropagation();var a=x.closest(".eg-loginl"),q=x.closest(".eg-lgq");q.remove();a.classList.remove("eg-lgqon");filter(a);return}
-    var b=t.closest&&t.closest(".eg-loginl [data-lgx]");if(!b)return;ev.preventDefault();ev.stopPropagation();var k=b.getAttribute("data-lgx"),acts=b.closest(".eg-loginl");
-    if(k==="search"){if(!acts.querySelector(".eg-lgq"))acts.insertAdjacentHTML("afterbegin",'<label class="eg-lgq">'+mi("search")+'<input placeholder="Search logs"><button class="eg-lgqx" type="button" title="Clear">'+mi("close")+'</button></label>');acts.classList.add("eg-lgqon");acts.querySelector(".eg-lgq input").focus();return}
-    if(k==="pause"){var p=!b.classList.contains("eg-lgp");b.classList.toggle("eg-lgp",p);b.querySelector(".mat-icon").textContent=p?"play_arrow":"pause";b.title=p?"Resume live tail":"Pause live tail";
-      var lv=live(acts);if(lv){lv.classList.toggle("eg-lgpaused",p);lv.lastChild.textContent=p?"Paused":"Live"}return}
-    if(k==="dl"){var tb=table(acts),n=tb?tb.querySelectorAll("mat-row").length:0;(window.egToast||function(){})("Downloading "+n+" log lines (.log)");return}
+    var sg=t.closest&&t.closest("[data-logv]");if(sg){ev.preventDefault();ev.stopPropagation();egS().logv=sg.getAttribute("data-logv");egSave();egShow();return}
+    var tb=t.closest&&t.closest(".eg-lgtabs>a[data-lgt]");if(tb){ev.preventDefault();ev.stopPropagation();setTab(tb.closest(".eg-lgtabbed"),tb.getAttribute("data-lgt"));return}
+    var nf=t.closest&&t.closest(".eg-lgacts-notes [data-ntlv]");if(nf){ev.stopPropagation();var w=nf.closest(".eg-lvf"),min=+nf.getAttribute("data-ntlv");[].forEach.call(w.querySelectorAll("[data-ntlv]"),function(x){x.classList.toggle("checked",x===nf)});w.classList.toggle("flt",min>0);
+      var tp=pane(nf.closest(".eg-lgacts"));if(tp)[].forEach.call(tp.querySelectorAll("mat-row"),function(r){var l=r.querySelector(".eg-loglv"),sv=l?(l.classList.contains("err")?2:l.classList.contains("warn")?1:0):0;r.style.display=sv>=min?"":"none"});return}
+    var x=t.closest&&t.closest(".eg-lgqx");if(x){ev.stopPropagation();var a=x.closest(".eg-lgacts");x.closest(".eg-lgq").remove();a.classList.remove("eg-lgqon");filter(a);return}
+    var b=t.closest&&t.closest(".eg-lgacts [data-lgx]");if(!b)return;ev.preventDefault();ev.stopPropagation();var k=b.getAttribute("data-lgx"),acts=b.closest(".eg-lgacts");
+    if(k==="search"){if(!acts.querySelector(".eg-lgq"))b.insertAdjacentHTML("afterend",'<label class="eg-lgq">'+mi("search")+'<input placeholder="'+(acts.classList.contains("eg-lgacts-notes")?"Search notifications":"Search logs")+'"><button class="eg-lgqx" type="button" title="Clear">'+mi("close")+'</button></label>');acts.classList.add("eg-lgqon");acts.querySelector(".eg-lgq input").focus();return}
+    if(k==="pause"){var pn=acts.closest(".eg-lgtabbed"),p=!pn.classList.contains("eg-paused");pn.classList.toggle("eg-paused",p); /* the live tail skips panels inside .eg-paused: no new lines */
+      b.querySelector(".mat-icon").textContent=p?"play_arrow":"pause";b.title=p?"Resume live tail":"Pause live tail";
+      var lv=acts.querySelector(".live");if(lv){lv.classList.toggle("eg-lgpaused",p);lv.lastChild.textContent=p?"Paused":"Live"}return}
+    if(k==="dl"){var tp2=pane(acts),n=tp2?tp2.querySelectorAll("mat-row").length:0;(window.egToast||function(){})("Downloading "+n+" log lines (.log)");return}
   },true);
-  document.addEventListener("input",function(ev){var i=ev.target.closest&&ev.target.closest(".eg-lgq input");if(i)filter(i.closest(".eg-loginl"))});
+  document.addEventListener("input",function(ev){var i=ev.target.closest&&ev.target.closest(".eg-lgq input");if(i)filter(i.closest(".eg-lgacts"))});
   document.addEventListener("keydown",function(ev){var i=ev.target.closest&&ev.target.closest(".eg-lgq input");if(i&&ev.key==="Escape"){var x=i.parentElement.querySelector(".eg-lgqx");if(x)x.click()}});
   try{window.egLogDecor()}catch(e){}
 })();
@@ -10983,7 +11035,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
   function load(){stop();W(host()).forEach(function(w){w.__egDone=0});var mark=function(){W(host()).forEach(function(w){if(!w.__egDone)w.classList.add("eg-wl")})};
     mark();Q.push(setTimeout(mark,30)); /* charts are redrawn to fit right after a render: mark the new nodes too */
     W(host()).forEach(function(w0,k){var dl=250+Math.round(Math.random()*1600);
-      Q.push(setTimeout(function(){var w=W(host())[k];if(w){w.__egDone=1;w.classList.remove("eg-wl","loading")}},dl))})}
+      Q.push(setTimeout(function(){var w=W(host())[k];if(w){w.__egDone=1;w.classList.remove("eg-wl","loading");if(w.classList.contains("eg-chartwrap")&&window.egChartIn)window.egChartIn(w)}},dl))})}
   window.egWidgetsLoad=load;
   /* edge page / panel opened (or another edge): load its widgets */
   window.egOpenLoad=function(){var S=window.egS&&egS();if(!S)return;var h=host(),key=h&&W(h).length?[S.screen,S.edge,S.peek,S.dv,S.vm,S.om].join("|"):"";
