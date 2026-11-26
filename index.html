@@ -8392,7 +8392,7 @@ var SCREENS={
 var DEF={scn:"fleet",screen:"list",dash:"metric",rad:"8",warn:"accent",ovp:"tab",v:{list:"T",status:"L",details:"D"},designer:0,size:"full",insp:"",fold:0,pw:0,vm:"comb",om:"full",dw:"new",ofl:"banner",gi:"side",ovf:"page",hint:{}}; /* 24.11: dw = side panel in Combined (new: details only, dashboard on the full page); ofl = inactive edge shows one Offline message */ /* 24.11 defaults: list Q, Combined + Full screen; the Screens page is not in the dock any more */
 var KEEPV={list:["M","O","P","Q","T"],status:[],cold:["L"],details:[]}; /* Edge overview / Edge details: no variants any more — the Views and Open as switches */
 Object.keys(SCREENS).forEach(function(k){var keep=KEEPV[k]||[];Object.keys(SCREENS[k].variants).forEach(function(v){if(keep.indexOf(v)<0)SCREENS[k].variants[v].hid=1})});
-var S=load();S.v=S.v||{};if(!S.rad8){S.rad="8";S.rad8=1} /* 26.11: 8px corners are the default (once, also for saved states) */if(!S.warn){S.warn=S.v.list==="R"?"orange":(S.v.list==="S"||S.v.list==="U")?"accent":"accent"}if(S.v.list==="R"||S.v.list==="S")S.v.list="Q";if(S.v.list==="U")S.v.list="T"; /* colour variants became the Warning switch */if(KEEPV.list.indexOf(S.v.list)<0)S.v.list="T";S.pw=0;egModes();
+var S=load();S.v=S.v||{};if(!S.rad8){S.rad="8";S.rad8=1}if(!S.logv1){S.logv="inline";S.logv1=1} /* 26.11: Logs "In the table" is the default */ /* 26.11: 8px corners are the default (once, also for saved states) */if(!S.warn){S.warn=S.v.list==="R"?"orange":(S.v.list==="S"||S.v.list==="U")?"accent":"accent"}if(S.v.list==="R"||S.v.list==="S")S.v.list="Q";if(S.v.list==="U")S.v.list="T"; /* colour variants became the Warning switch */if(KEEPV.list.indexOf(S.v.list)<0)S.v.list="T";S.pw=0;egModes();
 function load(){try{var j=JSON.parse(localStorage.getItem("edges-proto-v10")||"null");if(j)return Object.assign(clone(DEF),j)}catch(e){}return clone(DEF)}
 function save(){try{localStorage.setItem("edges-proto-v10",JSON.stringify(S))}catch(e){}}
 function clone(o){return JSON.parse(JSON.stringify(o))}
@@ -10939,7 +10939,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
   var ib=function(k,ic,t){return '<button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base eg-lgx mat-unthemed" data-lgx="'+k+'" title="'+t+'"><span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>'+mi(ic)+'<span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></button>'};
   var tab=function(k,l,on){return '<a class="mdc-tab mat-mdc-tab-link mat-mdc-focus-indicator'+(on?' mdc-tab--active':'')+'" data-lgt="'+k+'"><span class="mdc-tab__content"><span class="mdc-tab__text-label">'+l+'</span></span><span class="mdc-tab-indicator'+(on?' mdc-tab-indicator--active':'')+'"><span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span></span></a>'};
   var CUR="logs";
-  function mode(){return (window.egS&&egS().logv)||"page"}
+  function mode(){return (window.egS&&egS().logv)||"inline"}
   function setTab(pn,k){CUR=k;pn.setAttribute("data-cur",k);[].forEach.call(pn.querySelectorAll(".eg-lgtabs>a"),function(a){var on=a.getAttribute("data-lgt")===k;a.classList.toggle("mdc-tab--active",on);a.querySelector(".mdc-tab-indicator").classList.toggle("mdc-tab-indicator--active",on)})}
   window.egLogDecor=function(){var on=mode()==="inline";
     var seg=document.getElementById("pdLogSeg");if(seg)[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-logv")===mode())});
