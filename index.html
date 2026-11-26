@@ -10010,6 +10010,8 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 .eg-fcard.eg-editing .eg-frow:not(.eg-frow-ed){display:none!important}
 .eg-fcard.eg-editing{display:flex!important;flex-direction:column;box-sizing:border-box}
 .eg-fcard.eg-editing .eg-genacts{margin-top:auto}
+/* the title row keeps its height: the edit button is hidden, not removed */
+.eg-fcard.eg-editing .eg-fcard-t .eg-genedit{display:inline-flex!important;visibility:hidden}
 .eg-fcard .eg-genacts{padding:8px 16px 8px 0!important}
 .eg-frow.eg-frow.eg-frow-ed{padding-top:4px!important;padding-bottom:4px!important}
 /* inline edit inputs: 48px high */
