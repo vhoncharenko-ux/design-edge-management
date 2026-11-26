@@ -10837,7 +10837,7 @@ mat-row.eg-lgqhide{display:none!important}
 /* chart legend: lines and failures in one row (no forced break before the failure chips) */
 .eg-dotlegend .eg-legbr{display:none!important}
 /* "added" series (queued, not yet pushed): fine dotted line, the legend swatch dotted too */
-.eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:0 5;stroke-linecap:round;stroke-width:3px}
+.eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:0 4;stroke-linecap:round;stroke-width:2px} /* same width as the pushed line: hidden where the two overlap */
 /* dots in the solid color of their direction (same as pushed) */
 .eg-chart polyline[data-s="upa"],.eg-chart polyline[data-s="added"]{stroke:#00695c}
 .eg-chart polyline[data-s="downa"]{stroke:#4b8de8}
