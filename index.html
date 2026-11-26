@@ -9372,7 +9372,7 @@ function fill(root,parts){
    ROUTING
    ================================================================ */
 var main=$(".tb-main");
-function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
+function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor,window.egActDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
 function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
   var sc=S.screen;
   $("#pdStart").classList.toggle("open",sc==="start");
@@ -10787,6 +10787,39 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 /* 26.11 sort arrow next to "Created time": centred on the text line, 16px (it sat on the baseline at 24px) */
 .eg-entmain mat-header-row>:nth-child(2) .mat-icon{font-size:16px!important;width:16px!important;height:16px!important;line-height:16px!important;vertical-align:middle!important;margin:-3px 0 0 4px!important;color:rgba(0,0,0,.54)}
 </style>
+<style id="pd-fx19">
+/* 26.11 edge page: all edge actions sit in one row above General (light outlined buttons); the header keeps only the tabs */
+.eg-genacts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;justify-content:flex-start!important;align-self:stretch}
+.eg-genacts .eg-ga{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;box-sizing:border-box;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;color:rgba(0,0,0,.87);font:500 14px/20px Roboto,sans-serif;letter-spacing:.1px;cursor:pointer;white-space:nowrap}
+.eg-genacts .eg-ga:hover{background:rgba(0,0,0,.04)}
+.eg-genacts .eg-ga:active{background:rgba(0,0,0,.08)}
+.eg-genacts .eg-ga .mat-icon{font-size:18px;width:18px;height:18px;line-height:18px;color:rgba(0,0,0,.6)}
+.eg-genacts .eg-ga .mat-icon.dd{margin:0 -6px 0 -2px}
+.eg-genacts .eg-ga.icon{width:32px;padding:0;justify-content:center}
+.eg-genacts .eg-ga.eg-copydd.eg-copydd{display:inline-flex!important}
+.eg-pagecol:has(.eg-genacts) :is(.eg-tabsend,header) :is(.eg-hdracts,.eg-hdrmore){display:none!important}
+.eg-sidelay>.eg-sidewrap{display:flex;flex-direction:column;align-self:flex-start;flex:0 0 32%;width:32%;max-width:480px;min-width:360px}
+@media(max-width:1100px){.eg-sidelay>.eg-sidewrap{flex:none;width:auto;max-width:none;min-width:0;align-self:stretch}}
+.eg-pagecard .eg-sidewrap>aside.eg-sidecol.eg-sidecol{flex:none!important;width:auto!important;max-width:none!important;min-width:0!important;align-self:stretch!important}
+/* platform logo: no link underline on hover */
+.tb-nav-header tb-logo.tb-logo-title a,.tb-nav-header tb-logo.tb-logo-title a:hover{border-bottom:0!important;text-decoration:none!important;box-shadow:none!important}
+/* Edges list: Groups is not part of this prototype — not clickable */
+a.mdc-tab.eg-tabnoclick,a.mdc-tab.eg-tabnoclick *{cursor:default!important}
+a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ripple{display:none!important}
+</style>
+<style id="pd-fx18">
+/* 26.11 time range: the switch moves at once; while the new window loads, values and charts show loaders */
+.eg-twload .eg-vv,.eg-twload .eg-vv .u,.eg-twload .eg-vside,.eg-twload .eg-vside *{color:transparent!important}
+.eg-twload .eg-vv,.eg-twload .eg-vside{position:relative}
+.eg-twload .eg-vv::before,.eg-twload .eg-vside::before{content:"";position:absolute;left:0;top:50%;height:20px;margin-top:-10px;width:112px;border-radius:4px;background:rgba(0,0,0,.08);animation:egSkel 1.2s ease-in-out infinite}
+.eg-twload .eg-vv::before{height:28px;margin-top:-14px;width:128px}
+.eg-twload .eg-vside::before{left:auto;right:0;width:72px;height:16px;margin-top:-8px}
+.eg-twload .eg-chartwrap{position:relative}
+.eg-twload .eg-chartwrap>svg{opacity:.2;transition:opacity .15s}
+.eg-twload .eg-chartwrap::after{content:"";position:absolute;left:50%;top:50%;width:32px;height:32px;margin:-16px 0 0 -16px;box-sizing:border-box;border-radius:50%;border:3px solid rgba(48,86,128,.16);border-top-color:#305680;animation:egSpin .8s linear infinite}
+@keyframes egSkel{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes egSpin{to{transform:rotate(360deg)}}
+</style>
 <style id="pd-fx17">
 /* 26.11 empty state in a panel (No logs for this edge yet): a bit more room under the buttons */
 :is(#egDrawer,.eg-pagecard,body) .tb-form-panel>.eg-empty.eg-empty{padding-bottom:24px!important}
@@ -10841,4 +10874,54 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 .eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
+<script id="pd-fx19-js">
+/* 26.11 edge page: action row above General — Sync, Upgrade, Copy keys, Install & Connect, ⋮ (Delete) */
+(function(){
+  var mi=function(n,c){return '<mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color'+(c?' '+c:'')+'">'+n+'</mat-icon>'};
+  window.egActDecor=function(){
+    [].forEach.call(document.querySelectorAll(".eg-screen.on .eg-pagecol .eg-sidelay>.eg-sidecol:not(.eg-cardsmain),.eg-screen.on .eg-pagecol .eg-sidewrap>.eg-sidecol"),function(sc){
+      if(sc.style.display==="none")return;
+      var wrap=sc.parentElement.classList.contains("eg-sidewrap")?sc.parentElement:null;
+      if(!wrap){wrap=document.createElement("div");wrap.className="eg-sidewrap";sc.parentNode.insertBefore(wrap,sc);wrap.appendChild(sc)}
+      var pc=sc.closest(".eg-pagecol"),old=wrap.querySelector(":scope>.eg-genacts");
+      var up=pc.querySelector('.eg-hdracts button[title^="Upgrade"]');
+      var h='<button class="eg-ga" data-ga="sync" title="Sync edge">'+mi("sync")+'<span>Sync</span></button>'+
+        (up?'<button class="eg-ga" data-ga="up" title="'+up.title+'">'+mi("arrow_upward")+'<span>Upgrade</span></button>':'')+
+        '<button class="eg-ga eg-copydd" title="Copy the edge ID, key or secret">'+mi("content_copy")+'<span>Copy keys</span>'+mi("arrow_drop_down","dd")+'</button>'+
+        '<button class="eg-ga" data-ga="install" title="Install &amp; Connect Instructions">'+mi("install_desktop")+'<span>Install</span></button>'+
+        '<button class="eg-ga icon" data-ga="more" title="More actions">'+mi("more_vert")+'</button>';
+      if(old){if(old.getAttribute("data-h")!==h){old.innerHTML=h;old.setAttribute("data-h",h)}return}
+      var d=document.createElement("div");d.className="eg-genacts";d.innerHTML=h;d.setAttribute("data-h",h);wrap.insertBefore(d,sc)})};
+  function closeMore(){var m=document.getElementById("egGaMenu");if(m)m.remove()}
+  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".eg-genacts .eg-ga[data-ga]");
+    if(!b){if(!(ev.target.closest&&ev.target.closest("#egGaMenu")))closeMore();return}
+    ev.stopPropagation();ev.preventDefault();var k=b.getAttribute("data-ga"),pc=b.closest(".eg-pagecol"),T=window.egToast||function(){};
+    if(k!=="more")closeMore();
+    if(k==="sync")T("Sync started");
+    else if(k==="up"){var u=pc&&pc.querySelector('.eg-hdracts button[title^="Upgrade"]');if(u)u.click()}
+    else if(k==="install"){var ic=pc&&pc.querySelector('.eg-hdracts [data-ic]');if(ic)ic.click();else if(window.egOpenInstall)window.egOpenInstall(null)}
+    else if(k==="more"){if(document.getElementById("egGaMenu")){closeMore();return}
+      var m=document.createElement("div");m.id="egGaMenu";m.className="tb-hmenu eg-rowmenu";
+      m.innerHTML='<button class="danger">'+mi("delete")+'<span>Delete edge</span></button>';
+      document.body.appendChild(m);var r=b.getBoundingClientRect(),w=m.offsetWidth,hh=m.offsetHeight,t=r.bottom+4;if(t+hh>innerHeight-8)t=Math.max(8,r.top-hh-4);
+      m.style.left=Math.max(8,Math.min(r.left,innerWidth-w-8))+"px";m.style.top=t+"px";
+      m.addEventListener("click",function(e2){if(e2.target.closest("button")){e2.stopPropagation();m.remove();T("“Delete edge” — not wired in this prototype")}})}
+  },true);
+  addEventListener("keydown",function(ev){if(ev.key==="Escape")closeMore()});
+  /* disabled tabs (Edges list: Groups) ignore presses and clicks */
+  ["pointerdown","mousedown","click"].forEach(function(n){window.addEventListener(n,function(ev){var t=ev.target.closest&&ev.target.closest('a.mdc-tab.eg-tabnoclick,a.mdc-tab[aria-disabled="true"]');if(!t)return;ev.stopImmediatePropagation();ev.stopPropagation();ev.preventDefault()},true)});
+  try{window.egActDecor()}catch(e){}
+})();
+</script>
+<script id="pd-fx18-js">
+/* 26.11 time range: switch at once, show loaders, then render the new window (the real data request) */
+(function(){var T=0,pass=0;
+  window.addEventListener("click",function(ev){var t=ev.target.closest&&ev.target.closest(".tb-toggle[data-tw]");if(!t||pass)return;
+    ev.stopPropagation();ev.preventDefault();if(t.classList.contains("checked"))return;
+    [].forEach.call(t.parentNode.querySelectorAll(".tb-toggle"),function(x){x.classList.toggle("checked",x===t)});
+    var host=t.closest(".eg-pagecol,#egDrawer")||document.body;host.classList.add("eg-twload");
+    clearTimeout(T);T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}
+      [].forEach.call(document.querySelectorAll(".eg-twload"),function(h){h.classList.remove("eg-twload")})},400)},true);
+})();
+</script>
 </body></html>
