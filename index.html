@@ -9372,7 +9372,7 @@ function fill(root,parts){
    ROUTING
    ================================================================ */
 var main=$(".tb-main");
-function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor,window.egActDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
+function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor,window.egActDecor,window.egOpenLoad].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
 function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
   var sc=S.screen;
   $("#pdStart").classList.toggle("open",sc==="start");
@@ -10788,14 +10788,18 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 .eg-entmain mat-header-row>:nth-child(2) .mat-icon{font-size:16px!important;width:16px!important;height:16px!important;line-height:16px!important;vertical-align:middle!important;margin:-3px 0 0 4px!important;color:rgba(0,0,0,.54)}
 </style>
 <style id="pd-fx19">
-/* 26.11 edge page: all edge actions sit in one row above General (light outlined buttons); the header keeps only the tabs */
-.eg-genacts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;justify-content:flex-start!important;align-self:stretch}
-.eg-genacts .eg-ga{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;box-sizing:border-box;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;color:rgb(0,105,92);font:500 14px/20px Roboto,sans-serif;letter-spacing:.1px;cursor:pointer;white-space:nowrap}
-.eg-genacts .eg-ga:hover{background:rgba(0,105,92,.04)}
-.eg-genacts .eg-ga:active{background:rgba(0,105,92,.1)}
-.eg-genacts .eg-ga .mat-icon{font-size:18px;width:18px;height:18px;line-height:18px;color:rgba(0,0,0,.87)}
+/* 26.11 edge page: all edge actions sit in one row above General; the header keeps only the tabs.
+   Upgrade is the primary action (green), the rest are neutral (black); icon and outline take the text color; ⋮ is always at the right end of the first line */
+.eg-genacts.eg-genacts{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px!important;padding:0 44px 0 0!important;justify-content:flex-start!important;align-self:stretch}
+.eg-genacts .eg-ga{--ga:rgba(0,0,0,.87);--ga-h:rgba(0,0,0,.04);--ga-a:rgba(0,0,0,.08);display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;box-sizing:border-box;border:1px solid var(--ga);border-radius:8px;background:#fff;color:var(--ga);font:500 14px/20px Roboto,sans-serif;letter-spacing:.1px;cursor:pointer;white-space:nowrap}
+.eg-genacts .eg-ga.eg-ga{margin:0!important}
+.eg-genacts .eg-ga.pri{--ga:rgb(0,105,92);--ga-h:rgba(0,105,92,.04);--ga-a:rgba(0,105,92,.1)}
+.eg-genacts .eg-ga:hover{background:var(--ga-h)}
+.eg-genacts .eg-ga:active{background:var(--ga-a)}
+.eg-genacts .eg-ga .mat-icon{font-size:18px;width:18px;height:18px;line-height:18px;color:var(--ga)}
 .eg-genacts .eg-ga .mat-icon.dd{margin:0 -6px 0 -2px}
 .eg-genacts .eg-ga.icon{width:36px;padding:0;justify-content:center}
+.eg-genacts .eg-ga[data-ga="more"]{position:absolute;top:0;right:0}
 .eg-genacts .eg-ga.eg-copydd.eg-copydd{display:inline-flex!important}
 .eg-pagecol:has(.eg-genacts) :is(.eg-tabsend,header) :is(.eg-hdracts,.eg-hdrmore){display:none!important}
 .eg-sidelay>.eg-sidewrap{display:flex;flex-direction:column;align-self:flex-start;flex:0 0 32%;width:32%;max-width:480px;min-width:360px}
@@ -10883,7 +10887,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
       var pc=sc.closest(".eg-pagecol"),old=wrap.querySelector(":scope>.eg-genacts");
       var up=pc.querySelector('.eg-hdracts button[title^="Upgrade"]');
       var h='<button class="eg-ga" data-ga="sync" title="Sync edge">'+mi("sync")+'<span>Sync</span></button>'+
-        (up?'<button class="eg-ga" data-ga="up" title="'+up.title+'">'+mi("arrow_upward")+'<span>Upgrade</span></button>':'')+
+        (up?'<button class="eg-ga pri" data-ga="up" title="'+up.title+'">'+mi("arrow_upward")+'<span>Upgrade</span></button>':'')+
         '<button class="eg-ga eg-copydd" title="Copy the edge ID, key or secret">'+mi("content_copy")+'<span>Copy keys</span>'+mi("arrow_drop_down","dd")+'</button>'+
         '<button class="eg-ga" data-ga="install" title="Install &amp; Connect Instructions">'+mi("install_desktop")+'<span>Install</span></button>'+
         '<button class="eg-ga icon" data-ga="more" title="More actions">'+mi("more_vert")+'</button>';
@@ -10911,20 +10915,29 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 })();
 </script>
 <script id="pd-fx18-js">
-/* 26.11 time range: switch at once; each widget keeps its loader until its own data is "loaded" — they finish independently, in random order */
-(function(){var T=0,Q=[],pass=0;
-  function W(h){return [].slice.call(h.querySelectorAll(".eg-vcard,.eg-chartwrap")).filter(function(w){return w.offsetParent})}
+/* 26.11 widgets load like platform dashboard widgets: each value card and chart shows the accent loader until its own data arrives,
+   they finish independently in random order — when the edge page / Overview opens and when the time range changes (the switch itself moves at once) */
+(function(){var T=0,Q=[],pass=0,lastKey="";
+  function host(){return document.querySelector(".eg-screen.on .eg-pagecol")||document.querySelector("#egDrawer.open")||null}
+  function W(h){return h?[].slice.call(h.querySelectorAll(".eg-vcard,.eg-chartwrap")).filter(function(w){return w.offsetParent}):[]}
   function stop(){clearTimeout(T);Q.forEach(clearTimeout);Q=[]}
+  function load(){stop();W(host()).forEach(function(w){w.__egDone=0});var mark=function(){W(host()).forEach(function(w){if(!w.__egDone)w.classList.add("eg-wl")})};
+    mark();Q.push(setTimeout(mark,30)); /* charts are redrawn to fit right after a render: mark the new nodes too */
+    W(host()).forEach(function(w0,k){var dl=250+Math.round(Math.random()*1600);
+      Q.push(setTimeout(function(){var w=W(host())[k];if(w){w.__egDone=1;w.classList.remove("eg-wl","loading")}},dl))})}
+  window.egWidgetsLoad=load;
+  /* edge page / panel opened (or another edge): load its widgets */
+  window.egOpenLoad=function(){var S=window.egS&&egS();if(!S)return;var h=host(),key=h&&W(h).length?[S.screen,S.edge,S.peek,S.dv,S.vm,S.om].join("|"):"";
+    if(key&&key!==lastKey)load();lastKey=key};
+  /* back to Overview from another tab */
+  window.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('.tb-page-tabs>a[data-tab="status"],.tb-details-tabs>a[data-tab="status"]');
+    if(!a||W(host()).length)return;setTimeout(load,0)},true); /* only when Overview was not showing */
+  /* time range */
   window.addEventListener("click",function(ev){var t=ev.target.closest&&ev.target.closest(".tb-toggle[data-tw]");if(!t||pass)return;
     ev.stopPropagation();ev.preventDefault();if(t.classList.contains("checked"))return;
     [].forEach.call(t.parentNode.querySelectorAll(".tb-toggle"),function(x){x.classList.toggle("checked",x===t)});
-    var host=t.closest(".eg-pagecol,#egDrawer")||document.body;stop();W(host).forEach(function(w){w.classList.add("eg-wl")});
-    T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}
-      var hq=function(){return document.querySelector(".eg-screen.on .eg-pagecol")||document.querySelector("#egDrawer.open")||document.body};
-      var mark=function(){W(hq()).forEach(function(w,k){if(!w.__egDone)w.classList.add("eg-wl")})};
-      mark();Q.push(setTimeout(mark,30)); /* charts are redrawn to fit right after the render: mark the new nodes too */
-      W(hq()).forEach(function(w0,k){var dl=150+Math.round(Math.random()*1600); /* each widget finishes on its own, in random order */
-        Q.push(setTimeout(function(){var w=W(hq())[k];if(w){w.__egDone=1;w.classList.remove("eg-wl","loading")}},dl))})},250)},true);
+    stop();W(host()).forEach(function(w){w.classList.add("eg-wl")});
+    T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}load()},250)},true);
 })();
 </script>
 </body></html>
