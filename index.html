@@ -9890,7 +9890,9 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
     var cur=a.filter(function(x){return x[1]===SEL})[0],name=((document.querySelector("#egDrawer.open .tb-details-title")||document.querySelector("#egTitle .cur")||{}).textContent||"Edge").trim();
     var nav='<nav class="eg-entnav" aria-label="Entity types">'+a.map(function(x){return '<button data-ent="'+x[1]+'"'+(x[1]===SEL?' class="on"':'')+'><mat-icon class="mat-icon notranslate material-icons mat-ligature-font">'+x[0]+'</mat-icon><span>'+x[1]+'</span><span class="n">'+x[2]+'</span></button>'}).join("")+'</nav>';
     var t=document.createElement("div");t.innerHTML=window.egAsgBody?window.egAsgBody(cur[1],cur[2],name):"";
-    var bk=t.querySelector(".eg-subback");if(bk)bk.remove();var tt=t.querySelector(".eg-asghead .t");if(tt)tt.textContent=cur[1];
+    var bk=t.querySelector(".eg-subback");if(bk)bk.remove();var tt=t.querySelector(".eg-asghead .t");
+    if(tt){var lb=document.createElement("label");lb.className="eg-search eg-tsearch eg-entsearch";lb.innerHTML='<mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">search</mat-icon><input autocomplete="off">';lb.querySelector("input").setAttribute("placeholder","Search "+cur[1].toLowerCase());tt.parentNode.replaceChild(lb,tt)}
+    [].forEach.call(t.querySelectorAll('.eg-asghead button[title="Search"]'),function(b){b.remove()});
     return '<div class="eg-ent">'+nav+'<div class="eg-entmain">'+t.innerHTML+'</div></div>'}
   var td=window.egTabDemo;window.egTabDemo=function(n){if(n==="Manage entities"&&mode()==="tab")return body();return td?td.apply(this,arguments):""};
   window.egMngDecor=function(){var on=mode()==="tab",ns=navs();
@@ -9906,6 +9908,10 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
   document.addEventListener("click",function(ev){var t=ev.target;
     var b=t.closest&&t.closest(".eg-entnav [data-ent]");if(b){ev.preventDefault();ev.stopPropagation();SEL=b.getAttribute("data-ent");var ph=b.closest(".eg-tabph");if(ph)ph.innerHTML=body();return}
     var m=t.closest&&t.closest("[data-mng]");if(m){ev.preventDefault();ev.stopPropagation();egS().mng=m.getAttribute("data-mng");egSave();egMngDecor()}},true);
+  /* live search by name in the entity table */
+  document.addEventListener("input",function(ev){var i=ev.target.closest&&ev.target.closest(".eg-entsearch input");if(!i)return;var q=i.value.trim().toLowerCase(),m=i.closest(".eg-entmain");if(!m)return;
+    var rows=[].slice.call(m.querySelectorAll(".table-container mat-row")),n=0;rows.forEach(function(r){var c=r.querySelectorAll("mat-cell")[2],ok=!q||(c&&c.textContent.toLowerCase().indexOf(q)>=0);r.style.display=ok?"":"none";if(ok)n++});
+    var e=m.querySelector(".eg-entnone");if(!n&&rows.length){if(!e){e=document.createElement("div");e.className="eg-tbl-empty eg-entnone";m.querySelector(".table-container").appendChild(e)}e.textContent="No results for \u201c"+i.value.trim()+"\u201d";e.style.display=""}else if(e)e.style.display="none"},true);
   try{egMngDecor()}catch(e){}
 })();
 /* 26.11 Edit for the General card (Name, Edge type, Label, Description are the editable fields of an edge).
@@ -9983,4 +9989,16 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
   document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&pd.classList.contains("pd-drw-on"))set(false)});
 })();
 </script>
+<style id="pd-fx5">
+/* 26.11 compact header: taller top bar, the title block sits lower, next to the tabs */
+.tb-root.eg-hdr2 .tb-main-toolbar,.tb-root.eg-hdr2 .tb-main-toolbar>.mat-toolbar-tools{height:80px!important}
+.tb-root.eg-hdr2 #egHdr2{align-self:flex-end;margin-bottom:2px}
+/* Manage entities: the table card fills the height; search in place of the title */
+.eg-entmain{align-self:stretch}
+.eg-entmain .eg-subtable{flex:1 1 auto;min-height:0;overflow:auto;display:block!important}
+.eg-entmain .eg-subtable>.table-container{flex:none!important;height:auto!important}
+.eg-entmain .eg-asghead{gap:8px}
+.eg-entmain .eg-entsearch{width:320px;max-width:50%}
+.eg-entmain .eg-tbl-empty{padding:48px 16px}
+</style>
 </body></html>
