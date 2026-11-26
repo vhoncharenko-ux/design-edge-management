@@ -10852,7 +10852,7 @@ html.eg-cvw .eg-lgbar :is(.eg-lgfbtn.eg-lgfbtn,.eg-lgsearch,.eg-lvf.on .eg-lvfbt
 
 .eg-lgtabbed.eg-lgtabbed{height:auto!important;position:static!important;inset:auto!important}
 /* both lists scroll inside the frame after ~12 rows; a shorter list leaves no blank space */
-.eg-lgtabbed .eg-lgpane.eg-subtable{max-height:470px;overflow:auto!important;flex:none!important}
+.eg-lgtabbed .eg-lgpane.eg-subtable{height:470px;max-height:470px;overflow:auto!important;flex:none!important} /* 26.11: one fixed height for both tabs — the frame does not jump when switching tabs or searching */
 .eg-lgtabbed-g>.eg-gridcell:not(.eg-gridlogs),.eg-lgtabbed-g .eg-actnote{display:none!important}
 .eg-lgtabbed .eg-lgpane[data-lgp="notes"] mat-row{cursor:default}
 :is(#egDrawer,.eg-pagecard) .eg-lgtabbed .eg-lgpane.eg-lgpane[data-lgp="notes"] mat-row.mat-mdc-row{min-height:36px!important;height:36px!important}
