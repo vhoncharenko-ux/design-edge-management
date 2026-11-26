@@ -10845,6 +10845,15 @@ mat-row.eg-lgqhide{display:none!important}
 .eg-lgt:is([data-xs="upa"],[data-s="added"])>i{background-color:#00695c!important}
 .eg-lgt[data-xs="downa"]>i{background-color:#2160c4!important}
 .eg-lgt:is([data-xs="upa"],[data-xs="downa"],[data-s="added"])>i{opacity:.6}
+/* Upgrade: tinted fill (the main action of the row) */
+.eg-genacts .eg-ga.pri[data-ga="up"]{background:rgba(0,105,92,.08)}
+.eg-genacts .eg-ga.pri[data-ga="up"]:hover{background:rgba(0,105,92,.14)}
+/* General → Status as a pill (same colors as the value-card pills) */
+.eg-frow-v .eg-stxt.eg-stxt:is(.ok,.warn,.err,.off){display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:14px;box-sizing:border-box;font:500 14px/20px Roboto,sans-serif!important;margin-right:6px}
+.eg-frow-v .eg-stxt.ok{background:var(--eg-ok-bg,#e6f4ea);color:var(--eg-ok,#198038)}
+.eg-frow-v .eg-stxt.warn{background:var(--eg-warn-bg,#fff3e0);color:var(--eg-warn,#e65100)}
+.eg-frow-v .eg-stxt.err{background:rgba(209,39,48,.08);color:#d12730}
+.eg-frow-v .eg-stxt.off{background:rgba(0,0,0,.06);color:rgba(0,0,0,.6)}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
