@@ -7436,7 +7436,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
               <div class="title-container flex flex-row items-center justify-start">
                 <label class="eg-search eg-tsearch"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">search</mat-icon><input id="egQ" placeholder="Search edges" autocomplete="off"></label>
                 <button id="egFilterBtn" class="mdc-button mat-mdc-button-base mdc-button--outlined mat-mdc-outlined-button"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">filter_list</mat-icon><span class="mdc-button__label">Filter</span></button>
-                <mat-slide-toggle id="egLagSw" class="mat-mdc-slide-toggle mat-accent eg-lagsw" title="Show only active edges with a message queue (lag) in uplink or downlink"><div class="mdc-form-field mat-internal-form-field"><button class="mdc-switch mdc-switch--unselected" role="switch" type="button" aria-checked="false"><span class="mdc-switch__track"></span><span class="mdc-switch__handle-track"><span class="mdc-switch__handle"><span class="mdc-switch__shadow"><span class="mdc-elevation-overlay"></span></span><span class="mdc-switch__ripple"><span class="mat-mdc-slide-toggle-ripple mat-focus-indicator"></span></span><span class="mdc-switch__icons"><svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z"></path></svg><svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13H4v-2h16v2z"></path></svg></span></span></span></button><label class="mdc-label">Lagging only (<span class="eg-lagn">0</span>)</label></div></mat-slide-toggle><div class="tb-toggle-header eg-toolbar-toggle" id="egToggle" data-only="list:none"></div>
+                <mat-slide-toggle id="egLagSw" class="mat-mdc-slide-toggle mat-accent eg-lagsw" title="Show only active edges with a message queue (lag) in uplink or downlink"><div class="mdc-form-field mat-internal-form-field"><button class="mdc-switch mdc-switch--unselected" role="switch" type="button" aria-checked="false"><span class="mdc-switch__track"></span><span class="mdc-switch__handle-track"><span class="mdc-switch__handle"><span class="mdc-switch__shadow"><span class="mdc-elevation-overlay"></span></span><span class="mdc-switch__ripple"><span class="mat-mdc-slide-toggle-ripple mat-focus-indicator"></span></span><span class="mdc-switch__icons"><svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z"></path></svg><svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13H4v-2h16v2z"></path></svg></span></span></span></button><label class="mdc-label">Lagging (<span class="eg-lagn">0</span>)</label></div></mat-slide-toggle><div class="tb-toggle-header eg-toolbar-toggle" id="egToggle" data-only="list:none"></div>
               </div>
               <span class="flex-1"></span>
               <button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base" title="Refresh"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">refresh</mat-icon></button>
@@ -7505,6 +7505,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
 <button class="pd-btn" data-pd="dash" id="pdDashBtn" title="How the edge dashboard shows the data" style="display:none"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg><span class="k">Dashboard</span><span class="v" id="pdDashLbl">By direction</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
 <div class="pd-seg" id="pdWarnSeg" title="Colour of lag and warnings everywhere: the platform caution token, orange, or the platform accent"><span class="k">Warning</span><span class="pd-segs"><button data-pd="warn" data-val="caution" title="Warning: Caution"><i class="pd-sw" style="background:#b26500"></i>Caution</button><button data-pd="warn" data-val="orange" title="Warning: Orange"><i class="pd-sw" style="background:#f57c00"></i>Orange</button><button data-pd="warn" data-val="accent" title="Warning: Accent"><i class="pd-sw" style="background:#ff5722"></i>Accent</button></span></div>
 <div class="pd-seg" id="pdOvfSeg" title="Separate + Full screen: the dashboard as a tab next to Details, or as its own page opened with a button" style="display:none"><span class="k">Dashboard as</span><span class="pd-segs"><button data-pd="ovf" data-val="tab">Tab</button><button data-pd="ovf" data-val="page">Page</button></span></div><div class="pd-seg" id="pdOvpSeg" title="Separate + Side panel: the Edge overview dashboard as a tab next to Details, or opened on the full page" style="display:none"><span class="k">Overview</span><span class="pd-segs"><button data-pd="ovp" data-val="tab">Tab</button><button data-pd="ovp" data-val="page" title="Edge overview button opens the full page">Page</button></span></div><div class="pd-seg" id="pdRadSeg" title="Corner radius of the sections on the edge page" style="display:none"><span class="k">Radius</span><span class="pd-segs"><button data-pd="rad" data-val="12">12</button><button data-pd="rad" data-val="8">8</button></span></div>
+<div class="pd-seg" id="pdEditSeg" title="Editing General: in a dialog with only the editable fields, or in place (only the editable rows turn into inputs)"><span class="k">Edit</span><span class="pd-segs"><button data-edm="popup">Popup</button><button data-edm="inline">Inline</button></span></div>
 <div class="pd-seg" id="pdHdrSeg" title="Edge page header: current (breadcrumbs in the top bar, title row, tabs) or compact (title in the top bar, actions next to the tabs)"><span class="k">Header</span><span class="pd-segs"><button data-hdr="old">Current</button><button data-hdr="new">Compact</button></span></div>
 <button class="pd-btn" data-pd="scn" id="pdScnBtn" title="Switch the data behind the list"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span class="k">Scenario</span><span class="v" id="pdScnLbl">Typical</span></button></div>
 
@@ -8671,7 +8672,7 @@ function fill(root,parts){
    ROUTING
    ================================================================ */
 var main=$(".tb-main");
-function show(){try{return show0.apply(this,arguments)}finally{if(window.egHdr2)try{window.egHdr2()}catch(e){}}} /* 26.11: header variant runs after every render */
+function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
 function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
   var sc=S.screen;
   $("#pdStart").classList.toggle("open",sc==="start");
@@ -9762,6 +9763,21 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
    document.body.appendChild(d)},true);
 })();
 </script>
+<style id="pd-edit">
+/* 26.11 Edit for the General card: icon button in the card title; Popup or Inline */
+.eg-fcard-t .eg-genedit{margin:-8px -8px -8px auto!important}
+.eg-fcard-t .eg-genedit .mat-icon{margin:0!important;color:rgba(0,0,0,.54)!important}
+.eg-fcard.eg-editing .eg-fcard-t .eg-genedit{display:none}
+.eg-frow.eg-frow-ed{align-items:center;padding-top:4px;padding-bottom:4px}
+.eg-frow.eg-frow-ed .eg-frow-v{flex:1;min-width:0}
+.eg-frow.eg-frow-ed .eg-ofield{width:100%}
+.eg-frow.eg-frow-ed .mat-mdc-form-field-subscript-wrapper{display:none}
+.eg-genacts{display:flex;justify-content:flex-end;gap:8px;padding:8px 0 0}
+#egEdBd .eg-dlg{width:min(560px,calc(100vw - 48px));height:auto;max-height:calc(100vh - 48px)}
+#egEdBd .eg-ibody{display:flex;flex-direction:column;gap:4px;padding-top:20px}
+#egEdBd .eg-dlg-foot{gap:8px;border-top:0;padding:8px 24px 20px}
+#egEdBd .eg-dlg-head{padding-bottom:0}
+</style>
 <style id="pd-hdr2">
 /* 26.11 header variant "Compact" on the edge page: title in the top bar, actions in the tabs row, no title row */
 .tb-root.eg-hdr2 .tb-main-toolbar{border-bottom:0!important;height:72px!important}
@@ -9779,7 +9795,8 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 #egHdr2 .tb-page-titles{height:auto!important}
 .tb-root.eg-hdr2 .eg-screen.on header.tb-page-head{display:none!important}
 .tb-root.eg-hdr2 .eg-screen.on .tb-page-tabs.eg-tabsacts{display:flex!important;align-items:center;margin-top:-16px!important}
-.eg-tabsacts>.eg-tabsend{margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:8px;flex:none}
+#egHdr2 .eg-hdrav,#egHdr2 .eg-avatar{display:none!important}
+.eg-tabsacts>.eg-tabsend{align-self:flex-start;margin-left:auto;display:flex;align-items:flex-start;gap:8px;padding-right:8px;flex:none}
 .eg-tabsend .eg-hdrx{margin:0!important}
 </style>
 <style id="pd-ab-drawer">
@@ -9813,17 +9830,75 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
     if(seg){seg.style.display=head?"":"none";[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-hdr")===(egS().hdr||"new"))})}
     if(!on||!head){off();return}
     var tabs=head.nextElementSibling&&head.nextElementSibling.matches(".tb-page-tabs")?head.nextElementSibling:null;
-    box.innerHTML="";helpSlot.innerHTML="";
+    /* only a freshly rendered header is moved; when the page was not re-rendered its parts are already in place */
     var back=head.querySelector(".eg-back"),av=head.querySelector(".eg-avatar"),tt=head.querySelector(".tb-page-titles");
-    if(back)box.appendChild(back);if(av)box.appendChild(av);
-    var col=document.createElement("div");col.className="eg-h2col";col.appendChild(title);if(tt)col.appendChild(tt);box.appendChild(col);
-    var help=head.querySelector(".tb-help-btn");if(help)helpSlot.appendChild(help);
-    if(tabs){tabs.classList.add("eg-tabsacts");var end=tabs.querySelector(":scope>.eg-tabsend");if(!end){end=document.createElement("div");end.className="eg-tabsend";tabs.appendChild(end)}end.innerHTML="";
-      var acts=head.querySelector(".eg-hdrx"),more=head.querySelector(".eg-hdrmore");if(acts)end.appendChild(acts);if(more)end.appendChild(more)}
+    if(tt){box.innerHTML="";if(back)box.appendChild(back);if(av)box.appendChild(av);
+      var col=document.createElement("div");col.className="eg-h2col";col.appendChild(title);col.appendChild(tt);box.appendChild(col)}
+    else if(title.parentNode===bcHome){var col2=box.querySelector(".eg-h2col");if(col2)col2.insertBefore(title,col2.firstChild)}
+    var help=head.querySelector(".tb-help-btn");if(help){helpSlot.innerHTML="";helpSlot.appendChild(help)}
+    if(tabs){tabs.classList.add("eg-tabsacts");var end=tabs.querySelector(":scope>.eg-tabsend");if(!end){end=document.createElement("div");end.className="eg-tabsend";tabs.appendChild(end)}
+      var acts=head.querySelector(".eg-hdrx"),more=head.querySelector(".eg-hdrmore");if(acts||more){end.innerHTML="";if(acts)end.appendChild(acts);if(more)end.appendChild(more)}}
     document.querySelector(".tb-root").classList.add("eg-hdr2");
   };
   document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-hdr]");if(!b)return;ev.preventDefault();ev.stopPropagation();egS().hdr=b.getAttribute("data-hdr");egSave();egShow()},true);
   try{egHdr2()}catch(e){}
+})();
+/* 26.11 Edit for the General card (Name, Edge type, Label, Description are the editable fields of an edge).
+   Popup: those fields in a dialog. Inline: only those rows turn into inputs, the rest of the card stays read-only.
+   Saved values are kept for this visit and re-applied after every render. */
+(function(){
+  var ED=["Name","Edge type","Label","Description"],REQ={"Name":1,"Edge type":1},OV={};
+  function mode(){return egS().edm||"popup"}
+  function cards(){return [].filter.call(document.querySelectorAll(".shell .eg-fcard"),function(c){var t=c.querySelector(".eg-fcard-t>span");return t&&t.textContent.trim()==="General"&&c.offsetParent})}
+  function rowOf(c,l){return [].filter.call(c.querySelectorAll(".eg-frow"),function(r){var x=r.querySelector(".eg-frow-l");return x&&x.textContent.trim()===l})[0]}
+  function val(c,l){var r=rowOf(c,l);return r?r.querySelector(".eg-frow-v").textContent.trim():""}
+  function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+  function field(l,v){return '<div class="eg-ofield"><label>'+l+(REQ[l]?'*':'')+'</label><input class="v" data-f="'+l+'" value="'+esc(v)+'" autocomplete="off"></div>'}
+  function mkRow(l,v){var r=document.createElement("div");r.className="eg-frow";r.innerHTML='<div class="eg-frow-l">'+l+'</div><div class="eg-frow-v"></div>';r.querySelector(".eg-frow-v").textContent=v;return r}
+  function key(c){return c.getAttribute("data-egkey")||val(c,"Name")}
+  /* apply saved values to a card and to the page title */
+  function apply(c){var k=key(c),o=OV[k];c.setAttribute("data-egkey",k);if(!o)return;
+    var after=rowOf(c,"Edge type");
+    ED.forEach(function(l){var r=rowOf(c,l),v=o[l];if(v==null)return;
+      if(!v){if(r&&(l==="Label"||l==="Description"))r.remove();return}
+      if(!r){r=mkRow(l,v);var ref=l==="Description"?(rowOf(c,"Label")||after):after;if(ref&&ref.nextSibling)ref.parentNode.insertBefore(r,ref.nextSibling);else c.appendChild(r);return}
+      r.querySelector(".eg-frow-v").textContent=v});
+    if(o.Name){document.querySelectorAll("#egTitle .cur,.eg-screen.on .tb-page-h2,#egDrawer.open .tb-details-header h2,#egHdr2 .tb-page-h2").forEach(function(h){
+      var tn=[].filter.call(h.childNodes,function(n){return n.nodeType===3&&n.textContent.trim()})[0];if(tn)tn.textContent=o.Name;else if(h.classList.contains("cur"))h.textContent=o.Name})}}
+  function save(c,vals){var k=key(c);if(!vals.Name)vals.Name=val(c,"Name");OV[k]=vals;cards().forEach(apply)} /* no re-render: values are written into the card and the title */
+  function finish(c,vals){c.classList.remove("eg-editing");var a=c.querySelector(".eg-genacts");if(a)a.remove();
+    [].forEach.call(c.querySelectorAll(".eg-frow-ed"),function(r){var l=r.querySelector(".eg-frow-l").textContent.trim(),v=vals[l]||"";
+      if(!v&&(l==="Label"||l==="Description")){r.remove();return}r.classList.remove("eg-frow-ed");r.querySelector(".eg-frow-v").textContent=v})}
+  function popup(c){var cur={};ED.forEach(function(l){cur[l]=val(c,l)});
+    var bd=document.createElement("div");bd.id="egEdBd";bd.className="eg-dlg-bd";
+    bd.innerHTML='<div class="eg-dlg" role="dialog" aria-label="Edit edge"><div class="eg-dlg-head"><h2>Edit edge</h2><button class="eg-dlg-x" title="Close">'+'<mat-icon class="mat-icon notranslate material-icons mat-ligature-font">close</mat-icon></button></div>'+
+      '<div class="eg-ibody">'+ED.map(function(l){return field(l,cur[l])}).join("")+'</div>'+
+      '<div class="eg-dlg-foot"><button class="mdc-button mat-mdc-button eg-edcancel"><span class="mdc-button__label">Cancel</span></button><button class="mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-primary eg-edsave"><span class="mdc-button__label">Save</span></button></div></div>';
+    (document.querySelector(".shell")||document.body).appendChild(bd);
+    setTimeout(function(){var i=bd.querySelector("input");if(i){i.focus();i.select()}},50);
+    function close(){bd.remove();document.removeEventListener("keydown",kd,true)}
+    function kd(ev){if(ev.key==="Escape"){ev.stopPropagation();close()}if(ev.key==="Enter"&&ev.target.tagName==="INPUT")go()}
+    function go(){var v={};bd.querySelectorAll("input[data-f]").forEach(function(i){v[i.getAttribute("data-f")]=i.value.trim()});if(!v.Name){bd.querySelector('input[data-f="Name"]').focus();return}close();save(c,v)}
+    document.addEventListener("keydown",kd,true);
+    bd.addEventListener("click",function(ev){var t=ev.target;ev.stopPropagation();if(t===bd||t.closest(".eg-dlg-x,.eg-edcancel"))close();else if(t.closest(".eg-edsave"))go()})}
+  function inline(c){var cur={};ED.forEach(function(l){cur[l]=val(c,l)});c.classList.add("eg-editing");
+    var after=rowOf(c,"Edge type");
+    ED.forEach(function(l){var r=rowOf(c,l);
+      if(!r){r=mkRow(l,"");var ref=l==="Description"?(rowOf(c,"Label")||after):after;if(ref&&ref.nextSibling)ref.parentNode.insertBefore(r,ref.nextSibling);else c.appendChild(r)}
+      r.classList.add("eg-frow-ed");r.querySelector(".eg-frow-v").innerHTML=field(l,cur[l]).replace(/<label>[^<]*<\/label>/,"")});
+    var a=document.createElement("div");a.className="eg-genacts";a.innerHTML='<button class="mdc-button mat-mdc-button eg-edcancel"><span class="mdc-button__label">Cancel</span></button><button class="mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-primary eg-edsave"><span class="mdc-button__label">Save</span></button>';c.appendChild(a);
+    var f=c.querySelector('.eg-frow-ed input');if(f)setTimeout(function(){f.focus()},50);
+    a.addEventListener("click",function(ev){ev.stopPropagation();var t=ev.target;
+      if(t.closest(".eg-edcancel")){finish(c,cur);return}
+      if(t.closest(".eg-edsave")){var v={};c.querySelectorAll(".eg-frow-ed input[data-f]").forEach(function(i){v[i.getAttribute("data-f")]=i.value.trim()});if(!v.Name){c.querySelector('input[data-f="Name"]').focus();return}finish(c,v);save(c,v)}})}
+  window.egEditDecor=function(){
+    var seg=document.getElementById("pdEditSeg"),cs=cards();
+    if(seg){seg.style.display=cs.length?"":"none";[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-edm")===mode())})}
+    cs.forEach(function(c){apply(c);var t=c.querySelector(".eg-fcard-t");if(t&&!t.querySelector(".eg-genedit")){var b=document.createElement("button");b.className="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base eg-genedit";b.title="Edit";b.innerHTML='<mat-icon class="mat-icon notranslate material-icons mat-ligature-font">edit</mat-icon>';t.appendChild(b)}})};
+  document.addEventListener("click",function(ev){var t=ev.target;
+    var b=t.closest&&t.closest(".eg-genedit");if(b){ev.preventDefault();ev.stopPropagation();var c=b.closest(".eg-fcard");if(mode()==="inline")inline(c);else popup(c);return}
+    var m=t.closest&&t.closest("[data-edm]");if(m){ev.preventDefault();ev.stopPropagation();egS().edm=m.getAttribute("data-edm");egSave();egEditDecor()}},true);
+  try{egEditDecor()}catch(e){}
 })();
 /* 26.11 the side menu can be dragged by its title bar; the position is kept */
 (function(){var pd=document.getElementById("pd"),dr=pd&&pd.querySelector(".pd-left");if(!dr)return;
