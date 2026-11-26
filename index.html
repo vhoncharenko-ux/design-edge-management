@@ -8204,6 +8204,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
 <button class="pd-btn" data-pd="dash" id="pdDashBtn" title="How the edge dashboard shows the data" style="display:none"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg><span class="k">Dashboard</span><span class="v" id="pdDashLbl">By direction</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
 <div class="pd-seg" id="pdWarnSeg" title="Colour of lag and warnings everywhere: the platform caution token, orange, or the platform accent"><span class="k">Warning</span><span class="pd-segs"><button data-pd="warn" data-val="caution" title="Warning: Caution"><i class="pd-sw" style="background:#b26500"></i>Caution</button><button data-pd="warn" data-val="orange" title="Warning: Orange"><i class="pd-sw" style="background:#f57c00"></i>Orange</button><button data-pd="warn" data-val="accent" title="Warning: Accent"><i class="pd-sw" style="background:#ff5722"></i>Accent</button></span></div>
 <div class="pd-seg" id="pdOvfSeg" title="Separate + Full screen: the dashboard as a tab next to Details, or as its own page opened with a button" style="display:none"><span class="k">Dashboard as</span><span class="pd-segs"><button data-pd="ovf" data-val="tab">Tab</button><button data-pd="ovf" data-val="page">Page</button></span></div><div class="pd-seg" id="pdOvpSeg" title="Separate + Side panel: the Edge overview dashboard as a tab next to Details, or opened on the full page" style="display:none"><span class="k">Overview</span><span class="pd-segs"><button data-pd="ovp" data-val="tab">Tab</button><button data-pd="ovp" data-val="page" title="Edge overview button opens the full page">Page</button></span></div><div class="pd-seg" id="pdRadSeg" title="Corner radius of the sections on the edge page" style="display:none"><span class="k">Radius</span><span class="pd-segs"><button data-pd="rad" data-val="12">12</button><button data-pd="rad" data-val="8">8</button></span></div>
+<div class="pd-seg" id="pdLagSeg" title="Lag on the Overview: its own chart, inside the Traffic chart, or one chart per direction with traffic and lag"><span class="k">Lag</span><span class="pd-segs"><button data-lagv="sep">Separate</button><button data-lagv="comb">In traffic</button><button data-lagv="dir">By direction</button></span></div>
 <div class="pd-seg" id="pdLogSeg" title="Application logs: a separate Log viewer page, or its tools (search, pause, download) right in the logs table on Overview"><span class="k">Logs</span><span class="pd-segs"><button data-logv="page">Viewer page</button><button data-logv="inline">In the table</button></span></div>
 <div class="pd-seg" id="pdMngSeg" title="Assigned entities: the Manage menu in the header, or an Entities tab with side navigation"><span class="k">Manage</span><span class="pd-segs"><button data-mng="menu">Menu</button><button data-mng="tab">Tab</button></span></div>
 <div class="pd-seg" id="pdEditSeg" title="Editing General: in a dialog with only the editable fields, or in place (only the editable rows turn into inputs)"><span class="k">Edit</span><span class="pd-segs"><button data-edm="popup">Popup</button><button data-edm="inline">Inline</button></span></div>
@@ -8703,6 +8704,8 @@ function comboChart(x){
     if(sU&&!lag&&hU.add)SR.push(["Uplink added",XC.upa,sU.A.map(function(v){return v/sU.rep}),"upa"]);
     if(sD&&(!lag||hD.lag||x.zero))SR.push([lag?"Downlink lag":"Downlink pushed",lag?XC.ldown:XC.down,lag?sD.Lg:sD.P.map(function(v){return v/sD.rep}),"down"]);
     if(sD&&!lag&&hD.add)SR.push(["Downlink added",XC.downa,sD.A.map(function(v){return v/sD.rep}),"downa"]);
+    /* 26.11 variant "Lag in the chart": the queue size on the same axis as the traffic */
+    if(!lag&&x.lag){if(sU)SR.push(["Uplink lag",XC.lup,sU.Lg,"lup"]);if(sD)SR.push(["Downlink lag",XC.ldown,sD.Lg,"ldown"])}
     if(!SR.length)return "";
     top=nice(Math.max.apply(null,SR.map(function(a){return Math.max.apply(null,a[2])}))*1.05)||(lag?4:1);axis();var f2=frame();
     var xp=function(j,n){return L+(n>1?j/(n-1):.5)*(W-L-R)};
@@ -8713,7 +8716,7 @@ function comboChart(x){
     var Nc=Math.max.apply(null,SR.map(function(a){return a[2].length}));
     HV={edge:1,kind:"lines",x0:L,x1:W-R,W:W,H:H,yt:T,yb:f2.y(0),N:Nc,t:[],s:SR.map(function(a){var n=a[2].length,vals=[],ys=[];for(var j=0;j<Nc;j++){var q=a[2][Math.round(j*(n-1)/Math.max(1,Nc-1))];vals.push(lag?Math.round(q):r1(q));ys.push(+f2.y(q).toFixed(1))}return [a[0],a[1],vals,ys,a[3]]})};
     for(i=0;i<Nc;i++)HV.t.push(tlab(Nc>1?i/(Nc-1):1));}
-  var cfgOut={kind:x.kind,up:x.up,down:x.down,W0:x.W0||W,H0:x.H0||H,noX:x.noX?1:0,AX:x.AX||0,zero:x.zero?1:0,fill:x.fill?1:0};
+  var cfgOut={kind:x.kind,up:x.up,down:x.down,W0:x.W0||W,H0:x.H0||H,noX:x.noX?1:0,AX:x.AX||0,zero:x.zero?1:0,fill:x.fill?1:0,lag:x.lag?1:0};
   return '<div class="eg-chartwrap loading" data-hv=\''+(HV?JSON.stringify(HV):'')+'\' data-xcfg=\''+JSON.stringify(cfgOut).replace(/'/g,"&#39;")+'\'><svg class="eg-chart" viewBox="0 0 '+W+' '+H+'">'+body+'</svg><span class="eg-spin"></span></div>';
 }
 /* connection state chart (as the platform's State chart widget): coloured bands per state, dot legend on top */
@@ -9272,6 +9275,19 @@ function statusParts(id){
       var chip=function(k,l,c,dot){return '<span class="eg-lgt'+(dot?' eg-legdot':'')+'" data-xs="'+k+'" title="Show / hide"><i style="background:'+c+'"></i>'+l+'</span>'};
       var sec=function(t,note,body){return '<div class="eg-chsec"><div class="eg-chsec-h"><span class="t">'+t+'</span><span class="note">'+note+'</span></div><div class="tb-form-panel eg-chframe">'+body+'</div></div>'};
       var AX=0;if(anyF){comboChart({kind:"traffic",fill:1 /* 26.11: Uplink / Downlink pushed with a light fill */,up:cU,down:cD,W:1100,H:260,noX:1});AX=XC.lastL;comboChart({kind:"fail",up:cU,down:cD,W:1100,H:84});AX=Math.max(AX,XC.lastL)}
+      /* 26.11 A/B "Lag": sep = its own chart (as before); comb = lag inside the Traffic chart; dir = one chart per direction, each with pushed, added and lag (one axis) */
+      var LV=S.lagv||"sep";
+      if(LV!=="sep"&&!flat){
+        var trf=function(t,note,u,d,hasU,hasD){var sU3=hasU?sU:null,sD3=hasD?sD:null,t3=(sU3?sU3.tT:0)+(sD3?sD3.tT:0),p3=(sU3?sU3.tP:0)+(sD3?sD3.tP:0),aF=e.st&&(t3+p3)>0,AX3=0;
+          if(aF){comboChart({kind:"traffic",fill:1,lag:1,up:u,down:d,W:1100,H:340,noX:1});AX3=XC.lastL;comboChart({kind:"fail",up:u,down:d,W:1100,H:72});AX3=Math.max(AX3,XC.lastL)}
+          return sec(t,note,'<div class="eg-substack"><div class="eg-subchart"><div class="eg-dotlegend lines rowleg">'+
+            (hasU?chip("up","Uplink pushed",XC.up)+(hU.add?chip("upa","Uplink added",XC.upa):'')+chip("lup","Uplink lag",XC.lup):'')+
+            (hasD?chip("down","Downlink pushed",XC.down)+(hD.add?chip("downa","Downlink added",XC.downa):'')+chip("ldown","Downlink lag",XC.ldown):'')+
+            (aF&&t3>0?chip("ft","Temporary failures",XC.ft[0],1):'')+(aF&&p3>0?chip("fp","Permanent failures",XC.fp[0],1):'')+'</div>'+
+            comboChart({kind:"traffic",fill:1,lag:1,up:u,down:d,W:1100,H:340,noX:aF?1:0,AX:AX3})+'</div>'+(aF?'<div class="eg-subchart eg-kfail eg-kfail-l">'+comboChart({kind:"fail",up:u,down:d,W:1100,H:72,AX:AX3})+'</div>':'')+'</div>')};
+        var flc=function(c){return Object.assign({},c,{flat:1})},wrp=function(h){return '<div class="eg-dirsec eg-metsec"><div class="eg-lagrow eg-onecol">'+h+'</div></div>'};
+        return '<div class="eg-metpair"><div class="eg-metpair-in">'+(LV==="comb"?wrp(trf("Traffic and lag","Messages per minute and messages waiting to be delivered, on one axis",cU,cD,true,true)):
+          wrp(trf("Uplink","Edge → cloud: pushed, added and lag, on one axis",cU,flc(cD),true,false))+wrp(trf("Downlink","Cloud → edge: pushed, added and lag, on one axis",flc(cU),cD,false,true)))+'</div></div>'}
       var tr=sec("Traffic","Messages per minute (uplink reported every 1 min, downlink every 10 min)",
         '<div class="eg-substack"><div class="eg-subchart">'+(flat?'':'<div class="eg-dotlegend lines rowleg">'+chip("up","Uplink pushed",XC.up)+(hU.add?chip("upa","Uplink added",XC.upa):'')+chip("down","Downlink pushed",XC.down)+(hD.add?chip("downa","Downlink added",XC.downa):'')+(anyF&&(tT+tP)>0?'<i class="eg-legbr"></i>':'')+(anyF&&tT>0?chip("ft","Temporary failures",XC.ft[0],1):'')+(anyF&&tP>0?chip("fp","Permanent failures",XC.fp[0],1):'')+'</div>')+
         comboChart({kind:"traffic",fill:1 /* 26.11: Uplink / Downlink pushed with a light fill */,up:cU,down:cD,W:1100,H:340, /* 26.11: taller (was 240) */ noX:anyF?1:0,AX:AX})+'</div>'+(anyF?'<div class="eg-subchart eg-kfail eg-kfail-l">'+comboChart({kind:"fail",up:cU,down:cD,W:1100,H:72,AX:AX})+'</div>':'')+'</div>');
@@ -9374,7 +9390,7 @@ function fill(root,parts){
    ROUTING
    ================================================================ */
 var main=$(".tb-main");
-function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor,window.egActDecor,window.egOpenLoad,window.egLogDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
+function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor,window.egActDecor,window.egOpenLoad,window.egLogDecor,window.egLagSeg].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
 function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
   var sc=S.screen;
   $("#pdStart").classList.toggle("open",sc==="start");
@@ -10937,6 +10953,8 @@ tb-user-menu .tb-avatar.tb-avatar{background:rgba(0,0,0,.08)!important;color:rgb
 .eg-vt .eg-fparen.eg-fparen{color:rgba(0,0,0,.38)!important} /* period as light as the zero values */
 .eg-frow-v .eg-fparen::before{content:"– "} /* General notes: "Idle – last full sync 2 d ago" */
 .eg-lglive .live.eg-lgpaused{color:var(--eg-ok)!important} /* Paused: green text, grey dot and background */
+/* lag series inside the traffic charts: legend toggles */
+.eg-xoff-lup svg [data-s="lup"],.eg-xoff-ldown svg [data-s="ldown"]{display:none}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -11017,6 +11035,14 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
+<script id="pd-fx29-js">
+/* 26.11 A/B "Lag": Separate / In traffic / By direction (S.lagv) */
+(function(){
+  window.egLagSeg=function(){var v=(window.egS&&egS().lagv)||"sep",sg=document.getElementById("pdLagSeg");if(sg)[].forEach.call(sg.querySelectorAll("[data-lagv]"),function(b){b.classList.toggle("on",b.getAttribute("data-lagv")===v)})};
+  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-lagv]");if(!b)return;ev.preventDefault();ev.stopPropagation();egS().lagv=b.getAttribute("data-lagv");egSave();egShow()},true);
+  window.egLagSeg();
+})();
+</script>
 <script id="pd-fx28-js">
 /* 26.11 value cards: check whether the side text fits next to the number; if not, mark the row as wrapped (side text under the number, left-aligned) */
 (function(){
