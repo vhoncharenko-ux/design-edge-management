@@ -8195,6 +8195,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
 </div></div>
 <!-- ================= prototype controls (outside the product UI) ================= -->
 <div class="pd" id="pd">
+  <div class="pd-vis" id="pdVis" title="Visual style"><button type="button" data-vis="grey" title="Style 1: grey canvas, white cards">1</button><button type="button" data-vis="white" title="Style 2: white canvas">2</button></div>
   <div class="pd-left">
 <div class="pd-seg" title="Where a view opens: in the side panel over the list, or as a full-screen page"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M14 4v16"/></svg><span class="k">Open as</span><span class="pd-segs"><button data-pd="om" data-val="panel">Side panel</button><button data-pd="om" data-val="full">Full screen</button></span></div>
 <div class="pd-seg" title="Edge overview and Edge details: two separate views, or one combined view"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="8" height="14" rx="1"/><rect x="13" y="5" width="8" height="14" rx="1"/></svg><span class="k">Views</span><span class="pd-segs"><button data-pd="vm" data-val="sep">Separate</button><button data-pd="vm" data-val="comb">Combined</button></span></div>
@@ -10854,6 +10855,14 @@ mat-row.eg-lgqhide{display:none!important}
 .eg-frow-v .eg-stxt.warn{background:var(--eg-warn-bg,#fff3e0);color:var(--eg-warn,#e65100)}
 .eg-frow-v .eg-stxt.err{background:rgba(209,39,48,.08);color:#d12730}
 .eg-frow-v .eg-stxt.off{background:rgba(0,0,0,.06);color:rgba(0,0,0,.6)}
+/* prototype: visual style switch (1 grey canvas / 2 white canvas), bottom-left, away from the prototype buttons */
+.pd .pd-vis{position:fixed;left:16px;bottom:16px;z-index:2147483000;display:flex;gap:4px;padding:4px;border-radius:22px;background:rgb(28,29,32);box-shadow:rgba(0,0,0,.25) 0 4px 14px 0}
+.pd .pd-vis button{width:32px;height:32px;border:0;border-radius:16px;background:transparent;color:rgba(242,242,243,.7);font:600 13px/16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;padding:0}
+.pd .pd-vis button:hover{color:#fff;background:rgba(255,255,255,.08)}
+.pd .pd-vis button.on{background:#f2f2f3;color:rgb(28,29,32)}
+.pd.folded .pd-vis{display:none}
+/* style 2 (white canvas) with 8px corners */
+html.eg-cvw.eg-r8 .tb-form-panel.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe,html.eg-cvw.eg-r8 #egDrawer .tb-form-panel.eg-chframe.eg-chframe.eg-chframe.eg-chframe,html.eg-cvw.eg-r8 .eg-actbell.eg-actbell>.eg-gridcell.eg-gridlogs.eg-gridlogs.eg-gridlogs,html.eg-cvw.eg-r8 .eg-pagecard.eg-pagecard aside.eg-sidecol.eg-sidecol,html.eg-cvw.eg-r8 .eg-pagecard .eg-detcards.eg-detcards{border-radius:8px!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -10934,6 +10943,19 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
+<script id="pd-fx26-js">
+/* 26.11 visual style switch: 1 = grey canvas (S.cvs grey), 2 = white canvas (S.cvs white, html.eg-cvw) */
+(function(){
+  function mark(){var v=(window.egS&&egS().cvs)||"grey";[].forEach.call(document.querySelectorAll("#pdVis [data-vis]"),function(b){b.classList.toggle("on",b.getAttribute("data-vis")===v)});
+    document.documentElement.classList.toggle("eg-cvw",v==="white")}
+  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("#pdVis [data-vis]");if(!b)return;ev.preventDefault();ev.stopPropagation();
+    egS().cvs=b.getAttribute("data-vis");egSave();mark();egShow();(window.egRenderControls||function(){})()},true);
+  /* sits at the bottom-left of the content area, clear of the platform navigation (follows its open / collapsed width) */
+  function pos(){var el=document.getElementById("pdVis"),m=document.querySelector(".tb-main");if(!el||!m)return;el.style.left=(Math.round(m.getBoundingClientRect().left)+16)+"px"}
+  try{new ResizeObserver(pos).observe(document.querySelector(".tb-main"))}catch(e){}addEventListener("resize",pos);
+  mark();pos();
+})();
+</script>
 <script id="pd-fx25-js">
 /* 26.11 charts: a series sweeps in from the left edge to the right when it appears (data loaded, legend chip on); turned off, it disappears at once */
 (function(){var D=700,E="cubic-bezier(.4,0,.2,1)";
