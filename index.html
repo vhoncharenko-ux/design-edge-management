@@ -9999,7 +9999,8 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 .eg-entmain{align-self:stretch}
 .eg-entmain .eg-subtable{flex:1 1 auto;min-height:0;overflow:auto;display:block!important}
 .eg-entmain .eg-subtable>.table-container{flex:none!important;height:auto!important}
-.eg-entmain .eg-asghead{gap:8px}
+.eg-entmain .eg-asghead{gap:8px;height:64px!important;min-height:64px!important;padding:0 8px 0 16px!important;box-sizing:border-box;flex:none}
+.eg-entmain .eg-entsearch{height:40px;box-sizing:border-box;flex:none}
 .eg-entmain .eg-entsearch{width:320px;max-width:50%}
 .eg-entmain .eg-tbl-empty{padding:48px 16px}
 /* no Copy keys ▾ in the header: Edge ID, key and secret are copied from the General card */
@@ -10011,5 +10012,8 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 .eg-fcard.eg-editing .eg-genacts{margin-top:auto}
 .eg-fcard .eg-genacts{padding:8px 16px 8px 0!important}
 .eg-frow.eg-frow.eg-frow-ed{padding-top:4px!important;padding-bottom:4px!important}
+/* inline edit inputs: 48px high */
+.eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
+.eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
 </body></html>
