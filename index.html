@@ -10863,7 +10863,9 @@ mat-row.eg-lgqhide{display:none!important}
 .pd.folded .pd-vis{display:none}
 /* style 2 (white canvas): 12px corners (S.rad follows the style), pill buttons, charts split by dividers instead of frames,
    grey canvas back on the other tabs (Manage entities, Attributes …) where the content sits in its own frame */
-html.eg-cvw .eg-genacts .eg-ga.eg-ga{border-radius:18px}
+html.eg-cvw .eg-genacts .eg-ga.eg-ga{border-radius:8px}
+/* style 2: charts without frames need no side insets — title, legend and plot start at the column edge */
+html.eg-cvw .eg-screen.on .eg-chframe.eg-chframe :is(.eg-chsec-h,.eg-substack,.eg-dotlegend){padding-left:0!important;padding-right:0!important}
 html.eg-cvw .eg-ent.eg-ent{border-radius:12px!important}
 html.eg-cvw .eg-screen.on .tb-form-panel.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe.eg-chframe{border:0!important;border-top:1px solid rgba(0,0,0,.12)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding-left:0!important;padding-right:0!important}
 html.eg-cvw .tb-workarea:has(.eg-screen.on .eg-tabph:not([style*="none"])){background:rgb(247,247,248)!important}
