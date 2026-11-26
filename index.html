@@ -7505,6 +7505,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
 <button class="pd-btn" data-pd="dash" id="pdDashBtn" title="How the edge dashboard shows the data" style="display:none"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg><span class="k">Dashboard</span><span class="v" id="pdDashLbl">By direction</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
 <div class="pd-seg" id="pdWarnSeg" title="Colour of lag and warnings everywhere: the platform caution token, orange, or the platform accent"><span class="k">Warning</span><span class="pd-segs"><button data-pd="warn" data-val="caution" title="Warning: Caution"><i class="pd-sw" style="background:#b26500"></i>Caution</button><button data-pd="warn" data-val="orange" title="Warning: Orange"><i class="pd-sw" style="background:#f57c00"></i>Orange</button><button data-pd="warn" data-val="accent" title="Warning: Accent"><i class="pd-sw" style="background:#ff5722"></i>Accent</button></span></div>
 <div class="pd-seg" id="pdOvfSeg" title="Separate + Full screen: the dashboard as a tab next to Details, or as its own page opened with a button" style="display:none"><span class="k">Dashboard as</span><span class="pd-segs"><button data-pd="ovf" data-val="tab">Tab</button><button data-pd="ovf" data-val="page">Page</button></span></div><div class="pd-seg" id="pdOvpSeg" title="Separate + Side panel: the Edge overview dashboard as a tab next to Details, or opened on the full page" style="display:none"><span class="k">Overview</span><span class="pd-segs"><button data-pd="ovp" data-val="tab">Tab</button><button data-pd="ovp" data-val="page" title="Edge overview button opens the full page">Page</button></span></div><div class="pd-seg" id="pdRadSeg" title="Corner radius of the sections on the edge page" style="display:none"><span class="k">Radius</span><span class="pd-segs"><button data-pd="rad" data-val="12">12</button><button data-pd="rad" data-val="8">8</button></span></div>
+<div class="pd-seg" id="pdMngSeg" title="Assigned entities: the Manage menu in the header, or an Entities tab with side navigation"><span class="k">Manage</span><span class="pd-segs"><button data-mng="menu">Menu</button><button data-mng="tab">Tab</button></span></div>
 <div class="pd-seg" id="pdEditSeg" title="Editing General: in a dialog with only the editable fields, or in place (only the editable rows turn into inputs)"><span class="k">Edit</span><span class="pd-segs"><button data-edm="popup">Popup</button><button data-edm="inline">Inline</button></span></div>
 <div class="pd-seg" id="pdHdrSeg" title="Edge page header: current (breadcrumbs in the top bar, title row, tabs) or compact (title in the top bar, actions next to the tabs)"><span class="k">Header</span><span class="pd-segs"><button data-hdr="old">Current</button><button data-hdr="new">Compact</button></span></div>
 <button class="pd-btn" data-pd="scn" id="pdScnBtn" title="Switch the data behind the list"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span class="k">Scenario</span><span class="v" id="pdScnLbl">Typical</span></button></div>
@@ -8672,7 +8673,7 @@ function fill(root,parts){
    ROUTING
    ================================================================ */
 var main=$(".tb-main");
-function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
+function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
 function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
   var sc=S.screen;
   $("#pdStart").classList.toggle("open",sc==="start");
@@ -9365,6 +9366,7 @@ var QA=function(sel,r){return Array.prototype.slice.call((r||document).querySele
       rows+='<mat-row class="mat-mdc-row mdc-data-table__row"><mat-cell class="mat-mdc-cell mdc-data-table__cell eg-cbc"><mat-checkbox class="mat-mdc-checkbox"><div class="mdc-checkbox"><div class="mdc-checkbox__background"></div></div></mat-checkbox></mat-cell><mat-cell class="mat-mdc-cell mdc-data-table__cell">'+d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2)+'</mat-cell><mat-cell class="mat-mdc-cell mdc-data-table__cell">'+sing+" "+name.replace(/[^0-9A-Za-z]+/g,"-")+"-"+(i+1)+'</mat-cell><mat-cell class="mat-mdc-cell mdc-data-table__cell eg-desc"></mat-cell><mat-cell class="mat-mdc-cell mdc-data-table__cell">'+col[1][i%col[1].length]+'</mat-cell></mat-row>'}
     return '<div class="eg-asghead">'+ib("arrow_back","Back to "+name,"eg-subback eg-backbtn")+'<div class="t">'+name+': '+type+'</div><span class="sp"></span>'+ib("add","Add")+ib("refresh","Refresh")+ib("search","Search")+'</div>'+
       '<div class="eg-subtable eg-asgtable"><div class="table-container"><mat-header-row class="mat-mdc-header-row mdc-data-table__header-row">'+hc('<mat-checkbox class="mat-mdc-checkbox"><div class="mdc-checkbox"><div class="mdc-checkbox__background"></div></div></mat-checkbox>')+hc('Created time '+mi2("arrow_downward"))+hc("Name")+hc("Description")+hc(col[0])+'</mat-header-row>'+(rows||'<div class="eg-tbl-empty">No '+type.toLowerCase()+' assigned to this edge</div>')+'</div></div>'}
+  window.egAsgBody=asgBody; /* 26.11: the Entities tab reuses this table */
   window.egOpenAsg=function(type,n){var go2=function(){var card=document.querySelector('.eg-screen.on .eg-pagecard')||document.querySelector('.eg-pagecard');if(!card)return;close();
       var name=(document.querySelector('#egTitle .cur')||{}).textContent||"Edge";var o=document.createElement("div");o.className="eg-subpage eg-asgp";o.innerHTML=asgBody(type,n,name);card.appendChild(o);crumbs(type)};
     if(document.querySelector("#egDrawer.open")&&window.egOpenPage){window.egOpenPage();setTimeout(go2,60)}else go2()};
@@ -9763,6 +9765,26 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
    document.body.appendChild(d)},true);
 })();
 </script>
+<style id="pd-mng">
+/* 26.11 Manage as an Entities tab: side navigation by entity type + the assigned-entities table */
+.tb-root.eg-mngtab .eg-asgmenu{display:none!important}
+.eg-ent{display:flex;gap:16px;align-items:stretch;min-height:480px}
+/* nav: the platform side menu (tb-side-menu / tb-menu-link): full-width text buttons, active = primary 12% + 4px primary bar */
+.eg-entnav{flex:none;width:240px;display:flex;flex-direction:column;padding:8px 0;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;box-sizing:border-box;align-self:flex-start;overflow:hidden}
+.eg-entnav button{all:unset;position:relative;box-sizing:border-box;display:flex;align-items:center;gap:16px;height:40px;padding:0 16px;cursor:pointer;font:400 14px/20px Roboto,sans-serif;letter-spacing:.25px;color:rgba(0,0,0,.76)}
+.eg-entnav button:hover{background:rgba(0,0,0,.04)}
+.eg-entnav button .mat-icon{font-size:20px!important;width:20px!important;height:20px!important;color:color-mix(in srgb,currentcolor 80%,transparent)}
+.eg-entnav button .n{margin-left:auto;color:rgba(0,0,0,.54);font-size:13px}
+.eg-entnav button.on{background:color-mix(in srgb,var(--tb-primary-500,#00695c) 12%,transparent);color:var(--tb-primary-500,#00695c);font-weight:500}
+.eg-entnav button.on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tb-primary-500,#00695c)}
+.eg-entnav button.on .mat-icon,.eg-entnav button.on .n{color:var(--tb-primary-500,#00695c)}
+.eg-entmain{flex:1;min-width:0;display:flex;flex-direction:column;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;overflow:hidden}
+.eg-entmain .eg-asghead{box-shadow:inset 0 -1px 0 rgba(0,0,0,.12)!important}
+.eg-entmain .eg-asghead .t{font:500 16px/24px Roboto,sans-serif;color:rgba(0,0,0,.87)}
+.eg-entmain .eg-subtable{flex:1;margin:0!important;border:0!important;border-radius:0!important}
+.eg-tabph:has(>.eg-ent){background:transparent!important;padding:16px 0 0!important;border:0!important;box-shadow:none!important}
+#egDrawer .eg-entnav{width:208px}
+</style>
 <style id="pd-edit">
 /* 26.11 Edit for the General card: icon button in the card title; Popup or Inline */
 .eg-fcard-t .eg-genedit{margin:-8px -8px -8px auto!important}
@@ -9828,25 +9850,58 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
   var helpSlot=document.createElement("span");helpSlot.id="egHelpSlot";helpSlot.style.display="contents";
   var fs=[].filter.call(tools.querySelectorAll("button"),function(b){return /fullscreen/.test(b.textContent)})[0];
   tools.insertBefore(helpSlot,fs||null);
-  function off(){document.querySelector(".tb-root").classList.remove("eg-hdr2");if(title.parentNode!==bcHome)bcHome.appendChild(title);box.innerHTML="";helpSlot.innerHTML=""}
+  /* every moved node leaves a marker at its original place, so switching back (or leaving the page) puts it back */
+  var MOV=[];
+  function mv(el,to,before){if(!el)return;var mk=document.createComment("eg-hdr2");el.parentNode.insertBefore(mk,el);MOV.push([el,mk]);to.insertBefore(el,before||null)}
+  function restore(){MOV.forEach(function(p){if(p[1].parentNode){p[1].parentNode.insertBefore(p[0],p[1]);p[1].remove()}else if(p[0].parentNode)p[0].remove()});MOV=[];box.innerHTML="";helpSlot.innerHTML=""}
+  function off(){document.querySelector(".tb-root").classList.remove("eg-hdr2");restore()}
   window.egHdr2=function(){
     var seg=document.getElementById("pdHdrSeg"),on=(egS().hdr||"new")==="new";
     var head=document.querySelector(".eg-screen.on header.tb-page-head");
     if(seg){seg.style.display=head?"":"none";[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-hdr")===(egS().hdr||"new"))})}
     if(!on||!head){off();return}
     var tabs=head.nextElementSibling&&head.nextElementSibling.matches(".tb-page-tabs")?head.nextElementSibling:null;
-    /* only a freshly rendered header is moved; when the page was not re-rendered its parts are already in place */
+    /* put everything back first (the page may have updated the header in place), then move the current parts again */
+    restore();
     var back=head.querySelector(".eg-back"),av=head.querySelector(".eg-avatar"),tt=head.querySelector(".tb-page-titles");
-    if(tt){box.innerHTML="";if(back)box.appendChild(back);if(av)box.appendChild(av);
-      var col=document.createElement("div");col.className="eg-h2col";col.appendChild(title);col.appendChild(tt);box.appendChild(col)}
-    else if(title.parentNode===bcHome){var col2=box.querySelector(".eg-h2col");if(col2)col2.insertBefore(title,col2.firstChild)}
-    var help=head.querySelector(".tb-help-btn");if(help){helpSlot.innerHTML="";helpSlot.appendChild(help)}
+    var col=document.createElement("div");col.className="eg-h2col";
+    mv(back,box);mv(av,box);box.appendChild(col);mv(title,col);mv(tt,col);
+    mv(head.querySelector(".tb-help-btn"),helpSlot);
     if(tabs){tabs.classList.add("eg-tabsacts");var end=tabs.querySelector(":scope>.eg-tabsend");if(!end){end=document.createElement("div");end.className="eg-tabsend";tabs.appendChild(end)}
-      var acts=head.querySelector(".eg-hdrx"),more=head.querySelector(".eg-hdrmore");if(acts||more){end.innerHTML="";if(acts)end.appendChild(acts);if(more)end.appendChild(more)}}
+      [].slice.call(end.childNodes).forEach(function(n){if(!MOV.some(function(p){return p[0]===n}))n.remove()});
+      mv(head.querySelector(".eg-hdrx"),end);mv(head.querySelector(".eg-hdrmore"),end)}
     document.querySelector(".tb-root").classList.add("eg-hdr2");
   };
   document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-hdr]");if(!b)return;ev.preventDefault();ev.stopPropagation();egS().hdr=b.getAttribute("data-hdr");egSave();egShow()},true);
   try{egHdr2()}catch(e){}
+})();
+/* 26.11 Manage variant "Tab": an Entities tab next to Overview (side navigation by entity type + assigned-entities table); the Manage menu is hidden */
+(function(){
+  var SEL=null;
+  function mode(){return egS().mng||"tab"}
+  function navs(){return [].slice.call(document.querySelectorAll(".eg-screen.on .eg-pagecol>.tb-page-tabs,#egDrawer.open .tb-details-tabs"))}
+  function body(){var a=window.__egAsg||[];if(!a.length)return '<div class="tb-form-panel"><div class="tb-form-hint" style="margin:0">No entities are assigned to this edge.</div></div>';
+    if(!SEL||!a.some(function(x){return x[1]===SEL}))SEL=a[0][1];
+    var cur=a.filter(function(x){return x[1]===SEL})[0],name=((document.querySelector("#egDrawer.open .tb-details-title")||document.querySelector("#egTitle .cur")||{}).textContent||"Edge").trim();
+    var nav='<nav class="eg-entnav" aria-label="Entity types">'+a.map(function(x){return '<button data-ent="'+x[1]+'"'+(x[1]===SEL?' class="on"':'')+'><mat-icon class="mat-icon notranslate material-icons mat-ligature-font">'+x[0]+'</mat-icon><span>'+x[1]+'</span><span class="n">'+x[2]+'</span></button>'}).join("")+'</nav>';
+    var t=document.createElement("div");t.innerHTML=window.egAsgBody?window.egAsgBody(cur[1],cur[2],name):"";
+    var bk=t.querySelector(".eg-subback");if(bk)bk.remove();var tt=t.querySelector(".eg-asghead .t");if(tt)tt.textContent=cur[1];
+    return '<div class="eg-ent">'+nav+'<div class="eg-entmain">'+t.innerHTML+'</div></div>'}
+  var td=window.egTabDemo;window.egTabDemo=function(n){if(n==="Manage entities"&&mode()==="tab")return body();return td?td.apply(this,arguments):""};
+  window.egMngDecor=function(){var on=mode()==="tab",ns=navs();
+    document.querySelector(".tb-root").classList.toggle("eg-mngtab",on&&ns.length>0);
+    var seg=document.getElementById("pdMngSeg");if(seg){seg.style.display=ns.length?"":"none";[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-mng")===mode())})}
+    ns.forEach(function(nv){var mine=nv.querySelector(":scope>a.eg-enttab");
+      if(!on){if(mine){var was=mine.classList.contains("active");mine.remove();if(was&&nv.firstElementChild)nv.firstElementChild.click()}return}
+      if(mine)return;var src=nv.querySelector(":scope>a:not([data-tab]):not(.eg-dbtab):not(.eg-dettab):not(.eg-asgtab)");if(!src)return;
+      var tb=src.cloneNode(true);tb.className=tb.className.replace(/\b(active|mdc-tab--active|mat-mdc-tab-label-active)\b/g,"")+" eg-enttab";tb.removeAttribute("style");
+      var lb=tb.querySelector(".mdc-tab__text-label");if(lb)lb.textContent="Manage entities";else tb.textContent="Manage entities";
+      var ind=tb.querySelector(".mdc-tab-indicator");if(ind)ind.classList.remove("mdc-tab-indicator--active");
+      var first=nv.querySelector(":scope>a");nv.insertBefore(tb,first?first.nextSibling:null)})};
+  document.addEventListener("click",function(ev){var t=ev.target;
+    var b=t.closest&&t.closest(".eg-entnav [data-ent]");if(b){ev.preventDefault();ev.stopPropagation();SEL=b.getAttribute("data-ent");var ph=b.closest(".eg-tabph");if(ph)ph.innerHTML=body();return}
+    var m=t.closest&&t.closest("[data-mng]");if(m){ev.preventDefault();ev.stopPropagation();egS().mng=m.getAttribute("data-mng");egSave();egMngDecor()}},true);
+  try{egMngDecor()}catch(e){}
 })();
 /* 26.11 Edit for the General card (Name, Edge type, Label, Description are the editable fields of an edge).
    Popup: those fields in a dialog. Inline: only those rows turn into inputs, the rest of the card stays read-only.
