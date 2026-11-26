@@ -10801,6 +10801,12 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 .eg-genacts .eg-ga.icon{width:36px;padding:0;justify-content:center}
 .eg-genacts .eg-ga[data-ga="more"]{position:absolute;top:0;right:0}
 .eg-genacts .eg-ga.eg-copydd.eg-copydd{display:inline-flex!important}
+/* time range row: 36px high, the toggle centred */
+.eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
+/* Managed by: edit button at the row end, same size as the copy buttons */
+.eg-frow-v .eg-mgdedit{margin-left:auto;width:40px!important;height:40px!important;padding:0!important;flex:none;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+.eg-frow-v .eg-mgdedit .mat-icon{font-size:20px!important;width:20px!important;height:20px!important;line-height:20px!important;display:block!important;color:rgba(0,0,0,.87)}
+.eg-sidecol .eg-frow-v:has(.eg-mgdedit){flex-wrap:nowrap}
 .eg-pagecol:has(.eg-genacts) :is(.eg-tabsend,header) :is(.eg-hdracts,.eg-hdrmore){display:none!important}
 .eg-sidelay>.eg-sidewrap{display:flex;flex-direction:column;align-self:flex-start;flex:0 0 32%;width:32%;max-width:480px;min-width:360px}
 @media(max-width:1100px){.eg-sidelay>.eg-sidewrap{flex:none;width:auto;max-width:none;min-width:0;align-self:stretch}}
@@ -10889,18 +10895,21 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
       var h='<button class="eg-ga" data-ga="sync" title="Sync edge">'+mi("sync")+'<span>Sync</span></button>'+
         (up?'<button class="eg-ga pri" data-ga="up" title="'+up.title+'">'+mi("arrow_upward")+'<span>Upgrade</span></button>':'')+
         '<button class="eg-ga eg-copydd" title="Copy the edge ID, key or secret">'+mi("content_copy")+'<span>Copy keys</span>'+mi("arrow_drop_down","dd")+'</button>'+
-        '<button class="eg-ga" data-ga="install" title="Install &amp; Connect Instructions">'+mi("install_desktop")+'<span>Install</span></button>'+
+        '<button class="eg-ga pri" data-ga="install" title="Connect this edge to an agent or install it by hand (sets Managed by)">'+mi("link")+'<span>Connect agent</span></button>'+
         '<button class="eg-ga icon" data-ga="more" title="More actions">'+mi("more_vert")+'</button>';
+      /* Managed by: an edit button at the row end opens the same window */
+      [].forEach.call(sc.querySelectorAll(".eg-frow"),function(r){var l=r.querySelector(".eg-frow-l"),v=r.querySelector(".eg-frow-v");if(!l||!v||l.textContent.trim()!=="Managed by"||v.querySelector(".eg-mgdedit"))return;
+        v.insertAdjacentHTML("beforeend",'<button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base eg-mgdedit mat-unthemed" data-ga="install" title="Change who manages this edge"><span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>'+mi("edit")+'<span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></button>')});
       if(old){if(old.getAttribute("data-h")!==h){old.innerHTML=h;old.setAttribute("data-h",h)}return}
       var d=document.createElement("div");d.className="eg-genacts";d.innerHTML=h;d.setAttribute("data-h",h);wrap.insertBefore(d,sc)})};
   function closeMore(){var m=document.getElementById("egGaMenu");if(m)m.remove()}
-  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".eg-genacts .eg-ga[data-ga]");
+  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".eg-genacts .eg-ga[data-ga],.eg-mgdedit[data-ga]");
     if(!b){if(!(ev.target.closest&&ev.target.closest("#egGaMenu")))closeMore();return}
     ev.stopPropagation();ev.preventDefault();var k=b.getAttribute("data-ga"),pc=b.closest(".eg-pagecol"),T=window.egToast||function(){};
     if(k!=="more")closeMore();
     if(k==="sync")T("Sync started");
     else if(k==="up"){var u=pc&&pc.querySelector('.eg-hdracts button[title^="Upgrade"]');if(u)u.click()}
-    else if(k==="install"){var ic=pc&&pc.querySelector('.eg-hdracts [data-ic]');if(ic)ic.click();else if(window.egOpenInstall)window.egOpenInstall(null)}
+    else if(k==="install"){if(window.egOpenInstall)window.egOpenInstall(null)}
     else if(k==="more"){if(document.getElementById("egGaMenu")){closeMore();return}
       var m=document.createElement("div");m.id="egGaMenu";m.className="tb-hmenu eg-rowmenu";
       m.innerHTML='<button class="danger">'+mi("delete")+'<span>Delete edge</span></button>';
