@@ -10801,6 +10801,8 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 .eg-genacts .eg-ga.icon{width:36px;padding:0;justify-content:center}
 .eg-genacts .eg-ga[data-ga="more"]{position:absolute;top:0;right:0}
 .eg-genacts .eg-ga.eg-copydd.eg-copydd{display:inline-flex!important}
+/* no lag: the check sits in a light green circle, green icon (same colors as the No lag pill) */
+.eg-lagok.eg-lagok>.mat-icon{box-sizing:border-box;width:48px!important;height:48px!important;padding:12px;border-radius:50%;background:var(--eg-ok-bg,#e6f4ea);color:var(--eg-ok,#198038)!important;font-size:24px!important;line-height:24px!important;margin-bottom:8px!important;overflow:hidden}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -10894,7 +10896,6 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
       var up=pc.querySelector('.eg-hdracts button[title^="Upgrade"]');
       var h='<button class="eg-ga" data-ga="sync" title="Sync edge">'+mi("sync")+'<span>Sync</span></button>'+
         (up?'<button class="eg-ga pri" data-ga="up" title="'+up.title+'">'+mi("arrow_upward")+'<span>Upgrade</span></button>':'')+
-        '<button class="eg-ga eg-copydd" title="Copy the edge ID, key or secret">'+mi("content_copy")+'<span>Copy keys</span>'+mi("arrow_drop_down","dd")+'</button>'+
         '<button class="eg-ga pri" data-ga="install" title="Connect this edge to an agent or install it by hand (sets Managed by)">'+mi("link")+'<span>Connect agent</span></button>'+
         '<button class="eg-ga icon" data-ga="more" title="More actions">'+mi("more_vert")+'</button>';
       /* Managed by: an edit button at the row end opens the same window */
