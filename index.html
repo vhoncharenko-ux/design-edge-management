@@ -7514,6 +7514,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
       <button class="pd-btn pd-designer-only pd-cmp" data-pd="styles" title="Styles"><svg viewBox="0 0 24 24"><path d="M5 20L12 4l7 16"/><path d="M8 14h8"/></svg>Styles</button>
       <button class="pd-btn pd-cmp" data-pd="task" id="pdTaskBtn" title="Task context"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/></svg>Task</button>
       <button class="pd-btn pd-cmp" data-pd="reset" title="Back to the default variants, screen size and inspectors"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4h4"/></svg>Reset prototype</button>
+      <button class="pd-btn icon pd-abbtn" id="pdAbBtn" type="button" title="Variants and modes" aria-expanded="false"><span class="pd-ab">A/B</span></button>
       <button class="pd-btn icon pd-fold" data-pd="fold" title="Hide prototype controls"><svg viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3 3.5M6.6 7.6C4.3 9.2 3 12 3 12s4 6 9 6c1.5 0 2.9-.4 4.1-1"/><path d="M9.9 10a3 3 0 0 0 4.2 4.2"/></svg></button>
     </div>
   </div>
@@ -9094,6 +9095,8 @@ function closePops(){$$(".pd-pop").forEach(function(p){p.classList.remove("open"
 function openPop(pop,anchor){
   closePops();pop.classList.add("open");
   var r=anchor.getBoundingClientRect(),pw=pop.offsetWidth,ph=pop.offsetHeight;
+  var dwr=anchor.closest&&anchor.closest(".pd-left"); /* 26.11: from the side menu, popovers open to its right */
+  if(dwr&&document.getElementById("pd").classList.contains("pd-drw-on")){var d=dwr.getBoundingClientRect();pop.style.left=(d.right+8)+"px";pop.style.top=Math.max(8,Math.min(innerHeight-ph-8,r.top))+"px";return}
   pop.style.left=Math.max(8,Math.min(innerWidth-pw-8,r.right-pw))+"px";
   pop.style.top=Math.max(8,r.top-ph-8)+"px";
 }
@@ -9134,7 +9137,7 @@ function maybeHint(){
   if(S.fold||sc==="start"||!SCREENS[sc]||S.hint[varKey(sc)]||Object.keys(SCREENS[varKey(sc)].variants).filter(function(k){return !SCREENS[varKey(sc)].variants[k].hid}).length<2){h.classList.remove("open");return}
   $("#pdHintText").textContent="Switch "+SCREENS[sc].q.charAt(0).toLowerCase()+SCREENS[sc].q.slice(1,-1)+": "+Object.keys(SCREENS[varKey(sc)].variants).filter(function(k){return !SCREENS[varKey(sc)].variants[k].hid}).map(function(k){return SCREENS[varKey(sc)].variants[k].t.toLowerCase()}).join(" or ")+".";
   h.classList.add("open");
-  var b=$("#pdVarBtn").getBoundingClientRect();
+  var b=(document.getElementById("pd").classList.contains("pd-drw-on")?$("#pdVarBtn"):($("#pdAbBtn")||$("#pdVarBtn"))).getBoundingClientRect(); /* 26.11: points at the A/B button while the side menu is closed */
   h.style.left=Math.max(8,Math.min(innerWidth-h.offsetWidth-8,b.right-h.offsetWidth+40))+"px";h.style.top=Math.max(8,b.top-h.offsetHeight-14)+"px";
 }
 document.addEventListener("click",function(ev){
@@ -9156,7 +9159,7 @@ document.addEventListener("click",function(ev){
   if(b.hasAttribute("data-size")){S.size=b.getAttribute("data-size");save();closePops();renderControls();return}
   var a=b.getAttribute("data-pd");
   if(a==="start")go("start");
-  else if(a==="variants"){S.hint[varKey(S.screen)]=1;save();$("#pdHint").classList.remove("open");var p=$("#pdVarPop");if(p.classList.contains("open"))closePops();else variantPop($("#pdVarBtn"))}
+  else if(a==="variants"){S.hint[varKey(S.screen)]=1;save();$("#pdHint").classList.remove("open");var p=$("#pdVarPop");if(p.classList.contains("open"))closePops();else{var pdr=document.getElementById("pd");if(pdr.classList.contains("pd-drw-on"))variantPop($("#pdVarBtn"));else{pdr.classList.add("pd-drw-on");setTimeout(function(){variantPop($("#pdVarBtn"))},220)}}}
   else if(a==="hint-x"){S.hint[varKey(S.screen)]=1;save();$("#pdHint").classList.remove("open")}
   else if(a==="size"){var sp=$("#pdSizePop");if(sp.classList.contains("open"))closePops();else sizePop(b)}
   else if(a==="designer"){S.designer=S.designer?0:1;if(!S.designer){S.insp="";S.size="full";hideInsp()}save();closePops();renderControls();maybeHint()}
@@ -9754,6 +9757,27 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
      (ns.length?'<div class="bl">'+ns.map(function(x){var ic=IC[x.k]||IC.ok;return '<div class="bi"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font bic" style="color:'+ic[1]+'">'+ic[0]+'</mat-icon><div class="bc"><div class="s">'+x.s+'</div><div class="m">'+x.m+'</div></div><div class="br"><span class="tm">'+rel(x.t)+'</span><button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base bread" title="Mark as read"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font">check_circle_outline</mat-icon></button></div></div>'}).join("")+'</div>':'<div class="be">No notifications</div>')+
      '<div class="bf"><button class="mdc-button mat-mdc-button-base mat-mdc-button mat-primary" data-bview><span class="mdc-button__label">View all</span></button></div>';
    document.body.appendChild(d)},true);
+})();
+</script>
+<style id="pd-ab-drawer">
+/* 26.11 prototype switches live in a slide-out side menu; the A/B button next to the eye opens it */
+.pd .pd-left{position:fixed!important;top:16px!important;bottom:auto!important;max-height:calc(100vh - 100px);left:16px!important;width:320px;box-sizing:border-box;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:8px!important;padding:44px 12px 12px;background:var(--pd-bg);border:1px solid var(--pd-line);border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.4);overflow:auto;transform:translateX(calc(-100% - 24px));visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s}
+.pd.pd-drw-on .pd-left{transform:none;visibility:visible;transition:transform .2s ease}
+.pd .pd-left::before{content:"Variants & modes";position:absolute;top:15px;left:16px;font:600 10.5px/14px -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--pd-mid)}
+.pd .pd-left>.pd-seg,.pd .pd-left>.pd-btn,.pd .pd-left>#pdVarSlot>.pd-btn{box-shadow:none!important;width:100%!important;box-sizing:border-box;justify-content:flex-start!important;padding-left:12px!important}
+.pd .pd-left>#pdVarSlot{display:block}
+.pd .pd-left .pd-seg .pd-segs{margin-left:auto}
+.pd .pd-left .pd-seg .k,.pd .pd-left #pdScnBtn .k,.pd .pd-left .pd-btn .t{display:inline!important}
+.pd .pd-left .pd-seg svg{display:block!important}
+.pd .pd-abbtn .pd-ab{font:700 11px/1 -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.02em}
+.pd.pd-drw-on .pd-abbtn{background:var(--pd-acc);border-color:var(--pd-acc)}
+</style>
+<script>
+/* 26.11 A/B button: opens / closes the side menu with the prototype switches; Esc closes it */
+(function(){var pd=document.getElementById("pd");if(!pd)return;
+  function set(on){pd.classList.toggle("pd-drw-on",on);var b=document.getElementById("pdAbBtn");if(b)b.setAttribute("aria-expanded",on?"true":"false");if(!on&&typeof closePops==="function")closePops()}
+  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("#pdAbBtn");if(!b)return;ev.preventDefault();ev.stopPropagation();set(!pd.classList.contains("pd-drw-on"))},true);
+  document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&pd.classList.contains("pd-drw-on"))set(false)});
 })();
 </script>
 </body></html>
