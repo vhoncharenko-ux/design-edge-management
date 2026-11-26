@@ -10010,6 +10010,10 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 .eg-fcard.eg-editing .eg-frow:not(.eg-frow-ed){display:none!important}
 .eg-fcard.eg-editing{display:flex!important;flex-direction:column;box-sizing:border-box}
 .eg-fcard.eg-editing .eg-genacts{margin-top:auto}
+/* section titles (General, Connection, …): one height for all — 12px top, 8px bottom, the edit button does not add height */
+:is(#egDrawer,#egHdr2,.eg-pagecard,body) .eg-fcard>.eg-fcard-t.eg-fcard-t.eg-fcard-t{padding-top:12px!important;padding-bottom:8px!important;min-height:0!important;height:auto!important;box-sizing:border-box}
+.eg-fcard-t .eg-genedit.eg-genedit{width:40px!important;height:40px!important;padding:8px!important;margin:-8px -8px -8px auto!important}
+.eg-fcard-t .eg-genedit .mat-mdc-button-touch-target{width:40px!important;height:40px!important}
 /* the title row keeps its height: the edit button is hidden, not removed */
 .eg-fcard.eg-editing .eg-fcard-t .eg-genedit{display:inline-flex!important;visibility:hidden}
 .eg-fcard .eg-genacts{padding:8px 16px 8px 0!important}
