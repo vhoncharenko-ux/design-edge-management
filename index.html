@@ -10920,6 +10920,9 @@ html.eg-cvw .eg-screen.on .eg-pagecard:has(.eg-tabph:not([style*="none"])),html.
 html .tb-right-border.tb-right-border{border-right-color:rgba(0,0,0,.18)!important}
 /* No lag: a faint flat Lag chart behind the message (both directions at 0) */
 .eg-lagok.eg-lagbg{position:relative;min-height:220px!important;isolation:isolate}
+/* charts stacked one under another: a lower No lag block */
+.eg-onecol .eg-lagok.eg-lagbg,.eg-metsec .eg-lagok.eg-lagbg{min-height:140px!important;padding-bottom:28px!important}
+.eg-onecol .tb-form-panel.eg-chframe:has(>.eg-lagok){min-height:0!important;height:auto!important} /* not stretched to the Traffic frame height */
 .eg-lagok.eg-lagbg>svg.eg-lagbgsvg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .eg-lagok.eg-lagbg>.mat-icon,.eg-lagok.eg-lagbg>.t{position:relative}
 /* time range row: 36px high, the toggle centred */
@@ -11005,7 +11008,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 <script id="pd-fx27-js">
 /* 26.11 No lag: draw a faint flat Lag chart (grid + both directions at 0) behind the "No lag" message */
 (function(){
-  function svg(){var g="",i,y;for(i=0;i<5;i++){y=10+i*20;g+='<line x1="0" x2="1000" y1="'+y+'" y2="'+y+'" stroke="#e0e0e0" stroke-width="1" vector-effect="non-scaling-stroke"/>'}
+  function svg(){var g=""; /* 26.11: no grid lines — only the two flat lines at 0 */
     return '<svg class="eg-lagbgsvg" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">'+g+
       '<line x1="0" x2="1000" y1="90" y2="90" stroke="#8e5bd1" stroke-width="2" vector-effect="non-scaling-stroke"/>'+
       '<line x1="0" x2="1000" y1="90" y2="90" stroke="#f57c00" stroke-width="2" stroke-dasharray="6 6" vector-effect="non-scaling-stroke"/></svg>'}
