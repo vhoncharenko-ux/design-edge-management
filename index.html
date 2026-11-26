@@ -10836,6 +10836,9 @@ mat-row.eg-lgqhide{display:none!important}
 .eg-lgtabbed .eg-lgpane[data-lgp="notes"] mat-header-row.mat-mdc-header-row{min-height:36px!important;height:36px!important}
 /* chart legend: lines and failures in one row (no forced break before the failure chips) */
 .eg-dotlegend .eg-legbr{display:none!important}
+/* "added" series (queued, not yet pushed): fine dotted line, the legend swatch dotted too */
+.eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:1.5 3;stroke-linecap:round}
+.eg-lgt:is([data-xs="upa"],[data-xs="downa"],[data-s="added"])>i{background-image:repeating-linear-gradient(90deg,transparent 0 2px,#fff 2px 4px)!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
