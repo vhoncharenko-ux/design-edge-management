@@ -9937,7 +9937,7 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
     if(o.Name){document.querySelectorAll("#egTitle .cur,.eg-screen.on .tb-page-h2,#egDrawer.open .tb-details-header h2,#egHdr2 .tb-page-h2").forEach(function(h){
       var tn=[].filter.call(h.childNodes,function(n){return n.nodeType===3&&n.textContent.trim()})[0];if(tn)tn.textContent=o.Name;else if(h.classList.contains("cur"))h.textContent=o.Name})}}
   function save(c,vals){var k=key(c);if(!vals.Name)vals.Name=val(c,"Name");OV[k]=vals;cards().forEach(apply)} /* no re-render: values are written into the card and the title */
-  function finish(c,vals){c.classList.remove("eg-editing");var a=c.querySelector(".eg-genacts");if(a)a.remove();
+  function finish(c,vals){c.classList.remove("eg-editing");c.style.minHeight="";var a=c.querySelector(".eg-genacts");if(a)a.remove();
     [].forEach.call(c.querySelectorAll(".eg-frow-ed"),function(r){var l=r.querySelector(".eg-frow-l").textContent.trim(),v=vals[l]||"";
       if(!v&&(l==="Label"||l==="Description")){r.remove();return}r.classList.remove("eg-frow-ed");r.querySelector(".eg-frow-v").textContent=v})}
   function popup(c){var cur={};ED.forEach(function(l){cur[l]=val(c,l)});
@@ -9952,11 +9952,11 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
     function go(){var v={};bd.querySelectorAll("input[data-f]").forEach(function(i){v[i.getAttribute("data-f")]=i.value.trim()});if(!v.Name){bd.querySelector('input[data-f="Name"]').focus();return}close();save(c,v)}
     document.addEventListener("keydown",kd,true);
     bd.addEventListener("click",function(ev){var t=ev.target;ev.stopPropagation();if(t===bd||t.closest(".eg-dlg-x,.eg-edcancel"))close();else if(t.closest(".eg-edsave"))go()})}
-  function inline(c){var cur={};ED.forEach(function(l){cur[l]=val(c,l)});c.classList.add("eg-editing");
+  function inline(c){var cur={};ED.forEach(function(l){cur[l]=val(c,l)});c.style.minHeight=c.offsetHeight+"px";c.classList.add("eg-editing"); /* the section keeps its height while editing */
     var after=rowOf(c,"Edge type");
     ED.forEach(function(l){var r=rowOf(c,l);
       if(!r){r=mkRow(l,"");var ref=l==="Description"?(rowOf(c,"Label")||after):after;if(ref&&ref.nextSibling)ref.parentNode.insertBefore(r,ref.nextSibling);else c.appendChild(r)}
-      r.classList.add("eg-frow-ed");r.querySelector(".eg-frow-v").innerHTML=field(l,cur[l]).replace(/<label>[^<]*<\/label>/,"")});
+      r.classList.add("eg-frow-ed");r.querySelector(".eg-frow-v").innerHTML=field(l,cur[l]).replace(/<label>[^<]*<\/label>/,"").replace('class="eg-ofield"','class="eg-ofield tb-inline-field"')});
     var a=document.createElement("div");a.className="eg-genacts";a.innerHTML='<button class="mdc-button mat-mdc-button eg-edcancel"><span class="mdc-button__label">Cancel</span></button><button class="mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-primary eg-edsave"><span class="mdc-button__label">Save</span></button>';c.appendChild(a);
     var f=c.querySelector('.eg-frow-ed input');if(f)setTimeout(function(){f.focus()},50);
     a.addEventListener("click",function(ev){ev.stopPropagation();var t=ev.target;
@@ -9992,7 +9992,9 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 <style id="pd-fx5">
 /* 26.11 compact header: taller top bar, the title block sits lower, next to the tabs */
 .tb-root.eg-hdr2 .tb-main-toolbar,.tb-root.eg-hdr2 .tb-main-toolbar>.mat-toolbar-tools{height:70px!important}
-.tb-root.eg-hdr2 #egHdr2{align-self:flex-end;margin-bottom:2px}
+.tb-root.eg-hdr2 #egHdr2{align-self:flex-end;margin-bottom:2px;margin-left:0!important}
+.tb-root.eg-hdr2 .tb-main-toolbar{padding-left:8px!important;padding-right:8px!important}
+.tb-root.eg-hdr2 .tb-main-toolbar>.mat-toolbar-tools{padding-left:0!important;padding-right:0!important}
 /* Manage entities: the table card fills the height; search in place of the title */
 .eg-entmain{align-self:stretch}
 .eg-entmain .eg-subtable{flex:1 1 auto;min-height:0;overflow:auto;display:block!important}
@@ -10002,11 +10004,12 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 .eg-entmain .eg-tbl-empty{padding:48px 16px}
 /* no Copy keys ▾ in the header: Edge ID, key and secret are copied from the General card */
 .eg-copydd{display:none!important}
-/* inline edit: only the editable rows are shown while editing; fields are 36px in a 40px row, the same height as a read-only row */
-.eg-fcard .eg-genacts{padding:8px 16px 8px 0!important}
-.eg-frow.eg-frow.eg-frow-ed{padding-top:0!important;padding-bottom:0!important;min-height:40px}
-.eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:36px!important}
-.eg-frow-ed .mat-mdc-form-field-infix{min-height:36px!important;padding-top:6px!important;padding-bottom:6px!important}
+/* inline edit: only the editable rows are shown; fields are the platform inline field (tb-inline-field: 40px, 14/20, 12px inset);
+   the General section keeps its height (min-height set on entering edit), Cancel / Save sit at its bottom */
 .eg-fcard.eg-editing .eg-frow:not(.eg-frow-ed){display:none!important}
+.eg-fcard.eg-editing{display:flex!important;flex-direction:column;box-sizing:border-box}
+.eg-fcard.eg-editing .eg-genacts{margin-top:auto}
+.eg-fcard .eg-genacts{padding:8px 16px 8px 0!important}
+.eg-frow.eg-frow.eg-frow-ed{padding-top:4px!important;padding-bottom:4px!important}
 </style>
 </body></html>
