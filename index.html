@@ -9187,7 +9187,7 @@ function statusParts(id){
       var offBan=!OFB?"":'<div class="eg-offban"><span class="eg-offic">'+mi("cloud_off")+'</span><div class="eg-offtx"><div class="eg-offt">'+(offAgo?"Offline for "+offAgo:"Offline")+'</div><div class="eg-offs">Last seen '+offAt.replace(/^Today/,"today")+'. No data from this edge reaches the cloud, so there is nothing to chart.</div><div class="eg-offh">What to check</div><ul class="eg-offl"><li>The edge service is running on its host (Docker container or system service).</li><li>The host can reach the cloud over the network.</li><li>The cloud URL, edge key and secret in the edge configuration match this edge.</li></ul></div></div>';
       fields='<div class="eg-fbody">'+(DNEW?'<div class="eg-sidelay'+(DG?'':' eg-nodash')+'">'+(DG?'<div class="eg-sidemain">'+(OFB?offBan:ovBlock)+'</div>':'')+'<aside class="eg-sidecol'+(DG?'':' eg-cardsmain')+'"'+(DOV?' style="display:none"':'')+'>':'')+
         
-        (OFB&&DW2?offBan:"")+crd("router",DNEW?"General":"Edge","",rw("Name",e.n)+rw("Edge type",e.t)+(DW2?rw("Network",lagI?'<span class="eg-net warn">Lagging</span>':e.st?'<span class="eg-net ok">OK</span>':'<span class="eg-net off" title="No data while the edge is inactive">—</span>'):rw("Status",'<span>'+stTxt+'</span>'))+rw("Version",e.v+(e.up?' <a class="eg-mlink eg-uplink" title="Upgrade this edge to '+(D.upg||"4.4.0")+'">Upgrade to '+(D.upg||"4.4.0")+'</a>':''))+(DNEW?rw("Managed by",egMgd(e)):"")+rw("Edge ID",cpy(hx(7,8)+"-"+hx(8,4)+"-"+hx(9,4)+"-"+hx(10,4)+"-"+hx(11,12)))+rw("Edge key",egSec(keyV))+rw("Edge secret",egSec(secV))+(e.label?rw("Label",e.label):"")+(e.descr?rw("Description",e.descr):""))+ /* no value — no row */
+        (OFB&&DW2?offBan:"")+crd("router",DNEW?"General":"Edge","",rw("Name",e.n)+rw("Edge type",e.t)+(DW2?rw("Network",lagI?'<span class="eg-net warn">Lagging</span>':e.st?'<span class="eg-net ok">OK</span>':'<span class="eg-net off" title="No data while the edge is inactive">—</span>'):rw("Status",'<span>'+stTxt+'</span>'))+rw("Version",e.v+(e.up?' <a class="eg-mlink eg-uplink" title="Upgrade this edge to '+(D.upg||"4.4.0")+'">Upgrade to '+(D.upg||"4.4.0")+'</a>':''))+(DNEW?rw("Agent",egMgd(e)):"") /* 26.11: label "Agent" (was Managed by) */+rw("Edge ID",cpy(hx(7,8)+"-"+hx(8,4)+"-"+hx(9,4)+"-"+hx(10,4)+"-"+hx(11,12)))+rw("Edge key",egSec(keyV))+rw("Edge secret",egSec(secV))+(e.label?rw("Label",e.label):"")+(e.descr?rw("Description",e.descr):""))+ /* no value — no row */
         /* Connection card: hidden for now (review, 2026-11-23) — these rows are not in the platform's Edge details form */
         (!SHOW_CONN?"":crd("cloud_sync","Connection",DNEW?"":"How this edge talks to the cloud and when it was last seen.",rw("Last connected",gvI("Last connected"))+rw("Last disconnected",ldFmt(gvI("Last disconnected")))+rw("Sync",gvI("Sync"))+rw("Stats reporting","Uplink every 1 min, downlink every 10 min")))+
         
@@ -9215,8 +9215,8 @@ function statusParts(id){
     /* platform Aggregated value card without the sparkline: icon + title, big value + unit, secondary values on the right */
     var vcard=function(ic,title,val,unit,side,sp){if(TF){if(unit){title+=", "+unit;unit=""}ic=null;if(val==="0"||val==="—"||/pushed/.test(title))sp=""}if(S.v.status==="I"||(S.v.status==="K"||(S.v.status==="L"||(S.v.status==="M"||S.v.status==="N"))))sp="";if((S.v.status==="K"||(S.v.status==="L"||(S.v.status==="M"||S.v.status==="N"))))ic=null;return '<div class="eg-vcard"><div class="eg-vt">'+(ic?mi(ic):'')+'<span>'+egParen(title)+'</span></div><div class="eg-vrow"><div class="eg-vv'+(val==="0"?' eg-vzero':'')+'">'+val+(unit?'<span class="u">'+unit+'</span>':'')+'</div><div class="eg-vside">'+side.map(function(x){return '<div class="'+(x[1]||'')+'">'+x[0]+'</div>'}).join("")+'</div></div>'+(sp||'')+'</div>'};
     var lagCard=function(dir,n){return vcard(dir==="up"?"upload":"download",(dir==="up"?"Uplink":"Downlink")+" lag",e.st?fmt(n||0):"—",e.st?"msgs":"",[[!e.st?"Inactive":'<span class="eg-vpill '+(n?'warn':'ok')+'">'+mi(n?"warning":"check_circle")+(n?"Lagging":"No lag")+'</span>',""]],vspark(e.s+(dir==="up"?1:5),"lag",n||0,!!e.st))};
-    var pushCard=function(dir,c){var r=sc(c.r),f=sc(c.f);if(TL){var sx=kSer(dir);if(sx){r=sx.tT;f=sx.tP}}var sxo=!e.st&&kSer(dir);if(sxo)return vcard(dir==="up"?"upload":"download",(dir==="up"?"Uplink":"Downlink")+" pushed ("+TWL+")",fmt(Math.round(sxo.P.reduce(function(u,w){return u+w},0)*sxo.bm/sxo.rep)),"msgs",[["Until offline",""],[e.off+" h ago",""]],vspark(e.s+(dir==="up"?2:6),"push",0,false));
-      return vcard(dir==="up"?"upload":"download",(dir==="up"?"Uplink":"Downlink")+" pushed ("+TWL+")",!e.st||c.push===null?"—":fullN(c.push),e.st&&c.push!==null?"msgs":"",!e.st?[["Inactive",""]]:[[fmt(r)+" retried",r?"warn":""],[fmt(f)+" failed",f?"err":""]],vspark(e.s+(dir==="up"?2:6),"push",c.push===null?0:parseFloat(String(fullN(c.push)).replace(/,/g,"")),!!e.st&&c.push!==null))};
+    var pushCard=function(dir,c){var r=sc(c.r),f=sc(c.f);if(TL){var sx=kSer(dir);if(sx){r=sx.tT;f=sx.tP}}var sxo=!e.st&&kSer(dir);if(sxo)return vcard(dir==="up"?"upload":"download",(dir==="up"?"Uplink":"Downlink")+' pushed <span class="eg-fparen">'+TWL+'</span>' /* 26.11: no brackets */,fmt(Math.round(sxo.P.reduce(function(u,w){return u+w},0)*sxo.bm/sxo.rep)),"msgs",[["Until offline",""],[e.off+" h ago",""]],vspark(e.s+(dir==="up"?2:6),"push",0,false));
+      return vcard(dir==="up"?"upload":"download",(dir==="up"?"Uplink":"Downlink")+' pushed <span class="eg-fparen">'+TWL+'</span>' /* 26.11: no brackets */,!e.st||c.push===null?"—":fullN(c.push),e.st&&c.push!==null?"msgs":"",!e.st?[["Inactive",""]]:[[fmt(r)+" retried",r?"warn":""],[fmt(f)+" failed",f?"err":""]],vspark(e.s+(dir==="up"?2:6),"push",c.push===null?0:parseFloat(String(fullN(c.push)).replace(/,/g,"")),!!e.st&&c.push!==null))};
     var twRow='<div class="eg-vchead"><div class="eg-plattl"><div class="eg-platgt">Traffic</div><span class="eg-twnote">Updated 14:32, auto-refresh every 1 min</span></div><div class="tb-toggle-header" data-seg>'+["1h","6h","24h","7d"].map(function(w){return '<span class="tb-toggle'+(w===TW?' checked':'')+'" data-tw="'+w+'">'+w+'</span>'}).join("")+'</div></div>';
     var offAt=function(h){var d=new Date(2026,10,24,14,32);d.setMinutes(d.getMinutes()-h*60);var hm=("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);return (d.getDate()===24?"today":d.getDate()===23?"yesterday":["Nov",d.getDate()].join(" "))+" at "+hm};
     var offBan=!e.st&&e.off&&!S.editEdge?'<div class="eg-offban">'+mi("cloud_off")+'<span><b>The edge is inactive now.</b> Last data received '+offAt(e.off)+' ('+e.off+' h ago).</span></div>':'';
@@ -10925,6 +10925,11 @@ html .tb-right-border.tb-right-border{border-right-color:rgba(0,0,0,.18)!importa
 .eg-onecol .tb-form-panel.eg-chframe:has(>.eg-lagok){min-height:0!important;height:auto!important} /* not stretched to the Traffic frame height */
 .eg-lagok.eg-lagbg>svg.eg-lagbgsvg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .eg-lagok.eg-lagbg>.mat-icon,.eg-lagok.eg-lagbg>.t{position:relative}
+/* value cards: when the number and the side text (retried / failed, Lagging) do not fit on one line, the side text moves under the number */
+.eg-vcard .eg-vrow.eg-vrow{flex-wrap:wrap;row-gap:6px}
+.eg-vcard .eg-vrow>.eg-vv,.eg-vcard .eg-vrow>.eg-vside{flex:none;min-width:0}
+.eg-vcard .eg-vrow.eg-vwrapped{justify-content:flex-start}
+.eg-vcard .eg-vrow.eg-vwrapped>.eg-vside{align-items:center;text-align:left;flex-direction:row;flex-wrap:wrap;gap:4px 12px}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -11005,6 +11010,20 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
+<script id="pd-fx28-js">
+/* 26.11 value cards: check whether the side text fits next to the number; if not, mark the row as wrapped (side text under the number, left-aligned) */
+(function(){
+  function check(){var groups=new Map();
+    [].forEach.call(document.querySelectorAll(".eg-vcard .eg-vrow"),function(r){if(!r.offsetParent)return;r.classList.remove("eg-vwrapped");var g=r.closest(".eg-vcards")||r;if(!groups.has(g))groups.set(g,[]);groups.get(g).push(r)});
+    /* measured in the one-line layout (state cannot flip back and forth); if one card of a group needs the second line, the whole group takes it, so the cards stay alike */
+    groups.forEach(function(rs){var any=rs.some(function(r){var v=r.querySelector(":scope>.eg-vv"),sd=r.querySelector(":scope>.eg-vside");return v&&sd&&sd.offsetTop>v.offsetTop+4});
+      rs.forEach(function(r){r.classList.toggle("eg-vwrapped",any)})})}
+  var t=0;function soon(){clearTimeout(t);t=setTimeout(check,30)}
+  new MutationObserver(soon).observe(document.body,{childList:true,subtree:true});addEventListener("resize",soon);
+  try{new ResizeObserver(soon).observe(document.querySelector(".tb-main")||document.body)}catch(e){}
+  check();
+})();
+</script>
 <script id="pd-fx27-js">
 /* 26.11 No lag: draw a faint flat Lag chart (grid + both directions at 0) behind the "No lag" message */
 (function(){
@@ -11012,7 +11031,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
     return '<svg class="eg-lagbgsvg" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">'+g+
       '<line x1="0" x2="1000" y1="90" y2="90" stroke="#8e5bd1" stroke-width="2" vector-effect="non-scaling-stroke"/>'+
       '<line x1="0" x2="1000" y1="90" y2="90" stroke="#f57c00" stroke-width="2" stroke-dasharray="6 6" vector-effect="non-scaling-stroke"/></svg>'}
-  function dec(){[].forEach.call(document.querySelectorAll(".eg-lagok:not(.eg-lagbg)"),function(o){o.classList.add("eg-lagbg");o.insertAdjacentHTML("afterbegin",svg())})}
+  function dec(){[].forEach.call(document.querySelectorAll(".eg-lagok:not(.eg-lagbg)"),function(o){o.classList.add("eg-lagbg") /* 26.11: no background lines — only the lower block */})}
   var t=0;new MutationObserver(function(){clearTimeout(t);t=setTimeout(dec,0)}).observe(document.body,{childList:true,subtree:true});dec();
 })();
 </script>
@@ -11128,7 +11147,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
         '<button class="eg-ga" data-ga="install" title="Connect this edge to an agent or install it by hand (sets Managed by)">'+mi("link")+'<span>Connect agent</span></button>'+
         '<button class="eg-ga icon" data-ga="more" title="More actions">'+mi("more_vert")+'</button>';
       /* Managed by: an edit button at the row end opens the same window */
-      [].forEach.call(sc.querySelectorAll(".eg-frow"),function(r){var l=r.querySelector(".eg-frow-l"),v=r.querySelector(".eg-frow-v");if(!l||!v||l.textContent.trim()!=="Managed by"||v.querySelector(".eg-mgdedit"))return;
+      [].forEach.call(sc.querySelectorAll(".eg-frow"),function(r){var l=r.querySelector(".eg-frow-l"),v=r.querySelector(".eg-frow-v");if(!l||!v||!/^(Managed by|Agent)$/.test(l.textContent.trim())||v.querySelector(".eg-mgdedit"))return;
         v.insertAdjacentHTML("beforeend",'<button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base eg-mgdedit mat-unthemed" data-ga="install" title="Change who manages this edge"><span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>'+mi("edit")+'<span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></button>')});
       if(old){if(old.getAttribute("data-h")!==h){old.innerHTML=h;old.setAttribute("data-h",h)}return}
       var d=document.createElement("div");d.className="eg-genacts";d.innerHTML=h;d.setAttribute("data-h",h);wrap.insertBefore(d,sc)})};
