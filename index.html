@@ -11034,7 +11034,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
   function stop(){clearTimeout(T);Q.forEach(clearTimeout);Q=[]}
   function load(){stop();W(host()).forEach(function(w){w.__egDone=0});var mark=function(){W(host()).forEach(function(w){if(!w.__egDone)w.classList.add("eg-wl")})};
     mark();Q.push(setTimeout(mark,30)); /* charts are redrawn to fit right after a render: mark the new nodes too */
-    W(host()).forEach(function(w0,k){var dl=250+Math.round(Math.random()*1600);
+    W(host()).forEach(function(w0,k){var dl=120+Math.round(Math.random()*700); /* 26.11: shorter — 0.1–0.8 s per widget */
       Q.push(setTimeout(function(){var w=W(host())[k];if(w){w.__egDone=1;w.classList.remove("eg-wl","loading");if(w.classList.contains("eg-chartwrap")&&window.egChartIn)window.egChartIn(w)}},dl))})}
   window.egWidgetsLoad=load;
   /* edge page / panel opened (or another edge): load its widgets */
@@ -11048,7 +11048,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
     ev.stopPropagation();ev.preventDefault();if(t.classList.contains("checked"))return;
     [].forEach.call(t.parentNode.querySelectorAll(".tb-toggle"),function(x){x.classList.toggle("checked",x===t)});
     stop();W(host()).forEach(function(w){w.classList.add("eg-wl")});
-    T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}load()},250)},true);
+    T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}load()},150)},true);
 })();
 </script>
 </body></html>
