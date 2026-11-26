@@ -10587,7 +10587,9 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
   function body(){var a=window.__egAsg||[];if(!a.length)return '<div class="tb-form-panel"><div class="tb-form-hint" style="margin:0">No entities are assigned to this edge.</div></div>';
     if(!SEL||!a.some(function(x){return x[1]===SEL}))SEL=a[0][1];
     var cur=a.filter(function(x){return x[1]===SEL})[0],name=((document.querySelector("#egDrawer.open .tb-details-title")||document.querySelector("#egTitle .cur")||{}).textContent||"Edge").trim();
-    var nav='<nav class="eg-entnav" aria-label="Entity types">'+a.map(function(x){return '<button data-ent="'+x[1]+'"'+(x[1]===SEL?' class="on"':'')+'><mat-icon class="mat-icon notranslate material-icons mat-ligature-font">'+x[0]+'</mat-icon><span>'+x[1]+'</span><span class="n">'+x[2]+'</span></button>'}).join("")+'</nav>';
+    /* 26.11: the entity-type navigation is the platform side menu (tb-side-menu > tb-menu-link > a[mat-button]), same markup and styles as the main navigation */
+    var ICN={"Rule chains":"settings_ethernet"},mi3=function(n,c){return '<tb-icon class="mat-icon notranslate '+c+' material-icons mat-ligature-font mat-icon-no-color" role="img" aria-hidden="true">'+n+'</tb-icon>'};
+    var nav='<nav class="eg-entnav" aria-label="Entity types"><tb-side-menu><ul class="tb-side-menu flex flex-col items-stretch justify-start">'+a.map(function(x){var ic=ICN[x[1]]||x[0];return '<li><tb-menu-link><a class="mdc-button mat-mdc-button-base mat-mdc-button mat-unthemed'+(x[1]===SEL?' tb-active':'')+'" data-ent="'+x[1]+'" href="javascript:void(0)"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span>'+mi3(ic,"tb-filled-icon")+mi3(ic,"tb-outlined-icon")+'<span class="mdc-button__label"><span>'+x[1]+'</span><span class="eg-mn">'+x[2]+'</span></span><span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></a></tb-menu-link></li>'}).join("")+'</ul></tb-side-menu></nav>';
     var t=document.createElement("div");t.innerHTML=window.egAsgBody?window.egAsgBody(cur[1],cur[2],name):"";
     var bk=t.querySelector(".eg-subback");if(bk)bk.remove();var tt=t.querySelector(".eg-asghead .t");
     if(tt){var lb=document.createElement("label");lb.className="eg-search eg-tsearch eg-entsearch";lb.innerHTML='<mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">search</mat-icon><input autocomplete="off">';lb.querySelector("input").setAttribute("placeholder","Search "+cur[1].toLowerCase());tt.parentNode.replaceChild(lb,tt)}
@@ -10736,6 +10738,22 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 .eg-chsec-h.eg-chsec-h:has(>.eg-noteic){display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;text-align:left!important}
 .eg-acth.eg-acth:has(>.eg-noteic){display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important}
 .eg-acth.eg-acth>.eg-acth-acts{margin-left:auto!important}
+</style>
+<style id="pd-fx11">
+/* 26.11 Manage entities: the old hand-made nav item styles are off (the platform side-menu styles apply); the count sits at the end of the label */
+.eg-entnav.eg-entnav{padding:0!important;width:240px}
+.eg-entnav tb-side-menu{display:block}
+.eg-entnav .tb-side-menu{padding:8px 0!important}
+.eg-entnav .eg-mn{margin-left:auto;padding-left:8px;color:rgba(0,0,0,.54);font-size:13px}
+.eg-entnav a.tb-active .eg-mn{color:inherit}
+/* the same column widths in every entity table: select 52px · Created time 152px · Name 30% · Description · last column 22%; Created time left-aligned */
+.eg-entmain .eg-subtable .table-container{table-layout:fixed!important;width:100%!important}
+.eg-entmain .eg-subtable :is(mat-header-row,mat-row)>:nth-child(1){width:52px!important;min-width:52px!important;padding:0 0 0 12px!important}
+.eg-entmain .eg-subtable :is(mat-header-row,mat-row)>:nth-child(2){width:152px!important;text-align:left!important;padding-left:0!important;padding-right:16px!important}
+.eg-entmain .eg-subtable :is(mat-header-row,mat-row)>:nth-child(3){width:30%!important;padding-left:0!important;padding-right:16px!important}
+.eg-entmain .eg-subtable :is(mat-header-row,mat-row)>:nth-child(4){width:auto!important;padding-left:0!important;padding-right:16px!important}
+.eg-entmain .eg-subtable :is(mat-header-row,mat-row)>:nth-child(5){width:22%!important;padding-left:0!important;padding-right:16px!important}
+.eg-entmain .eg-subtable mat-header-row>:nth-child(2) :is(.mat-sort-header-container,div){justify-content:flex-start!important}
 </style>
 <style id="pd-fx5">
 /* 26.11 compact header: taller top bar, the title block sits lower, next to the tabs */
