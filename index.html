@@ -8203,6 +8203,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
 <button class="pd-btn" data-pd="dash" id="pdDashBtn" title="How the edge dashboard shows the data" style="display:none"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg><span class="k">Dashboard</span><span class="v" id="pdDashLbl">By direction</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
 <div class="pd-seg" id="pdWarnSeg" title="Colour of lag and warnings everywhere: the platform caution token, orange, or the platform accent"><span class="k">Warning</span><span class="pd-segs"><button data-pd="warn" data-val="caution" title="Warning: Caution"><i class="pd-sw" style="background:#b26500"></i>Caution</button><button data-pd="warn" data-val="orange" title="Warning: Orange"><i class="pd-sw" style="background:#f57c00"></i>Orange</button><button data-pd="warn" data-val="accent" title="Warning: Accent"><i class="pd-sw" style="background:#ff5722"></i>Accent</button></span></div>
 <div class="pd-seg" id="pdOvfSeg" title="Separate + Full screen: the dashboard as a tab next to Details, or as its own page opened with a button" style="display:none"><span class="k">Dashboard as</span><span class="pd-segs"><button data-pd="ovf" data-val="tab">Tab</button><button data-pd="ovf" data-val="page">Page</button></span></div><div class="pd-seg" id="pdOvpSeg" title="Separate + Side panel: the Edge overview dashboard as a tab next to Details, or opened on the full page" style="display:none"><span class="k">Overview</span><span class="pd-segs"><button data-pd="ovp" data-val="tab">Tab</button><button data-pd="ovp" data-val="page" title="Edge overview button opens the full page">Page</button></span></div><div class="pd-seg" id="pdRadSeg" title="Corner radius of the sections on the edge page" style="display:none"><span class="k">Radius</span><span class="pd-segs"><button data-pd="rad" data-val="12">12</button><button data-pd="rad" data-val="8">8</button></span></div>
+<div class="pd-seg" id="pdLogSeg" title="Application logs: a separate Log viewer page, or its tools (search, pause, download) right in the logs table on Overview"><span class="k">Logs</span><span class="pd-segs"><button data-logv="page">Viewer page</button><button data-logv="inline">In the table</button></span></div>
 <div class="pd-seg" id="pdMngSeg" title="Assigned entities: the Manage menu in the header, or an Entities tab with side navigation"><span class="k">Manage</span><span class="pd-segs"><button data-mng="menu">Menu</button><button data-mng="tab">Tab</button></span></div>
 <div class="pd-seg" id="pdEditSeg" title="Editing General: in a dialog with only the editable fields, or in place (only the editable rows turn into inputs)"><span class="k">Edit</span><span class="pd-segs"><button data-edm="popup">Popup</button><button data-edm="inline">Inline</button></span></div>
 <div class="pd-seg" id="pdHdrSeg" title="Edge page header: current (breadcrumbs in the top bar, title row, tabs) or compact (title in the top bar, actions next to the tabs)"><span class="k">Header</span><span class="pd-segs"><button data-hdr="old">Current</button><button data-hdr="new">Compact</button></span></div>
@@ -8388,10 +8389,10 @@ var SCREENS={
             L:{g:"p",t:"Tufte-lite, filled",d:"As K, with area fills."},
             J:{g:"p",t:"Data-ink (Tufte)",d:"As I, with Tufte-style charts: gap and lag shown directly, failures as ticks, direct labels."}}}
 };
-var DEF={scn:"fleet",screen:"list",dash:"metric",rad:"12",warn:"accent",ovp:"tab",v:{list:"T",status:"L",details:"D"},designer:0,size:"full",insp:"",fold:0,pw:0,vm:"comb",om:"full",dw:"new",ofl:"banner",gi:"side",ovf:"page",hint:{}}; /* 24.11: dw = side panel in Combined (new: details only, dashboard on the full page); ofl = inactive edge shows one Offline message */ /* 24.11 defaults: list Q, Combined + Full screen; the Screens page is not in the dock any more */
+var DEF={scn:"fleet",screen:"list",dash:"metric",rad:"8",warn:"accent",ovp:"tab",v:{list:"T",status:"L",details:"D"},designer:0,size:"full",insp:"",fold:0,pw:0,vm:"comb",om:"full",dw:"new",ofl:"banner",gi:"side",ovf:"page",hint:{}}; /* 24.11: dw = side panel in Combined (new: details only, dashboard on the full page); ofl = inactive edge shows one Offline message */ /* 24.11 defaults: list Q, Combined + Full screen; the Screens page is not in the dock any more */
 var KEEPV={list:["M","O","P","Q","T"],status:[],cold:["L"],details:[]}; /* Edge overview / Edge details: no variants any more — the Views and Open as switches */
 Object.keys(SCREENS).forEach(function(k){var keep=KEEPV[k]||[];Object.keys(SCREENS[k].variants).forEach(function(v){if(keep.indexOf(v)<0)SCREENS[k].variants[v].hid=1})});
-var S=load();S.v=S.v||{};if(!S.warn){S.warn=S.v.list==="R"?"orange":(S.v.list==="S"||S.v.list==="U")?"accent":"accent"}if(S.v.list==="R"||S.v.list==="S")S.v.list="Q";if(S.v.list==="U")S.v.list="T"; /* colour variants became the Warning switch */if(KEEPV.list.indexOf(S.v.list)<0)S.v.list="T";S.pw=0;egModes();
+var S=load();S.v=S.v||{};if(!S.rad8){S.rad="8";S.rad8=1} /* 26.11: 8px corners are the default (once, also for saved states) */if(!S.warn){S.warn=S.v.list==="R"?"orange":(S.v.list==="S"||S.v.list==="U")?"accent":"accent"}if(S.v.list==="R"||S.v.list==="S")S.v.list="Q";if(S.v.list==="U")S.v.list="T"; /* colour variants became the Warning switch */if(KEEPV.list.indexOf(S.v.list)<0)S.v.list="T";S.pw=0;egModes();
 function load(){try{var j=JSON.parse(localStorage.getItem("edges-proto-v10")||"null");if(j)return Object.assign(clone(DEF),j)}catch(e){}return clone(DEF)}
 function save(){try{localStorage.setItem("edges-proto-v10",JSON.stringify(S))}catch(e){}}
 function clone(o){return JSON.parse(JSON.stringify(o))}
@@ -9372,7 +9373,7 @@ function fill(root,parts){
    ROUTING
    ================================================================ */
 var main=$(".tb-main");
-function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor,window.egActDecor,window.egOpenLoad].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
+function show(){try{return show0.apply(this,arguments)}finally{[window.egHdr2,window.egEditDecor,window.egMngDecor,window.egNoteDecor,window.egActDecor,window.egOpenLoad,window.egLogDecor].forEach(function(f){if(f)try{f()}catch(e){}})}} /* 26.11: header variant runs after every render */
 function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
   var sc=S.screen;
   $("#pdStart").classList.toggle("open",sc==="start");
@@ -10803,6 +10804,23 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 .eg-genacts .eg-ga.eg-copydd.eg-copydd{display:inline-flex!important}
 /* no lag: the check sits in a light green circle, green icon (same colors as the No lag pill) */
 .eg-lagok.eg-lagok>.mat-icon{box-sizing:border-box;width:48px!important;height:48px!important;padding:12px;border-radius:50%;background:var(--eg-ok-bg,#e6f4ea);color:var(--eg-ok,#198038)!important;font-size:24px!important;line-height:24px!important;margin-bottom:8px!important;overflow:hidden}
+/* Activity without its tab bar: the logs frame closes at the top too (border + corners) */
+html :is(#egDrawer,.eg-pagecard.eg-pagecard.eg-pagecard) .eg-lnbar.eg-lnbar.eg-lngone.eg-lngone~.eg-gridcell.eg-gridcell{border-radius:12px!important}
+html :is(#egDrawer,.eg-pagecard.eg-pagecard.eg-pagecard) .eg-lnbar.eg-lnbar.eg-lngone.eg-lngone~.eg-gridcell.eg-gridcell>.tb-form-panel.tb-form-panel{border-top:1px solid rgba(0,0,0,.06)!important;border-radius:12px!important}
+html.eg-r8 :is(#egDrawer,.eg-pagecard.eg-pagecard.eg-pagecard) .eg-lnbar.eg-lnbar.eg-lngone.eg-lngone~.eg-gridcell.eg-gridcell,html.eg-r8 :is(#egDrawer,.eg-pagecard.eg-pagecard.eg-pagecard) .eg-lnbar.eg-lnbar.eg-lngone.eg-lngone~.eg-gridcell.eg-gridcell>.tb-form-panel.tb-form-panel{border-radius:8px!important}
+/* Logs variant "In the table": no Log viewer page — search, pause and download sit in the logs table header */
+.eg-loginl .eg-logviewer{display:none!important}
+.eg-lgx{position:relative;width:40px!important;height:40px!important;padding:8px!important;color:rgba(0,0,0,.54)!important;display:inline-flex!important;align-items:center;justify-content:center}
+.eg-lgx .mat-icon{font-size:24px!important;width:24px!important;height:24px!important;line-height:24px!important}
+.eg-lgq{display:inline-flex;align-items:center;gap:4px;height:36px;width:240px;box-sizing:border-box;padding:0 4px 0 10px;border:1px solid rgba(0,0,0,.12);border-radius:4px;background:#fff}
+.eg-lgq .mat-icon{font-size:20px;width:20px;height:20px;line-height:20px;color:rgba(0,0,0,.54);flex:none}
+.eg-lgq input{flex:1;min-width:0;border:0;outline:0;background:none;font:400 14px/20px Roboto,sans-serif;color:rgba(0,0,0,.87)}
+.eg-lgq .eg-lgqx{border:0;background:none;padding:4px;cursor:pointer;display:inline-flex;border-radius:50%}
+.eg-lgq .eg-lgqx:hover{background:rgba(0,0,0,.06)}
+.eg-loginl.eg-lgqon [data-lgx="search"]{display:none!important}
+mat-row.eg-lgqhide{display:none!important}
+.live.eg-lgpaused{background:rgba(0,0,0,.08)!important;color:rgba(0,0,0,.76)!important}
+.live.eg-lgpaused i{background:rgba(0,0,0,.38)!important;animation:none!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -10810,8 +10828,8 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 .eg-frow-v .eg-mgdedit .mat-icon{font-size:20px!important;width:20px!important;height:20px!important;line-height:20px!important;display:block!important;color:rgba(0,0,0,.87)}
 .eg-sidecol .eg-frow-v:has(.eg-mgdedit){flex-wrap:nowrap}
 .eg-pagecol:has(.eg-genacts) :is(.eg-tabsend,header) :is(.eg-hdracts,.eg-hdrmore){display:none!important}
-.eg-sidelay>.eg-sidewrap{display:flex;flex-direction:column;align-self:flex-start;flex:0 0 32%;width:32%;max-width:480px;min-width:360px}
-@media(max-width:1100px){.eg-sidelay>.eg-sidewrap{flex:none;width:auto;max-width:none;min-width:0;align-self:stretch}}
+.eg-sidelay>.eg-sidewrap{display:flex;flex-direction:column;align-self:flex-start;position:sticky;top:0;flex:0 0 32%;width:32%;max-width:480px;min-width:360px}
+@media(max-width:1100px){.eg-sidelay>.eg-sidewrap{flex:none;width:auto;max-width:none;min-width:0;align-self:stretch;position:static}}
 .eg-pagecard .eg-sidewrap>aside.eg-sidecol.eg-sidecol{flex:none!important;width:auto!important;max-width:none!important;min-width:0!important;align-self:stretch!important}
 /* platform logo: no link underline on hover */
 .tb-nav-header tb-logo.tb-logo-title a,.tb-nav-header tb-logo.tb-logo-title a:hover{border-bottom:0!important;text-decoration:none!important;box-shadow:none!important}
@@ -10883,6 +10901,37 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
+<script id="pd-fx23-js">
+/* 26.11 Logs variant: "Viewer page" (default, Open log viewer opens a separate page) or "In the table" (the viewer's tools in the Overview logs table) */
+(function(){
+  var mi=function(n){return '<mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">'+n+'</mat-icon>'};
+  var ib=function(k,ic,t){return '<button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base eg-lgx mat-unthemed" data-lgx="'+k+'" title="'+t+'"><span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>'+mi(ic)+'<span class="mat-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></button>'};
+  function mode(){return (window.egS&&egS().logv)||"page"}
+  function scope(el){return el.closest(".eg-grid4,.eg-vc2,.tb-form-panel")||el.parentElement}
+  function table(el){var sc=scope(el);return sc&&sc.querySelector(".eg-logtable:not(.eg-lvtable)")}
+  function live(el){var sc=scope(el);return sc&&sc.querySelector(".live")}
+  window.egLogDecor=function(){var on=mode()==="inline";
+    var seg=document.getElementById("pdLogSeg");if(seg)[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-logv")===mode())});
+    [].forEach.call(document.querySelectorAll(".eg-logviewer"),function(v){var acts=v.parentElement;if(!acts||v.closest(".eg-subpage"))return;
+      if(!on){acts.classList.remove("eg-loginl","eg-lgqon");[].forEach.call(acts.querySelectorAll("[data-lgx],.eg-lgq"),function(x){x.remove()});return}
+      if(acts.classList.contains("eg-loginl"))return;acts.classList.add("eg-loginl");
+      v.insertAdjacentHTML("beforebegin",ib("search","search","Search logs")+ib("pause","pause","Pause live tail")+ib("dl","download","Download logs"))})};
+  function filter(acts){var i=acts.querySelector(".eg-lgq input"),q=i?i.value.trim().toLowerCase():"",t=table(acts);if(!t)return;
+    [].forEach.call(t.querySelectorAll("mat-row"),function(r){r.classList.toggle("eg-lgqhide",!!q&&r.textContent.toLowerCase().indexOf(q)<0)})}
+  document.addEventListener("click",function(ev){var t=ev.target;
+    var sg=t.closest&&t.closest("[data-logv]");if(sg){ev.preventDefault();ev.stopPropagation();egS().logv=sg.getAttribute("data-logv");egSave();window.egLogDecor();return}
+    var x=t.closest&&t.closest(".eg-lgqx");if(x){ev.stopPropagation();var a=x.closest(".eg-loginl"),q=x.closest(".eg-lgq");q.remove();a.classList.remove("eg-lgqon");filter(a);return}
+    var b=t.closest&&t.closest(".eg-loginl [data-lgx]");if(!b)return;ev.preventDefault();ev.stopPropagation();var k=b.getAttribute("data-lgx"),acts=b.closest(".eg-loginl");
+    if(k==="search"){if(!acts.querySelector(".eg-lgq"))acts.insertAdjacentHTML("afterbegin",'<label class="eg-lgq">'+mi("search")+'<input placeholder="Search logs"><button class="eg-lgqx" type="button" title="Clear">'+mi("close")+'</button></label>');acts.classList.add("eg-lgqon");acts.querySelector(".eg-lgq input").focus();return}
+    if(k==="pause"){var p=!b.classList.contains("eg-lgp");b.classList.toggle("eg-lgp",p);b.querySelector(".mat-icon").textContent=p?"play_arrow":"pause";b.title=p?"Resume live tail":"Pause live tail";
+      var lv=live(acts);if(lv){lv.classList.toggle("eg-lgpaused",p);lv.lastChild.textContent=p?"Paused":"Live"}return}
+    if(k==="dl"){var tb=table(acts),n=tb?tb.querySelectorAll("mat-row").length:0;(window.egToast||function(){})("Downloading "+n+" log lines (.log)");return}
+  },true);
+  document.addEventListener("input",function(ev){var i=ev.target.closest&&ev.target.closest(".eg-lgq input");if(i)filter(i.closest(".eg-loginl"))});
+  document.addEventListener("keydown",function(ev){var i=ev.target.closest&&ev.target.closest(".eg-lgq input");if(i&&ev.key==="Escape"){var x=i.parentElement.querySelector(".eg-lgqx");if(x)x.click()}});
+  try{window.egLogDecor()}catch(e){}
+})();
+</script>
 <script id="pd-fx19-js">
 /* 26.11 edge page: action row above General — Sync, Upgrade, Copy keys, Install & Connect, ⋮ (Delete) */
 (function(){
