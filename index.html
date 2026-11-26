@@ -9782,8 +9782,13 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 .eg-entmain .eg-asghead{box-shadow:inset 0 -1px 0 rgba(0,0,0,.12)!important}
 .eg-entmain .eg-asghead .t{font:500 16px/24px Roboto,sans-serif;color:rgba(0,0,0,.87)}
 .eg-entmain .eg-subtable{flex:1;margin:0!important;border:0!important;border-radius:0!important}
-.eg-tabph:has(>.eg-ent){background:transparent!important;padding:16px 0 0!important;border:0!important;box-shadow:none!important}
+.eg-tabph:has(>.eg-ent){background:transparent!important;padding:0!important;border:0!important;box-shadow:none!important;margin:0 -16px -16px!important;flex:1 1 auto;display:flex;min-height:0;overflow:auto;border-radius:0!important}
+/* as a sidebar: flush to the left edge, full height, divider on the right; the table sits in the page area next to it */
+.eg-ent{flex:1;gap:0!important;min-height:0!important}
+.eg-entnav{align-self:stretch!important;border:0!important;border-right:1px solid rgba(0,0,0,.12)!important;border-radius:0!important;padding:8px 0!important}
+.eg-entmain{margin:16px}
 #egDrawer .eg-entnav{width:208px}
+#egDrawer .eg-tabph:has(>.eg-ent){margin:0 -8px 0!important}
 </style>
 <style id="pd-edit">
 /* 26.11 Edit for the General card: icon button in the card title; Popup or Inline */
