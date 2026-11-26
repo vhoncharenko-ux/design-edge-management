@@ -10837,11 +10837,11 @@ mat-row.eg-lgqhide{display:none!important}
 /* chart legend: lines and failures in one row (no forced break before the failure chips) */
 .eg-dotlegend .eg-legbr{display:none!important}
 /* "added" series (queued, not yet pushed): fine dotted line, the legend swatch dotted too */
-.eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:4 3;stroke-linecap:butt;stroke-width:2px} /* same width as the pushed line: hidden where the two overlap */
+.eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:1.5 4;stroke-linecap:round;stroke-width:2px} /* same width as the pushed line: hidden where the two overlap */
 /* dots in the solid color of their direction (same as pushed) */
 .eg-chart polyline[data-s="upa"],.eg-chart polyline[data-s="added"]{stroke:#00695c}
 .eg-chart polyline[data-s="downa"]{stroke:#2160c4}
-.eg-lgt:is([data-xs="upa"],[data-xs="downa"],[data-s="added"])>i{background-image:repeating-linear-gradient(90deg,transparent 0 4px,#fff 4px 6px)!important}
+.eg-lgt:is([data-xs="upa"],[data-xs="downa"],[data-s="added"])>i{background-image:repeating-linear-gradient(90deg,transparent 0 3px,#fff 3px 5px)!important}
 .eg-lgt:is([data-xs="upa"],[data-s="added"])>i{background-color:#00695c!important}
 .eg-lgt[data-xs="downa"]>i{background-color:#2160c4!important}
 /* time range row: 36px high, the toggle centred */
