@@ -8707,7 +8707,8 @@ function comboChart(x){
     /* 26.11 variant "Lag in the chart": the queue size on the same axis as the traffic */
     if(!lag&&x.lag){if(sU)SR.push(["Uplink lag",XC.lup,sU.Lg,"lup"]);if(sD)SR.push(["Downlink lag",XC.ldown,sD.Lg,"ldown"])}
     if(!SR.length)return "";
-    top=nice(Math.max.apply(null,SR.map(function(a){return Math.max.apply(null,a[2])}))*1.05)||(lag?4:1);axis();var f2=frame();
+    var HID=x.hide||[],SRv=SR.filter(function(a){return HID.indexOf(a[3])<0}); /* 26.11: the axis fits the series that are shown */
+    top=nice(Math.max.apply(null,(SRv.length?SRv:SR).map(function(a){return Math.max.apply(null,a[2])}))*1.05)||(lag?4:1);axis();var f2=frame();
     var xp=function(j,n){return L+(n>1?j/(n-1):.5)*(W-L-R)};
     var NV=function(n){return n};
     body=f2.svg+SR.slice().sort(function(p,q){return (/a$/.test(q[3])?1:0)-(/a$/.test(p[3])?1:0)}).map(function(a){var n=a[2].length,nv=NV(n),pts=a[2].slice(0,nv).map(function(v,j){return xp(j,n).toFixed(1)+","+f2.y(v).toFixed(1)}).join(" ");
@@ -8716,9 +8717,10 @@ function comboChart(x){
     var Nc=Math.max.apply(null,SR.map(function(a){return a[2].length}));
     HV={edge:1,kind:"lines",x0:L,x1:W-R,W:W,H:H,yt:T,yb:f2.y(0),N:Nc,t:[],s:SR.map(function(a){var n=a[2].length,vals=[],ys=[];for(var j=0;j<Nc;j++){var q=a[2][Math.round(j*(n-1)/Math.max(1,Nc-1))];vals.push(lag?Math.round(q):r1(q));ys.push(+f2.y(q).toFixed(1))}return [a[0],a[1],vals,ys,a[3]]})};
     for(i=0;i<Nc;i++)HV.t.push(tlab(Nc>1?i/(Nc-1):1));}
-  var cfgOut={kind:x.kind,up:x.up,down:x.down,W0:x.W0||W,H0:x.H0||H,noX:x.noX?1:0,AX:x.AX||0,zero:x.zero?1:0,fill:x.fill?1:0,lag:x.lag?1:0};
+  var cfgOut={kind:x.kind,up:x.up,down:x.down,W0:x.W0||W,H0:x.H0||H,noX:x.noX?1:0,AX:x.AX||0,zero:x.zero?1:0,fill:x.fill?1:0,lag:x.lag?1:0,hide:x.hide||[]};
   return '<div class="eg-chartwrap loading" data-hv=\''+(HV?JSON.stringify(HV):'')+'\' data-xcfg=\''+JSON.stringify(cfgOut).replace(/'/g,"&#39;")+'\'><svg class="eg-chart" viewBox="0 0 '+W+' '+H+'">'+body+'</svg><span class="eg-spin"></span></div>';
 }
+window.egComboChart=comboChart;
 /* connection state chart (as the platform's State chart widget): coloured bands per state, dot legend on top */
 function stateChart(cfg){
   var W=1100,H=150,L=8,R=8,T=8,B=30,ax='font-family="Roboto" font-size="13" fill="rgba(0,0,0,.6)"',GC="#e0e0e0";
@@ -11097,7 +11099,14 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
     var xs=it.hasAttribute("data-xs"),k=it.getAttribute(xs?"data-xs":"data-s"),cls=(xs?"eg-xoff-":"eg-off-")+k,was=pn.classList.contains(cls);
     ev.__egSw={pn:pn,cls:cls,k:k,was:was}},true);
   /* after the legend handler (window, bubble phase = last listener of the same click): start the sweep in the same task, so the series never paints at full length first */
+  /* redraw the line charts of the panel so the axis fits the series still shown (bigger or smaller top) */
+  function rescale(pn){if(!window.egComboChart)return;var hide=(pn.className.match(/eg-x?off-([a-z]+)/g)||[]).map(function(c){return c.replace(/^eg-x?off-/,"")});
+    [].forEach.call(pn.querySelectorAll(".eg-chartwrap[data-xcfg]"),function(w){var xc;try{xc=JSON.parse(w.getAttribute("data-xcfg"))}catch(e){return}if(!xc||xc.kind==="fail")return;
+      var sv=w.querySelector("svg"),vb=sv&&sv.viewBox&&sv.viewBox.baseVal;if(vb&&vb.width){xc.W=Math.round(vb.width);xc.H=Math.round(vb.height)}xc.hide=hide;
+      var tmp=document.createElement("div");tmp.innerHTML=window.egComboChart(xc);var nw=tmp.querySelector(".eg-chartwrap");if(!nw)return;
+      nw.classList.remove("loading");if(w.getAttribute("data-fitw"))nw.setAttribute("data-fitw",w.getAttribute("data-fitw"));w.replaceWith(nw)})}
   window.addEventListener("click",function(ev){var d=ev.__egSw;if(!d)return;var now=d.pn.classList.contains(d.cls);if(now===d.was)return;
+    rescale(d.pn);
     if(!now)[].forEach.call(d.pn.querySelectorAll('svg [data-s="'+d.k+'"]'),sweepIn) /* turned off: gone at once, no animation */});
 })();
 </script>
