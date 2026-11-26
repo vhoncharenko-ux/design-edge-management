@@ -9444,7 +9444,7 @@ function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8");
           var grp=hd.querySelector(".eg-hdrx .eg-actrow")||hd.querySelector(".eg-hdrx .eg-sideacts")||hd.querySelector(".eg-hdrx");if(!grp)return;
           [].forEach.call(old,function(o){if(o.parentNode!==grp)o.remove()});if(!grp.querySelector(".eg-copydd"))grp.insertAdjacentHTML("beforeend",'<button class="mdc-button mat-mdc-button-base mdc-button--outlined mat-mdc-outlined-button eg-copydd" title="Copy the edge ID, key or secret"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">content_copy</mat-icon><span class="mdc-button__label">Copy keys</span><mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">arrow_drop_down</mat-icon></button>');var cp0=grp.querySelector(":scope>.eg-copydd"),mg0=grp.querySelector(":scope>.eg-asgmenu");if(cp0&&mg0&&cp0.nextElementSibling!==mg0)grp.insertBefore(cp0,mg0) /* order: Copy keys, then Manage */})();
         /* this variant: the time range sits above the value cards, on the left (not in the header) */
-        if(true){ /* all page variants: the time range sits above the value cards (was: only the header-info variant) */var tg=$('[data-eg="page"] .eg-pagecol>header.tb-page-head .eg-hdrx>.tb-toggle-header[data-seg]'),vc=$('[data-eg="page"] .tb-page-body .eg-vcards');
+        if(true){ /* all page variants: the time range sits above the value cards (was: only the header-info variant) */var tg=$('[data-eg="page"] .eg-pagecol .eg-hdrx>.tb-toggle-header[data-seg]'),vc=$('[data-eg="page"] .tb-page-body .eg-vcards');
           if(tg&&vc){var tr=vc.parentNode.querySelector(":scope>.eg-twrow");if(!tr){tr=document.createElement("div");tr.className="eg-twrow";vc.parentNode.insertBefore(tr,vc)}tr.innerHTML="";tr.appendChild(tg)}}
         if(!(gim&&st&&getComputedStyle(nav).display!=="none")&&dt){var wasA=dt.classList.contains("active");dt.remove();if(wasA&&st)setTimeout(function(){st.click()},0)}})();
       if(gim){}else if(ps&&parts.meta){ps.innerHTML=parts.meta;ps.classList.add("has-meta")}else if(ps){ps.classList.remove("has-meta");if((v==="M"||v==="N")||parts.side)ps.innerHTML="" /* the breadcrumbs stay in the top toolbar, as everywhere on the platform */}
@@ -10457,7 +10457,7 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
      else if((m=/^(\w{3})\s+(\d+),?\s*(\d+):(\d+)/.exec(t))){var mo=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(m[1]);if(mo>=0)d=new Date(2026,mo,+m[2],+m[3],+m[4])}
      if(!d)return t;var mins=Math.max(1,Math.round((now-d)/60000)),h=Math.round(mins/60),dy=Math.round(mins/1440),wk=Math.round(dy/7);
      return mins<60?mins+" min":h<24?(h===1?"1 hour":h+" hours"):dy<7?(dy===1?"1 day":dy+" days"):wk<5?(wk===1?"1 week":wk+" weeks"):Math.round(dy/30)+" months"};
-   var d=document.createElement("div");d.id="egBellPop";d.style.top=(r.bottom+4)+"px";d.style.left=Math.max(8,r.right-400)+"px";
+   var d=document.createElement("div");d.id="egBellPop";d.style.top=(r.bottom+4)+"px";d.style.left=Math.max(8,Math.min(innerWidth-428,r.right-420))+"px";d.style.maxHeight=Math.max(240,Math.min(560,innerHeight-r.bottom-16))+"px";
    d.innerHTML='<div class="bh"><b>Notification</b>'+(ns.length?'<button class="mdc-button mat-mdc-button-base mat-mdc-button mat-primary" data-ball><span class="mdc-button__label">Mark all as read</span></button>':'')+'</div>'+
      (ns.length?'<div class="bl">'+ns.map(function(x){var ic=IC[x.k]||IC.ok;return '<div class="bi"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font bic" style="color:'+ic[1]+'">'+ic[0]+'</mat-icon><div class="bc"><div class="s">'+x.s+'</div><div class="m">'+x.m+'</div></div><div class="br"><span class="tm">'+rel(x.t)+'</span><button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base bread" title="Mark as read"><mat-icon class="mat-icon notranslate material-icons mat-ligature-font">check_circle_outline</mat-icon></button></div></div>'}).join("")+'</div>':'<div class="be">No notifications</div>')+
      '<div class="bf"><button class="mdc-button mat-mdc-button-base mat-mdc-button mat-primary" data-bview><span class="mdc-button__label">View all</span></button></div>';
@@ -10703,11 +10703,12 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 })();
 /* 26.11 the side menu can be dragged by its title bar; the position is kept */
 (function(){var pd=document.getElementById("pd"),dr=pd&&pd.querySelector(".pd-left");if(!dr)return;
-  var h=document.createElement("div");h.className="pd-drag";h.title="Drag to move";h.innerHTML='<span class="grip">\u2237</span>Variants &amp; modes';dr.insertBefore(h,dr.firstChild);
+  var h=document.createElement("div");h.className="pd-drag";h.title="Drag to move";h.innerHTML='<span class="grip">\u2237</span>Variants &amp; modes<button class="pd-dragx" type="button" title="Close" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>';
+  h.querySelector(".pd-dragx").addEventListener("click",function(ev){ev.preventDefault();var ab=document.getElementById("pdAbBtn");if(ab)ab.click()});dr.insertBefore(h,dr.firstChild);
   function place(x,y){var w=dr.offsetWidth,hh=dr.offsetHeight;x=Math.max(8,Math.min(innerWidth-w-8,x));y=Math.max(8,Math.min(innerHeight-Math.min(hh,120)-8,y));dr.style.setProperty("left",x+"px","important");dr.style.setProperty("top",y+"px","important");return [x,y]}
   var S0=egS();if(S0.drw&&S0.drw.length===2)place(S0.drw[0],S0.drw[1]);
   var st=null;
-  h.addEventListener("pointerdown",function(ev){var r=dr.getBoundingClientRect();st={dx:ev.clientX-r.left,dy:ev.clientY-r.top};h.setPointerCapture(ev.pointerId);dr.classList.add("dragging");egClosePops();ev.preventDefault()});
+  h.addEventListener("pointerdown",function(ev){if(ev.target.closest&&ev.target.closest(".pd-dragx"))return;var r=dr.getBoundingClientRect();st={dx:ev.clientX-r.left,dy:ev.clientY-r.top};h.setPointerCapture(ev.pointerId);dr.classList.add("dragging");egClosePops();ev.preventDefault()});
   h.addEventListener("pointermove",function(ev){if(!st)return;place(ev.clientX-st.dx,ev.clientY-st.dy)});
   h.addEventListener("pointerup",function(ev){if(!st)return;var r=dr.getBoundingClientRect();egS().drw=[Math.round(r.left),Math.round(r.top)];egSave();st=null;dr.classList.remove("dragging")});
   addEventListener("resize",function(){var d=egS().drw;if(d)place(d[0],d[1])});
@@ -10785,6 +10786,23 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 <style id="pd-fx14">
 /* 26.11 sort arrow next to "Created time": centred on the text line, 16px (it sat on the baseline at 24px) */
 .eg-entmain mat-header-row>:nth-child(2) .mat-icon{font-size:16px!important;width:16px!important;height:16px!important;line-height:16px!important;vertical-align:middle!important;margin:-3px 0 0 4px!important;color:rgba(0,0,0,.54)}
+</style>
+<style id="pd-fx16">
+/* 26.11 Variants & modes: close button in the drag header */
+.pd .pd-left>.pd-drag .pd-dragx{margin-left:auto;margin-right:-8px;width:28px;height:28px;border:0;border-radius:50%;background:none;color:var(--pd-mid);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.pd .pd-left>.pd-drag .pd-dragx:hover{background:rgba(0,0,0,.06);color:inherit}
+/* inactive edge banner: full width under the tabs, edge to edge like the tab bar */
+.eg-pagecard .eg-pagecol>.eg-offban.eg-offban.eg-offban-full{margin-left:-16px!important;margin-right:-16px!important;padding-left:32px!important;padding-right:32px!important}
+/* Activity tables (logs, notifications): header row as tall as the rows */
+:is(#egDrawer,.eg-pagecard,body) .eg-gridcell .eg-subtable.eg-subtable mat-header-row.mat-mdc-header-row,:is(#egDrawer,.eg-pagecard,body) .eg-logtable.eg-logtable mat-header-row.mat-mdc-header-row{min-height:36px!important;height:36px!important}
+/* notification popover: the list scrolls inside the popover */
+#egBellPop{max-width:calc(100vw - 16px)}
+#egBellPop .bl{flex:1 1 auto;min-height:0}
+</style>
+<style id="pd-fx15">
+/* 26.11 "Upgrade to 4.4.0" in General: the same link style as Managed by (platform link: 400, #106cc8, light underline, full on hover) */
+:is(#egDrawer,.eg-pagecard,body) .eg-frow-v a.eg-uplink.eg-uplink.eg-uplink{font-weight:400!important;font-size:14px!important;color:rgb(16,108,200)!important;text-decoration:none!important;border-bottom:1px solid rgba(64,84,178,.25)!important;background:none!important;padding:0!important}
+:is(#egDrawer,.eg-pagecard,body) .eg-frow-v a.eg-uplink.eg-uplink.eg-uplink:hover{border-bottom-color:rgb(64,84,178)!important}
 </style>
 <style id="pd-fx5">
 /* 26.11 compact header: taller top bar, the title block sits lower, next to the tabs */
