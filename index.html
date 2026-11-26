@@ -8751,7 +8751,7 @@ var FLT={all:function(){return 1},active:function(e){return e.st},inactive:funct
 function egSec(v){return '<span class="eg-fmono eg-secret" data-v="'+v+'">'+"•".repeat(16)+'</span>'+ibtn("visibility","Show","eg-fcopy eg-reveal")+ibtn("content_copy","Copy","eg-fcopy")}
 document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".eg-reveal");if(!b)return;ev.preventDefault();ev.stopPropagation();var v=b.parentNode.querySelector(".eg-secret");if(!v)return;var on=!v.classList.contains("on");v.classList.toggle("on",on);v.textContent=on?v.getAttribute("data-v"):"•".repeat(16);b.title=on?"Hide":"Show";var ic=b.querySelector(".mat-icon");if(ic)ic.textContent=on?"visibility_off":"visibility"},true);
 /* 26.11 details cards: text in brackets is secondary — grey (tags and attributes are left alone) */
-function egParen(v){return String(v).split(/(<[^>]*>)/).map(function(p){return p.charAt(0)==="<"?p:p.replace(/\(([^()]*)\)/g,'<span class="eg-fparen">($1)</span>')}).join("")}
+function egParen(v){return String(v).split(/(<[^>]*>)/).map(function(p){return p.charAt(0)==="<"?p:p.replace(/\s*\(([^()]*)\)/g,' <span class="eg-fparen">$1</span>') /* 26.11: no brackets, grey with a gap */}).join("")}
 function egMgd(e){return '<span class="eg-mgd">'+(e.m?'<a class="tb-entity-link" title="Agent page: '+e.m[0]+'">'+e.m[0]+'</a> <span class="eg-msl">/</span> <a class="tb-entity-link" title="Application page: '+e.m[1]+' on '+e.m[0]+'">'+e.m[1]+'</a>':'<span class="eg-mgdno">Not managed</span>')+'</span>'}
 window.egS=function(){return S};window.egSave=function(){save()};window.egShow=function(){show()};window.egClosePops=function(){closePops()}; /* 26.11: for the prototype-control scripts outside this scope */
 function egIsLag(e){return !!e.st&&((e.ul||0)+(e.dl||0))>0}
@@ -10834,7 +10834,7 @@ mat-row.eg-lgqhide{display:none!important}
 .eg-lglive .live{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:12px;background:var(--eg-ok-bg);color:var(--eg-ok)!important;gap:6px;font:500 12px/16px Roboto,sans-serif;letter-spacing:.24px;box-sizing:border-box;white-space:nowrap}
 .eg-lglive .live i{width:8px;height:8px;border-radius:50%;background:var(--eg-ok)}
 .eg-lgtabbed[data-cur="notes"] .eg-lglive{display:none!important}
-.eg-lgbar{padding:12px 16px;border-bottom:1px solid rgba(0,0,0,.06)}
+.eg-lgbar{padding:8px;border-bottom:1px solid rgba(0,0,0,.06)}
 .eg-lgbar .eg-lgacts{display:flex;align-items:center;gap:8px}
 .eg-lgbar .eg-lgsearch{width:320px;min-width:0;height:40px;box-sizing:border-box}
 .eg-lgbar .eg-lvf{position:relative;display:inline-flex}
@@ -10932,6 +10932,8 @@ html .tb-right-border.tb-right-border{border-right-color:rgba(0,0,0,.18)!importa
 .eg-vcard .eg-vrow.eg-vwrapped>.eg-vside{align-items:center;text-align:left;flex-direction:row;flex-wrap:wrap;gap:4px 12px}
 /* user avatar in the navigation: neutral, it should not pull attention */
 tb-user-menu .tb-avatar.tb-avatar{background:rgba(0,0,0,.08)!important;color:rgba(0,0,0,.7)!important}
+/* grey side text (period in card titles, notes in General values): a clear gap before it */
+.eg-vt .eg-fparen,.eg-frow-v .eg-fparen{margin-left:6px}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
