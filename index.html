@@ -10814,11 +10814,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-twload .eg-vv::before,.eg-twload .eg-vside::before{content:"";position:absolute;left:0;top:50%;height:20px;margin-top:-10px;width:112px;border-radius:4px;background:rgba(0,0,0,.08);animation:egSkel 1.2s ease-in-out infinite}
 .eg-twload .eg-vv::before{height:28px;margin-top:-14px;width:128px}
 .eg-twload .eg-vside::before{left:auto;right:0;width:72px;height:16px;margin-top:-8px}
-.eg-twload .eg-chartwrap{position:relative}
-.eg-twload .eg-chartwrap>svg{opacity:.2;transition:opacity .15s}
-.eg-twload .eg-chartwrap::after{content:"";position:absolute;left:50%;top:50%;width:32px;height:32px;margin:-16px 0 0 -16px;box-sizing:border-box;border-radius:50%;border:3px solid rgba(48,86,128,.16);border-top-color:#305680;animation:egSpin .8s linear infinite}
 @keyframes egSkel{0%,100%{opacity:1}50%{opacity:.45}}
-@keyframes egSpin{to{transform:rotate(360deg)}}
 </style>
 <style id="pd-fx17">
 /* 26.11 empty state in a panel (No logs for this edge yet): a bit more room under the buttons */
@@ -10920,6 +10916,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
     ev.stopPropagation();ev.preventDefault();if(t.classList.contains("checked"))return;
     [].forEach.call(t.parentNode.querySelectorAll(".tb-toggle"),function(x){x.classList.toggle("checked",x===t)});
     var host=t.closest(".eg-pagecol,#egDrawer")||document.body;host.classList.add("eg-twload");
+    [].forEach.call(host.querySelectorAll(".eg-chartwrap"),function(w){w.classList.add("loading")}); /* the charts' own loader, kept on until the new window is drawn */
     clearTimeout(T);T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}
       [].forEach.call(document.querySelectorAll(".eg-twload"),function(h){h.classList.remove("eg-twload")})},400)},true);
 })();
