@@ -9721,7 +9721,7 @@ function fitCharts(){fixMetaSeps();setTimeout(fitGridRows,0);
     else return;
     nw=tmp.querySelector(".eg-chartwrap");if(!nw)return;if(!loading)nw.classList.remove("loading");nw.setAttribute("data-fitw",cw);
     /* keep a dot legend that failChart put in front of the chart only once */
-    w.replaceWith(nw)})});egEqMet()}
+    ["eg-wl","loading"].forEach(function(c){if(w.classList.contains(c))nw.classList.add(c)}); /* 26.11: a redraw keeps the loader state — no flash of the chart before it loads */w.replaceWith(nw)})});egEqMet()}
 /* By metric, Traffic | Lag in one row: the Lag chart is drawn as tall as the Traffic block, so both charts end on one line */
 function egEqMet(){document.querySelectorAll(".eg-metpair-in:not(.one)").forEach(function(p){
   var fr=p.querySelectorAll(".eg-chframe"),two=getComputedStyle(p).gridTemplateColumns.trim().split(/\s+/).length>=2;
@@ -9732,7 +9732,7 @@ function egEqMet(){document.querySelectorAll(".eg-metpair-in:not(.one)").forEach
   var d=a.offsetHeight-b.offsetHeight;if(Math.abs(d)<2)return;
   var w=b.querySelector(".eg-chartwrap[data-xcfg]");if(!w)return;var xc=JSON.parse(w.getAttribute("data-xcfg")),svg=w.querySelector("svg");
   xc.W=Math.round(w.clientWidth);xc.H=Math.round((svg?svg.getBoundingClientRect().height:xc.H)+d);if(xc.H<80)return;
-  var tmp=document.createElement("div");tmp.innerHTML=comboChart(xc);var nw=tmp.querySelector(".eg-chartwrap");if(!nw)return;nw.classList.remove("loading");nw.setAttribute("data-fitw",xc.W);w.replaceWith(nw)})}
+  var tmp=document.createElement("div");tmp.innerHTML=comboChart(xc);var nw=tmp.querySelector(".eg-chartwrap");if(!nw)return;nw.classList.remove("loading");nw.setAttribute("data-fitw",xc.W);["eg-wl","loading"].forEach(function(c){if(w.classList.contains(c))nw.classList.add(c)}); /* 26.11: a redraw keeps the loader state — no flash of the chart before it loads */w.replaceWith(nw)})}
 window.addEventListener("resize",function(){clearTimeout(window.__fitT);window.__fitT=setTimeout(fitCharts,150)});
 function openChart(dir){
   var src=$('.eg-fsbtn[data-dir="'+dir+'"]');if(!src)return;var pn=src.closest(".tb-form-panel");
@@ -9752,7 +9752,7 @@ function openChart(dir){
       if(w.getAttribute("data-fcfg")){var fc=JSON.parse(w.getAttribute("data-fcfg"));fc.legOut=true;fc.W=1100;fc.H=Math.round(h*1100/cw);tmp.innerHTML=failChart(fc).body}
       else if(w.getAttribute("data-cfg")){var cfg=JSON.parse(w.getAttribute("data-cfg"));cfg.W=1100;cfg.H=Math.round(h*1100/cw);tmp.innerHTML=chart(cfg)}
       else return;
-      nw=tmp.querySelector(".eg-chartwrap");if(!loading)nw.classList.remove("loading");w.replaceWith(nw)})}
+      nw=tmp.querySelector(".eg-chartwrap");if(!loading)nw.classList.remove("loading");["eg-wl","loading"].forEach(function(c){if(w.classList.contains(c))nw.classList.add(c)}); /* 26.11: a redraw keeps the loader state — no flash of the chart before it loads */w.replaceWith(nw)})}
 }
 /* chart hover: vertical marker line, point markers and a dark tooltip with time + series values, as in the platform's time series chart */
 /* chart hover: marker line + tooltip on the hovered chart; charts of the same direction (traffic + failures)
@@ -10837,7 +10837,7 @@ mat-row.eg-lgqhide{display:none!important}
 /* chart legend: lines and failures in one row (no forced break before the failure chips) */
 .eg-dotlegend .eg-legbr{display:none!important}
 /* "added" series (queued, not yet pushed): fine dotted line, the legend swatch dotted too */
-.eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:0 4;stroke-linecap:round}
+.eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:0 5;stroke-linecap:round;stroke-width:3px}
 /* dots in the solid color of their direction (same as pushed) */
 .eg-chart polyline[data-s="upa"],.eg-chart polyline[data-s="added"]{stroke:#00695c}
 .eg-chart polyline[data-s="downa"]{stroke:#4b8de8}
@@ -10927,7 +10927,10 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 <script id="pd-fx25-js">
 /* 26.11 charts: a series sweeps in from the left edge to the right when it appears (data loaded, legend chip on); turned off, it disappears at once */
 (function(){var D=700,E="cubic-bezier(.4,0,.2,1)";
-  function sweepIn(el){try{if(el.tagName.toLowerCase()==="rect"){el.animate([{opacity:0},{opacity:1}],{duration:D,easing:E});return}
+  function sweepIn(el){try{if(el.tagName.toLowerCase()==="rect"){ /* bars grow up from the baseline, one after another from the left edge */
+      var sv=el.ownerSVGElement,vb=sv&&sv.viewBox&&sv.viewBox.baseVal,W=vb&&vb.width||1100,x=+el.getAttribute("x")||0;
+      el.style.transformBox="fill-box";el.style.transformOrigin="50% 100%";
+      el.animate([{transform:"scaleY(0)"},{transform:"scaleY(1)"}],{duration:D*.45,delay:Math.max(0,x/W)*D*.75,easing:E,fill:"backwards"});return}
     el.animate([{clipPath:"inset(-20px 100% -20px 0)"},{clipPath:"inset(-20px 0 -20px 0)"}],{duration:D,easing:E})}catch(e){}}
   function sweepOut(el){try{el.style.setProperty("display","inline","important");
     var a=el.tagName.toLowerCase()==="rect"?el.animate([{opacity:1},{opacity:0}],{duration:D*.6,easing:E}):el.animate([{clipPath:"inset(-20px 0 -20px 0)"},{clipPath:"inset(-20px 0 -20px 100%)"}],{duration:D,easing:E});
