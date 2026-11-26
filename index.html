@@ -10622,6 +10622,28 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
   var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(function(){try{egNoteDecor()}catch(e){}},60)}).observe(document.querySelector(".tb-workarea")||document.body,{childList:true,subtree:true});
   try{egNoteDecor()}catch(e){}
 })();
+/* 26.11 tabs behave as Angular Material tabs do in the platform:
+   - every tab gets the state layer and ripple host Material renders (span.mdc-tab__ripple + div.mat-ripple.mat-mdc-tab-ripple): hover / focus from the Material CSS
+   - pressed: a ripple as MatRipple draws it (enter 450ms, exit 400ms, radius to the farthest corner)
+   - switching: the ink bar slides from the previous tab (MatInkBar: translateX + scaleX from the old position, then transition to none) */
+(function(){
+  function decor(){[].forEach.call(document.querySelectorAll(".mdc-tab"),function(t){if(t.querySelector(":scope>.mdc-tab__ripple"))return;
+    var r=document.createElement("span");r.className="mdc-tab__ripple";var m=document.createElement("div");m.className="mat-ripple mat-mdc-tab-ripple";t.insertBefore(m,t.firstChild);t.insertBefore(r,t.firstChild)})}
+  var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(decor,30)}).observe(document.body,{childList:true,subtree:true});decor();
+  /* pressed ripple */
+  document.addEventListener("pointerdown",function(ev){var t=ev.target.closest&&ev.target.closest(".mdc-tab");if(!t||ev.button!==0)return;var host=t.querySelector(":scope>.mat-mdc-tab-ripple");if(!host)return;
+    var rc=t.getBoundingClientRect(),x=ev.clientX,y=ev.clientY,dx=Math.max(Math.abs(x-rc.left),Math.abs(x-rc.right)),dy=Math.max(Math.abs(y-rc.top),Math.abs(y-rc.bottom)),R=Math.sqrt(dx*dx+dy*dy);
+    var e=document.createElement("div");e.className="mat-ripple-element";e.style.left=(x-rc.left-R)+"px";e.style.top=(y-rc.top-R)+"px";e.style.width=e.style.height=(2*R)+"px";e.style.transitionDuration="450ms";host.appendChild(e);
+    e.getBoundingClientRect();e.style.transform="scale3d(1, 1, 1)";
+    var up=function(){document.removeEventListener("pointerup",up,true);document.removeEventListener("pointercancel",up,true);e.style.transitionDuration="400ms";e.style.opacity="0";setTimeout(function(){e.remove()},450)};
+    document.addEventListener("pointerup",up,true);document.addEventListener("pointercancel",up,true)},true);
+  /* ink bar */
+  window.addEventListener("click",function(ev){var t=ev.target.closest&&ev.target.closest(".mdc-tab");if(!t)return;var bar=t.parentElement;
+    var old=bar.querySelector(":scope>.mdc-tab--active .mdc-tab-indicator__content");if(!old||t.classList.contains("mdc-tab--active"))return;var prev=old.getBoundingClientRect();
+    setTimeout(function(){if(!bar.isConnected)return;var ind=bar.querySelector(":scope>.mdc-tab--active .mdc-tab-indicator");if(!ind)return;var c=ind.querySelector(".mdc-tab-indicator__content");if(!c||c===old)return;
+      var cur=c.getBoundingClientRect();if(!cur.width)return;ind.classList.add("mdc-tab-indicator--no-transition");c.style.transform="translateX("+(prev.left-cur.left)+"px) scaleX("+(prev.width/cur.width)+")";
+      c.getBoundingClientRect();ind.classList.remove("mdc-tab-indicator--no-transition");c.style.transform=""},0)},true);
+})();
 /* 26.11 Edit for the General card (Name, Edge type, Label, Description are the editable fields of an edge).
    Popup: those fields in a dialog. Inline: only those rows turn into inputs, the rest of the card stays read-only.
    Saved values are kept for this visit and re-applied after every render. */
