@@ -8512,7 +8512,7 @@ function egSeries(cfg){
 function chart(cfg){if(cfg.tufte)return tufteChart(cfg);
   var W=cfg.W||1100,H=cfg.H||(cfg.keepFail?286:(W<800?330:236)),L=40,R=6,T=10,MB=cfg.keepFail?90:cfg.noX?6:30,N=cfg.tl?NBk(cfg):NB(cfg.tw),x=function(i){return cfg.tl?L+(N>1?i/(N-1):.5)*(W-L-R):L+(i+.5)/N*(W-L-R)},y=function(v){return T+(1-v)*(H-T-MB)};
   var FT=H-MB+48,FH=30,fy=function(v){return FT+FH-v*FH};
-  var ax='font-family="Roboto" font-size="12" fill="rgba(0,0,0,.6)"',GC="#e0e0e0",C1="#4b8de8",C2="#f19c38",C3="#8e5bd1";
+  var ax='font-family="Roboto" font-size="12" fill="rgba(0,0,0,.6)"',GC="#e0e0e0",C1="#2160c4",C2="#f19c38",C3="#8e5bd1";
   var mx=cfg.max||0,lm=cfg.lagmax||0,per=mx?mx/N*1.25:0;
   var nice=function(v){if(!v)return 0;var e=Math.pow(10,Math.floor(Math.log10(v))),f=v/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e};
   /* one Y axis for all series (all are message counts) — no second scale on the right */
@@ -8661,7 +8661,7 @@ function failChart(cfg){
 /* Combined charts (details variant H): uplink and downlink as series of one chart on a common time axis.
    kind "traffic": pushed, normalised to messages per minute (uplink reports every 1 min, downlink every 10 min);
    kind "lag": queue size of each direction, own chart and own scale; kind "fail": failed attempts / dropped messages per interval, both directions stacked */
-var XC={up:"#00695c",down:"#4b8de8",upa:"#99c3be",downa:"#b7d1f6", /* added = the same hue as pushed, 40% tint, solid line */lup:"#f57c00",ldown:"#8e5bd1",ft:["#ffc107","#ffc107"],fp:["#e53935","#e53935"]};
+var XC={up:"#00695c",down:"#2160c4",upa:"#99c3be",downa:"#b7d1f6", /* added = the same hue as pushed, 40% tint, solid line */lup:"#f57c00",ldown:"#8e5bd1",ft:["#ffc107","#ffc107"],fp:["#e53935","#e53935"]};
 /* a series that carries no information is not drawn: lag that stays 0 for the whole window, added that never differs from pushed */
 function xcHas(se){if(!se)return {lag:false,add:false};var mA=Math.max.apply(null,se.A),thr=mA*.004;return {lag:Math.max.apply(null,se.Lg)>0,add:se.A.some(function(v,i){return v-se.P[i]>thr})}}
 function comboChart(x){
@@ -8732,7 +8732,7 @@ function stateChart(cfg){
 }
 function legend(items){
   /* widget-style legend: series list at the bottom-left, one value column with an accent header */
-  var sw=["#4b8de8","#f19c38","#8e5bd1","#ffc107","#e57373"],dash=[0,0,1,0,0];
+  var sw=["#2160c4","#f19c38","#8e5bd1","#ffc107","#e57373"],dash=[0,0,1,0,0];
   return '<div class="eg-legend tbl"><div class="hd"><span></span><b>total</b></div>'+items.map(function(it,i){return '<div class="rw"><span><i style="'+(dash[i]?'border-top:2px dashed '+sw[i]+';background:none;height:0':'background:'+sw[i])+'"></i>'+it[0]+(it[0]==="Lag"?' <em>(now)</em>':'')+'</span><b>'+it[1]+'</b></div>'}).join("")+'</div>';
 }
 
@@ -9052,7 +9052,7 @@ function statusParts(id){
   var twCfg0=twCfg,AXW=Math.max(axW(twCfg0(D.up)),axW(twCfg0(D.down)));
   twCfg=function(c){var o=twCfg0(c);o.AX=AXW;return o};
   /* legend on top, names only (as in the platform's chart widgets) */
-  var dotLeg=function(){return '<div class="eg-dotlegend lines">'+[["Added","#4b8de8"],["Pushed","#f19c38"],["Lag","#8e5bd1",1]].map(function(x){return '<span><i style="'+(x[2]?'background:none;border-top:2px dashed '+x[1]:'background:'+x[1])+'"></i>'+x[0]+'</span>'}).join("")+'</div>'};
+  var dotLeg=function(){return '<div class="eg-dotlegend lines">'+[["Added","#2160c4"],["Pushed","#f19c38"],["Lag","#8e5bd1",1]].map(function(x){return '<span><i style="'+(x[2]?'background:none;border-top:2px dashed '+x[1]:'background:'+x[1])+'"></i>'+x[0]+'</span>'}).join("")+'</div>'};
   /* failures chart only when the direction had failures in the window */
   var hasF=function(dir){var L=dir==="up"?D.up.legend:D.down.legend;return (fv(L,"Temporarily failed")+fv(L,"Permanently failed"))>0};
   var noF=function(L){return L.filter(function(it){return !/failed/i.test(it[0])})};
@@ -9081,7 +9081,7 @@ function statusParts(id){
   /* status variant D: dashboard-style widgets stacked at full width */
   var PLAT=S.v.status==="E",VC=S.v.status==="F"||S.v.status==="G"||S.v.status==="H"||S.v.status==="I"||S.v.status==="J"||(S.v.status==="K"||(S.v.status==="L"||(S.v.status==="M"||S.v.status==="N"))),GRID=S.v.status==="H"||S.v.status==="I"||S.v.status==="J"||(S.v.status==="K"||(S.v.status==="L"||(S.v.status==="M"||S.v.status==="N"))),TF=S.v.status==="J",TL=(S.v.status==="K"||(S.v.status==="L"||(S.v.status==="M"||S.v.status==="N"))),STK=S.v.status==="D"||PLAT||VC;
   /* one frame per direction holding both charts: traffic and (when there were failures) failures */
-  var legVals=function(L){if(!e.st)L=L.map(function(it){return [it[0],'—']});var sw={"Added":["#4b8de8",0],"Pushed":["#f19c38",0],"Lag":["#8e5bd1",1]};
+  var legVals=function(L){if(!e.st)L=L.map(function(it){return [it[0],'—']});var sw={"Added":["#2160c4",0],"Pushed":["#f19c38",0],"Lag":["#8e5bd1",1]};
     return '<div class="eg-dotlegend lines rowleg">'+L.map(function(it){var c=sw[it[0]]||["#999",0];return '<span><i style="'+(c[1]?'background:none;border-top:2px dashed '+c[0]:'background:'+c[0])+'"></i>'+it[0]+(it[0]==="Lag"?' (now)':'')+' <b>'+it[1]+'</b></span>'}).join("")+'</div>'};
   var kCfg=function(dir){var Dd=dir==="up"?D.up:D.down,c=twCfg(Dd);c.st=e.st?1:0;c.fT=dir==="up"?fcfg.ut:fcfg.dt;c.fP=dir==="up"?fcfg.uf:fcfg.df;if(dir==="down")c.spike=false;return c};
   KC[e.id]={up:kCfg("up"),down:kCfg("down")};
@@ -9139,7 +9139,7 @@ function statusParts(id){
   if(STK){
     var wdg=function(icon,title,body,dir){return panel(icon,title,ibtn("fullscreen","Open chart","eg-fsbtn").replace("<button ",'<button data-dir="'+dir+'" '),body)};
     var fc1={};for(var k1 in fcfg)fc1[k1]=fcfg[k1];fc1.W=1100;fc1.H=220;
-    var rowLeg=function(L){var sw={"Added":["#4b8de8",0],"Pushed":["#f19c38",0],"Lag":["#8e5bd1",1]};
+    var rowLeg=function(L){var sw={"Added":["#2160c4",0],"Pushed":["#f19c38",0],"Lag":["#8e5bd1",1]};
       return '<div class="eg-dotlegend lines rowleg">'+L.map(function(it){var c=sw[it[0]]||["#999",0];return '<span><i style="'+(c[1]?'background:none;border-top:2px dashed '+c[0]:'background:'+c[0])+'"></i>'+it[0]+(it[0]==="Lag"?' (now)':'')+' <b>'+it[1]+'</b></span>'}).join("")+'</div>'};
     var fW=function(dir){var c={};for(var k in fcfg)c[k]=fcfg[k];c.W=1100;c.H=200;c.dir=dir;if(dir==="down")c.spike=false;return failChart(c)};
     var G=function(t){return PLAT?"":grp(t)},T=function(a,b){return PLAT?b:a};
@@ -9775,9 +9775,9 @@ function drawHv(w,frac,cy,withTip){
     html='<div class="tt">'+d.t[bi]+'</div>'+d.s.map(function(sr){return '<div><i style="background:'+sr[1]+';height:10px;width:10px;border-radius:50%"></i>'+sr[0]+':<b>'+fmt(sr[2][bi])+'</b></div>'}).join("")}
   else{var n=d.t.length,i=idx(n),sl=slot(n,i);px=sl[0];
     g.innerHTML='<rect x="'+sl[1]+'" y="'+d.yt+'" width="'+sl[2]+'" height="'+(d.yb-d.yt)+'" fill="'+(d.edge?'none':'rgba(0,0,0,.05)')+'"/><line x1="'+px+'" x2="'+px+'" y1="'+d.yt+'" y2="'+d.yb+'" stroke="#c62828" stroke-width="1.5"/>'+
-      [["ya",(d.c||[])[0]||"#4b8de8"],["yp",(d.c||[])[1]||"#f19c38"]].concat(d.noLag?[]:[["yl",(d.c||[])[2]||"#8e5bd1"]]).map(function(c){return '<circle cx="'+px+'" cy="'+d[c[0]][i]+'" r="7" fill="'+c[1]+'" fill-opacity=".7"/>'}).join("");
+      [["ya",(d.c||[])[0]||"#2160c4"],["yp",(d.c||[])[1]||"#f19c38"]].concat(d.noLag?[]:[["yl",(d.c||[])[2]||"#8e5bd1"]]).map(function(c){return '<circle cx="'+px+'" cy="'+d[c[0]][i]+'" r="7" fill="'+c[1]+'" fill-opacity=".7"/>'}).join("");
     var row=function(c,l,v){return '<div><i style="background:'+c+'"></i>'+l+':<b>'+fmt(v)+'</b></div>'};
-    var cc=d.c||["#4b8de8","#f19c38","#8e5bd1"];html='<div class="tt">'+d.t[i]+'</div>'+row(cc[0],"Added",d.a[i])+row(cc[1],"Pushed",d.p[i])+(d.noLag?"":row(cc[2],"Lag",d.l[i]))}
+    var cc=d.c||["#2160c4","#f19c38","#8e5bd1"];html='<div class="tt">'+d.t[i]+'</div>'+row(cc[0],"Added",d.a[i])+row(cc[1],"Pushed",d.p[i])+(d.noLag?"":row(cc[2],"Lag",d.l[i]))}
   svg.appendChild(g);if(!withTip)return;
   var tip=document.createElement("div");tip.className="eg-hv eg-tip";tip.innerHTML=html;w.appendChild(tip);
   var left=px/d.W*r.width+12;if(left+tip.offsetWidth>wr.width)left=px/d.W*r.width-12-tip.offsetWidth;
@@ -10840,10 +10840,10 @@ mat-row.eg-lgqhide{display:none!important}
 .eg-chart polyline:is([data-s="upa"],[data-s="downa"],[data-s="added"]){stroke-dasharray:0 4;stroke-linecap:round;stroke-width:2px} /* same width as the pushed line: hidden where the two overlap */
 /* dots in the solid color of their direction (same as pushed) */
 .eg-chart polyline[data-s="upa"],.eg-chart polyline[data-s="added"]{stroke:#00695c}
-.eg-chart polyline[data-s="downa"]{stroke:#4b8de8}
+.eg-chart polyline[data-s="downa"]{stroke:#2160c4}
 .eg-lgt:is([data-xs="upa"],[data-xs="downa"],[data-s="added"])>i{background-image:repeating-linear-gradient(90deg,transparent 0 2px,#fff 2px 4px)!important}
 .eg-lgt:is([data-xs="upa"],[data-s="added"])>i{background-color:#00695c!important}
-.eg-lgt[data-xs="downa"]>i{background-color:#4b8de8!important}
+.eg-lgt[data-xs="downa"]>i{background-color:#2160c4!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
