@@ -10790,12 +10790,12 @@ mat-sidenav.tb-site-sidenav:not(.tb-collapsed) .eg-goto-collapsed,mat-sidenav.tb
 <style id="pd-fx19">
 /* 26.11 edge page: all edge actions sit in one row above General (light outlined buttons); the header keeps only the tabs */
 .eg-genacts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;justify-content:flex-start!important;align-self:stretch}
-.eg-genacts .eg-ga{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;box-sizing:border-box;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;color:rgba(0,0,0,.87);font:500 14px/20px Roboto,sans-serif;letter-spacing:.1px;cursor:pointer;white-space:nowrap}
-.eg-genacts .eg-ga:hover{background:rgba(0,0,0,.04)}
-.eg-genacts .eg-ga:active{background:rgba(0,0,0,.08)}
-.eg-genacts .eg-ga .mat-icon{font-size:18px;width:18px;height:18px;line-height:18px;color:rgba(0,0,0,.6)}
+.eg-genacts .eg-ga{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;box-sizing:border-box;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;color:rgb(0,105,92);font:500 14px/20px Roboto,sans-serif;letter-spacing:.1px;cursor:pointer;white-space:nowrap}
+.eg-genacts .eg-ga:hover{background:rgba(0,105,92,.04)}
+.eg-genacts .eg-ga:active{background:rgba(0,105,92,.1)}
+.eg-genacts .eg-ga .mat-icon{font-size:18px;width:18px;height:18px;line-height:18px;color:rgba(0,0,0,.87)}
 .eg-genacts .eg-ga .mat-icon.dd{margin:0 -6px 0 -2px}
-.eg-genacts .eg-ga.icon{width:32px;padding:0;justify-content:center}
+.eg-genacts .eg-ga.icon{width:36px;padding:0;justify-content:center}
 .eg-genacts .eg-ga.eg-copydd.eg-copydd{display:inline-flex!important}
 .eg-pagecol:has(.eg-genacts) :is(.eg-tabsend,header) :is(.eg-hdracts,.eg-hdrmore){display:none!important}
 .eg-sidelay>.eg-sidewrap{display:flex;flex-direction:column;align-self:flex-start;flex:0 0 32%;width:32%;max-width:480px;min-width:360px}
@@ -10808,13 +10808,14 @@ a.mdc-tab.eg-tabnoclick,a.mdc-tab.eg-tabnoclick *{cursor:default!important}
 a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ripple{display:none!important}
 </style>
 <style id="pd-fx18">
-/* 26.11 time range: the switch moves at once; while the new window loads, values and charts show loaders */
-.eg-twload .eg-vv,.eg-twload .eg-vv .u,.eg-twload .eg-vside,.eg-twload .eg-vside *{color:transparent!important}
-.eg-twload .eg-vv,.eg-twload .eg-vside{position:relative}
-.eg-twload .eg-vv::before,.eg-twload .eg-vside::before{content:"";position:absolute;left:0;top:50%;height:20px;margin-top:-10px;width:112px;border-radius:4px;background:rgba(0,0,0,.08);animation:egSkel 1.2s ease-in-out infinite}
-.eg-twload .eg-vv::before{height:28px;margin-top:-14px;width:128px}
-.eg-twload .eg-vside::before{left:auto;right:0;width:72px;height:16px;margin-top:-8px}
-@keyframes egSkel{0%,100%{opacity:1}50%{opacity:.45}}
+/* 26.11 time range: the switch moves at once; every widget (value card, chart) shows the platform loader in the accent color until its own data arrives — independently, in random order */
+.eg-vcard.eg-wl .eg-vrow{visibility:hidden;position:relative}
+.eg-vcard.eg-wl .eg-vrow::after,.eg-chartwrap.eg-wl::after{content:"";visibility:visible;position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;box-sizing:border-box;border-radius:50%;border:4px solid transparent;border-top-color:var(--tb-accent-500,#ff5722);border-right-color:var(--tb-accent-500,#ff5722);animation:egspin .9s linear infinite}
+.eg-chartwrap.eg-wl{position:relative}
+.eg-chartwrap.eg-wl::after{top:42%}
+.eg-chartwrap.eg-wl svg,.eg-chartwrap.eg-wl .eg-spin{visibility:hidden!important}
+/* charts on first open: their own loader, in the accent color */
+.eg-chartwrap.eg-chartwrap.loading .eg-spin{border-top-color:var(--tb-accent-500,#ff5722)!important;border-right-color:var(--tb-accent-500,#ff5722)!important}
 </style>
 <style id="pd-fx17">
 /* 26.11 empty state in a panel (No logs for this edge yet): a bit more room under the buttons */
@@ -10910,15 +10911,20 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 })();
 </script>
 <script id="pd-fx18-js">
-/* 26.11 time range: switch at once, show loaders, then render the new window (the real data request) */
-(function(){var T=0,pass=0;
+/* 26.11 time range: switch at once; each widget keeps its loader until its own data is "loaded" — they finish independently, in random order */
+(function(){var T=0,Q=[],pass=0;
+  function W(h){return [].slice.call(h.querySelectorAll(".eg-vcard,.eg-chartwrap")).filter(function(w){return w.offsetParent})}
+  function stop(){clearTimeout(T);Q.forEach(clearTimeout);Q=[]}
   window.addEventListener("click",function(ev){var t=ev.target.closest&&ev.target.closest(".tb-toggle[data-tw]");if(!t||pass)return;
     ev.stopPropagation();ev.preventDefault();if(t.classList.contains("checked"))return;
     [].forEach.call(t.parentNode.querySelectorAll(".tb-toggle"),function(x){x.classList.toggle("checked",x===t)});
-    var host=t.closest(".eg-pagecol,#egDrawer")||document.body;host.classList.add("eg-twload");
-    [].forEach.call(host.querySelectorAll(".eg-chartwrap"),function(w){w.classList.add("loading")}); /* the charts' own loader, kept on until the new window is drawn */
-    clearTimeout(T);T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}
-      [].forEach.call(document.querySelectorAll(".eg-twload"),function(h){h.classList.remove("eg-twload")})},400)},true);
+    var host=t.closest(".eg-pagecol,#egDrawer")||document.body;stop();W(host).forEach(function(w){w.classList.add("eg-wl")});
+    T=setTimeout(function(){pass=1;try{t.click()}finally{pass=0}
+      var hq=function(){return document.querySelector(".eg-screen.on .eg-pagecol")||document.querySelector("#egDrawer.open")||document.body};
+      var mark=function(){W(hq()).forEach(function(w,k){if(!w.__egDone)w.classList.add("eg-wl")})};
+      mark();Q.push(setTimeout(mark,30)); /* charts are redrawn to fit right after the render: mark the new nodes too */
+      W(hq()).forEach(function(w0,k){var dl=150+Math.round(Math.random()*1600); /* each widget finishes on its own, in random order */
+        Q.push(setTimeout(function(){var w=W(hq())[k];if(w){w.__egDone=1;w.classList.remove("eg-wl","loading")}},dl))})},250)},true);
 })();
 </script>
 </body></html>
