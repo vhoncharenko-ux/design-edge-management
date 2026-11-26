@@ -10986,14 +10986,17 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
       var sv=el.ownerSVGElement,vb=sv&&sv.viewBox&&sv.viewBox.baseVal,W=vb&&vb.width||1100,x=+el.getAttribute("x")||0;
       el.style.transformBox="fill-box";el.style.transformOrigin="50% 100%";
       el.animate([{transform:"scaleY(0)"},{transform:"scaleY(1)"}],{duration:D*.45,delay:Math.max(0,x/W)*D*.75,easing:E,fill:"backwards"});return}
-    el.animate([{clipPath:"inset(-20px 100% -20px 0)"},{clipPath:"inset(-20px 0 -20px 0)"}],{duration:D,easing:E})}catch(e){}}
+    el.animate([{clipPath:"inset(-20px 100% -20px 0)"},{clipPath:"inset(-20px 0 -20px 0)"}],{duration:D,easing:E,fill:"backwards"})}catch(e){}}
   function sweepOut(el){try{el.style.setProperty("display","inline","important");
     var a=el.tagName.toLowerCase()==="rect"?el.animate([{opacity:1},{opacity:0}],{duration:D*.6,easing:E}):el.animate([{clipPath:"inset(-20px 0 -20px 0)"},{clipPath:"inset(-20px 0 -20px 100%)"}],{duration:D,easing:E});
     a.onfinish=a.oncancel=function(){el.style.removeProperty("display")}}catch(e){el.style.removeProperty("display")}}
   window.egChartIn=function(w){[].forEach.call(w.querySelectorAll("svg [data-s]"),sweepIn)};
   document.addEventListener("click",function(ev){var it=ev.target.closest&&ev.target.closest(".eg-lgt[data-xs],.eg-lgt[data-s]");if(!it)return;var pn=it.closest(".tb-form-panel");if(!pn)return;
     var xs=it.hasAttribute("data-xs"),k=it.getAttribute(xs?"data-xs":"data-s"),cls=(xs?"eg-xoff-":"eg-off-")+k,was=pn.classList.contains(cls);
-    setTimeout(function(){var now=pn.classList.contains(cls);if(now===was)return;if(!now)[].forEach.call(pn.querySelectorAll('svg [data-s="'+k+'"]'),sweepIn) /* turned off: gone at once, no animation */},0)},true);
+    ev.__egSw={pn:pn,cls:cls,k:k,was:was}},true);
+  /* after the legend handler (window, bubble phase = last listener of the same click): start the sweep in the same task, so the series never paints at full length first */
+  window.addEventListener("click",function(ev){var d=ev.__egSw;if(!d)return;var now=d.pn.classList.contains(d.cls);if(now===d.was)return;
+    if(!now)[].forEach.call(d.pn.querySelectorAll('svg [data-s="'+d.k+'"]'),sweepIn) /* turned off: gone at once, no animation */});
 })();
 </script>
 <script id="pd-fx23-js">
