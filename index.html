@@ -7030,7 +7030,7 @@ html.eg-r8 .eg-pagecard.eg-sidev .eg-subpage>.eg-asghead+.eg-subtable{border-rad
 
 .eg-frow-v .eg-fparen,.eg-vt .eg-fparen,#egTable mat-header-cell .eg-fparen{color:var(--tb-ink-2)}
 /* 26.11 hidden keys: dots, eye + copy side by side */
-.eg-secret:not(.on){letter-spacing:2px;color:rgba(0,0,0,.6)}
+.eg-secret:not(.on){letter-spacing:2px;color:rgba(0,0,0,.87)}
 .eg-frow-v .eg-reveal+.eg-fcopy{margin-left:0!important}
 /* 26.11 Managed by row in General: slash and "Not managed" as in the list */
 .eg-frow-v .eg-msl{color:var(--tb-ink-2);margin:0 2px}
@@ -7505,6 +7505,7 @@ html.eg-cvw .eg-screen.on .eg-vcard.eg-vcard,html.eg-cvw #egDrawer .eg-vcard.eg-
 <button class="pd-btn" data-pd="dash" id="pdDashBtn" title="How the edge dashboard shows the data" style="display:none"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg><span class="k">Dashboard</span><span class="v" id="pdDashLbl">By direction</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
 <div class="pd-seg" id="pdWarnSeg" title="Colour of lag and warnings everywhere: the platform caution token, orange, or the platform accent"><span class="k">Warning</span><span class="pd-segs"><button data-pd="warn" data-val="caution" title="Warning: Caution"><i class="pd-sw" style="background:#b26500"></i>Caution</button><button data-pd="warn" data-val="orange" title="Warning: Orange"><i class="pd-sw" style="background:#f57c00"></i>Orange</button><button data-pd="warn" data-val="accent" title="Warning: Accent"><i class="pd-sw" style="background:#ff5722"></i>Accent</button></span></div>
 <div class="pd-seg" id="pdOvfSeg" title="Separate + Full screen: the dashboard as a tab next to Details, or as its own page opened with a button" style="display:none"><span class="k">Dashboard as</span><span class="pd-segs"><button data-pd="ovf" data-val="tab">Tab</button><button data-pd="ovf" data-val="page">Page</button></span></div><div class="pd-seg" id="pdOvpSeg" title="Separate + Side panel: the Edge overview dashboard as a tab next to Details, or opened on the full page" style="display:none"><span class="k">Overview</span><span class="pd-segs"><button data-pd="ovp" data-val="tab">Tab</button><button data-pd="ovp" data-val="page" title="Edge overview button opens the full page">Page</button></span></div><div class="pd-seg" id="pdRadSeg" title="Corner radius of the sections on the edge page" style="display:none"><span class="k">Radius</span><span class="pd-segs"><button data-pd="rad" data-val="12">12</button><button data-pd="rad" data-val="8">8</button></span></div>
+<div class="pd-seg" id="pdHdrSeg" title="Edge page header: current (breadcrumbs in the top bar, title row, tabs) or compact (title in the top bar, actions next to the tabs)"><span class="k">Header</span><span class="pd-segs"><button data-hdr="old">Current</button><button data-hdr="new">Compact</button></span></div>
 <button class="pd-btn" data-pd="scn" id="pdScnBtn" title="Switch the data behind the list"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span class="k">Scenario</span><span class="v" id="pdScnLbl">Typical</span></button></div>
 
   <div class="pd-bar">
@@ -8049,6 +8050,7 @@ document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.targe
 /* 26.11 details cards: text in brackets is secondary — grey (tags and attributes are left alone) */
 function egParen(v){return String(v).split(/(<[^>]*>)/).map(function(p){return p.charAt(0)==="<"?p:p.replace(/\(([^()]*)\)/g,'<span class="eg-fparen">($1)</span>')}).join("")}
 function egMgd(e){return '<span class="eg-mgd">'+(e.m?'<a class="tb-entity-link" title="Agent page: '+e.m[0]+'">'+e.m[0]+'</a> <span class="eg-msl">/</span> <a class="tb-entity-link" title="Application page: '+e.m[1]+' on '+e.m[0]+'">'+e.m[1]+'</a>':'<span class="eg-mgdno">Not managed</span>')+'</span>'}
+window.egS=function(){return S};window.egSave=function(){save()};window.egShow=function(){show()};window.egClosePops=function(){closePops()}; /* 26.11: for the prototype-control scripts outside this scope */
 function egIsLag(e){return !!e.st&&((e.ul||0)+(e.dl||0))>0}
 function egLagCount(){var mg=S.mgmt||"any",et=S.etype||"any";return EDGES.filter(egIsLag).filter(function(e){return (mg==="any"||(mg==="agent"?!!e.m:!e.m))&&(et==="any"||e.t===et)}).length}
 function egLagSwSync(){var w=document.getElementById("egLagSw");if(!w)return;var on=!!S.onlyLag;w.classList.toggle("mat-mdc-slide-toggle-checked",on);var b=w.querySelector(".mdc-switch");b.classList.toggle("mdc-switch--selected",on);b.classList.toggle("mdc-switch--checked",on);b.classList.toggle("mdc-switch--unselected",!on);b.setAttribute("aria-checked",on?"true":"false");w.querySelector(".eg-lagn").textContent=egLagCount()}
@@ -8669,7 +8671,8 @@ function fill(root,parts){
    ROUTING
    ================================================================ */
 var main=$(".tb-main");
-function show(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
+function show(){try{return show0.apply(this,arguments)}finally{if(window.egHdr2)try{window.egHdr2()}catch(e){}}} /* 26.11: header variant runs after every render */
+function show0(){document.documentElement.classList.toggle("eg-r8",S.rad==="8"); /* variant: 8px corners on the page sections */document.documentElement.classList.toggle("eg-wR",S.warn==="orange");document.documentElement.classList.toggle("eg-wS",S.warn==="accent");if(window.egCloseSub)window.egCloseSub(1);setTimeout(fitCharts,0);setTimeout(function(){$$(".eg-chartwrap.loading").forEach(function(w){w.classList.remove("loading")})},900);useScenario(S.scn);
   var sc=S.screen;
   $("#pdStart").classList.toggle("open",sc==="start");
   $("#pd").classList.toggle("on-start",sc==="start");
@@ -9096,7 +9099,7 @@ function openPop(pop,anchor){
   closePops();pop.classList.add("open");
   var r=anchor.getBoundingClientRect(),pw=pop.offsetWidth,ph=pop.offsetHeight;
   var dwr=anchor.closest&&anchor.closest(".pd-left"); /* 26.11: from the side menu, popovers open to its right */
-  if(dwr&&document.getElementById("pd").classList.contains("pd-drw-on")){var d=dwr.getBoundingClientRect();pop.style.left=(d.right+8)+"px";pop.style.top=Math.max(8,Math.min(innerHeight-ph-8,r.top))+"px";return}
+  if(dwr&&document.getElementById("pd").classList.contains("pd-drw-on")){var d=dwr.getBoundingClientRect();pop.style.left=(d.right+8+pw<=innerWidth-8?d.right+8:Math.max(8,d.left-pw-8))+"px";pop.style.top=Math.max(8,Math.min(innerHeight-ph-8,r.top))+"px";return}
   pop.style.left=Math.max(8,Math.min(innerWidth-pw-8,r.right-pw))+"px";
   pop.style.top=Math.max(8,r.top-ph-8)+"px";
 }
@@ -9759,11 +9762,33 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
    document.body.appendChild(d)},true);
 })();
 </script>
+<style id="pd-hdr2">
+/* 26.11 header variant "Compact" on the edge page: title in the top bar, actions in the tabs row, no title row */
+.tb-root.eg-hdr2 .tb-main-toolbar{border-bottom:0!important;height:72px!important}
+.tb-root.eg-hdr2 .tb-main-toolbar>.mat-toolbar-tools{height:72px!important}
+#egHdr2 .tb-page-h2{font-size:24px!important;line-height:32px!important;font-weight:500!important;color:rgba(0,0,0,.87)!important;height:auto!important;margin:0!important}
+#egHdr2 .eg-bc a{color:rgba(0,0,0,.6)}
+#egHdr2 .eg-bc .cur{color:rgba(0,0,0,.87)}
+.tb-root.eg-hdr2 .tb-main-toolbar .eg-aibtn,.tb-root.eg-hdr2 .tb-main-toolbar>.mat-toolbar-tools>.tb-breadcrumb{display:none!important}
+#egHdr2{display:none;align-items:center;gap:12px;min-width:0;margin-left:-8px}
+.tb-root.eg-hdr2 #egHdr2{display:flex}
+#egHdr2 .eg-h2col{display:flex;flex-direction:column;min-width:0}
+#egHdr2 .tb-page-title,#egHdr2 .eg-bc{font:400 14px/20px Roboto,sans-serif!important;letter-spacing:.25px;margin:0;height:auto!important}
+#egHdr2 .eg-bc .sep .mat-icon{font-size:18px!important;width:18px!important;height:18px!important}
+#egHdr2 .eg-bc{gap:4px!important}
+#egHdr2 .tb-page-titles{height:auto!important}
+.tb-root.eg-hdr2 .eg-screen.on header.tb-page-head{display:none!important}
+.tb-root.eg-hdr2 .eg-screen.on .tb-page-tabs.eg-tabsacts{display:flex!important;align-items:center;margin-top:-16px!important}
+.eg-tabsacts>.eg-tabsend{margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:8px;flex:none}
+.eg-tabsend .eg-hdrx{margin:0!important}
+</style>
 <style id="pd-ab-drawer">
 /* 26.11 prototype switches live in a slide-out side menu; the A/B button next to the eye opens it */
-.pd .pd-left{position:fixed!important;top:16px!important;bottom:auto!important;max-height:calc(100vh - 100px);left:16px!important;width:320px;box-sizing:border-box;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:8px!important;padding:44px 12px 12px;background:var(--pd-bg);border:1px solid var(--pd-line);border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.4);overflow:auto;transform:translateX(calc(-100% - 24px));visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s}
-.pd.pd-drw-on .pd-left{transform:none;visibility:visible;transition:transform .2s ease}
-.pd .pd-left::before{content:"Variants & modes";position:absolute;top:15px;left:16px;font:600 10.5px/14px -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--pd-mid)}
+.pd .pd-left{position:fixed!important;top:16px!important;bottom:auto!important;max-height:calc(100vh - 100px);left:16px!important;width:320px;box-sizing:border-box;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:8px!important;padding:44px 12px 12px;background:var(--pd-bg);border:1px solid var(--pd-line);border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.4);overflow:auto;opacity:0;transform:translateY(8px);visibility:hidden;transition:opacity .15s ease,transform .15s ease,visibility 0s linear .15s}
+.pd.pd-drw-on .pd-left{opacity:1;transform:none;visibility:visible;transition:opacity .15s ease,transform .15s ease}
+.pd .pd-left>.pd-drag{position:absolute;top:0;left:0;right:0;height:40px;display:flex;align-items:center;gap:8px;padding:0 16px;cursor:grab;user-select:none;touch-action:none;font:600 10.5px/14px -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--pd-mid)}
+.pd .pd-left>.pd-drag .grip{font-size:14px;letter-spacing:0;opacity:.7}
+.pd .pd-left.dragging,.pd .pd-left.dragging>.pd-drag{cursor:grabbing;transition:none!important}
 .pd .pd-left>.pd-seg,.pd .pd-left>.pd-btn,.pd .pd-left>#pdVarSlot>.pd-btn{box-shadow:none!important;width:100%!important;box-sizing:border-box;justify-content:flex-start!important;padding-left:12px!important}
 .pd .pd-left>#pdVarSlot{display:block}
 .pd .pd-left .pd-seg .pd-segs{margin-left:auto}
@@ -9773,9 +9798,47 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 .pd.pd-drw-on .pd-abbtn{background:var(--pd-acc);border-color:var(--pd-acc)}
 </style>
 <script>
+/* 26.11 compact header variant: moves the title block into the top bar and the actions into the tabs row after every render */
+(function(){
+  var tools=document.querySelector(".tb-main-toolbar>.mat-toolbar-tools"),bcHome=document.querySelector(".tb-main-toolbar .tb-breadcrumb"),title=document.getElementById("egTitle");
+  if(!tools||!title)return;
+  var box=document.createElement("div");box.id="egHdr2";tools.insertBefore(box,tools.firstChild);
+  var helpSlot=document.createElement("span");helpSlot.id="egHelpSlot";helpSlot.style.display="contents";
+  var fs=[].filter.call(tools.querySelectorAll("button"),function(b){return /fullscreen/.test(b.textContent)})[0];
+  tools.insertBefore(helpSlot,fs||null);
+  function off(){document.querySelector(".tb-root").classList.remove("eg-hdr2");if(title.parentNode!==bcHome)bcHome.appendChild(title);box.innerHTML="";helpSlot.innerHTML=""}
+  window.egHdr2=function(){
+    var seg=document.getElementById("pdHdrSeg"),on=(egS().hdr||"new")==="new";
+    var head=document.querySelector(".eg-screen.on header.tb-page-head");
+    if(seg){seg.style.display=head?"":"none";[].forEach.call(seg.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-hdr")===(egS().hdr||"new"))})}
+    if(!on||!head){off();return}
+    var tabs=head.nextElementSibling&&head.nextElementSibling.matches(".tb-page-tabs")?head.nextElementSibling:null;
+    box.innerHTML="";helpSlot.innerHTML="";
+    var back=head.querySelector(".eg-back"),av=head.querySelector(".eg-avatar"),tt=head.querySelector(".tb-page-titles");
+    if(back)box.appendChild(back);if(av)box.appendChild(av);
+    var col=document.createElement("div");col.className="eg-h2col";col.appendChild(title);if(tt)col.appendChild(tt);box.appendChild(col);
+    var help=head.querySelector(".tb-help-btn");if(help)helpSlot.appendChild(help);
+    if(tabs){tabs.classList.add("eg-tabsacts");var end=tabs.querySelector(":scope>.eg-tabsend");if(!end){end=document.createElement("div");end.className="eg-tabsend";tabs.appendChild(end)}end.innerHTML="";
+      var acts=head.querySelector(".eg-hdrx"),more=head.querySelector(".eg-hdrmore");if(acts)end.appendChild(acts);if(more)end.appendChild(more)}
+    document.querySelector(".tb-root").classList.add("eg-hdr2");
+  };
+  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-hdr]");if(!b)return;ev.preventDefault();ev.stopPropagation();egS().hdr=b.getAttribute("data-hdr");egSave();egShow()},true);
+  try{egHdr2()}catch(e){}
+})();
+/* 26.11 the side menu can be dragged by its title bar; the position is kept */
+(function(){var pd=document.getElementById("pd"),dr=pd&&pd.querySelector(".pd-left");if(!dr)return;
+  var h=document.createElement("div");h.className="pd-drag";h.title="Drag to move";h.innerHTML='<span class="grip">\u2237</span>Variants &amp; modes';dr.insertBefore(h,dr.firstChild);
+  function place(x,y){var w=dr.offsetWidth,hh=dr.offsetHeight;x=Math.max(8,Math.min(innerWidth-w-8,x));y=Math.max(8,Math.min(innerHeight-Math.min(hh,120)-8,y));dr.style.setProperty("left",x+"px","important");dr.style.setProperty("top",y+"px","important");return [x,y]}
+  var S0=egS();if(S0.drw&&S0.drw.length===2)place(S0.drw[0],S0.drw[1]);
+  var st=null;
+  h.addEventListener("pointerdown",function(ev){var r=dr.getBoundingClientRect();st={dx:ev.clientX-r.left,dy:ev.clientY-r.top};h.setPointerCapture(ev.pointerId);dr.classList.add("dragging");egClosePops();ev.preventDefault()});
+  h.addEventListener("pointermove",function(ev){if(!st)return;place(ev.clientX-st.dx,ev.clientY-st.dy)});
+  h.addEventListener("pointerup",function(ev){if(!st)return;var r=dr.getBoundingClientRect();egS().drw=[Math.round(r.left),Math.round(r.top)];egSave();st=null;dr.classList.remove("dragging")});
+  addEventListener("resize",function(){var d=egS().drw;if(d)place(d[0],d[1])});
+})();
 /* 26.11 A/B button: opens / closes the side menu with the prototype switches; Esc closes it */
 (function(){var pd=document.getElementById("pd");if(!pd)return;
-  function set(on){pd.classList.toggle("pd-drw-on",on);var b=document.getElementById("pdAbBtn");if(b)b.setAttribute("aria-expanded",on?"true":"false");if(!on&&typeof closePops==="function")closePops()}
+  function set(on){pd.classList.toggle("pd-drw-on",on);var b=document.getElementById("pdAbBtn");if(b)b.setAttribute("aria-expanded",on?"true":"false");if(!on&&window.egClosePops)egClosePops()}
   document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("#pdAbBtn");if(!b)return;ev.preventDefault();ev.stopPropagation();set(!pd.classList.contains("pd-drw-on"))},true);
   document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&pd.classList.contains("pd-drw-on"))set(false)});
 })();
