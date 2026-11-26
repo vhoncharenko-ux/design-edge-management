@@ -10996,7 +10996,7 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
     if(!on)return;
     [].forEach.call(document.querySelectorAll(".eg-grid4"),function(g){
       var lc=g.querySelector(":scope>.eg-gridcell.eg-gridlogs"),pn=lc&&lc.querySelector(":scope>.tb-form-panel"),ih=pn&&pn.querySelector(":scope>.eg-inhdr");
-      if(!ih||pn.getAttribute("data-lgtab"))return;pn.setAttribute("data-lgtab","1");
+      if(!ih||pn.getAttribute("data-lgtab"))return;pn.setAttribute("data-lgtab","1");var ek=(egS().edge||"")+"|"+(egS().screen||"");if(ek!==window.__egLgEdge){window.__egLgEdge=ek;CUR="logs"} /* another edge opens on Application logs; the chosen tab is kept only while you stay on this edge */
       var ttl=ih.querySelector(".t"),lv=ih.querySelector(".live"),pa=ih.querySelector(".eg-panel-acts"),lt=pn.querySelector(".eg-subtable.eg-logtable"),meta=pn.querySelector(".eg-logmeta");
       var nc=g.querySelector(":scope>.eg-gridcell:not(.eg-gridlogs)"),nt=nc&&nc.querySelector(".eg-subtable"),nN=nt?nt.querySelectorAll("mat-row").length:0;
       var nav=document.createElement("nav");nav.className="eg-lgtabs mat-mdc-tab-nav-bar mat-mdc-tab-header mat-primary";nav.innerHTML=tab("logs","Application logs",CUR==="logs")+tab("notes",'Notifications'+(nN?'<span class="eg-lgtn">'+nN+'</span>':''),CUR==="notes");
@@ -11047,9 +11047,9 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
       if(!wrap){wrap=document.createElement("div");wrap.className="eg-sidewrap";sc.parentNode.insertBefore(wrap,sc);wrap.appendChild(sc)}
       var pc=sc.closest(".eg-pagecol"),old=wrap.querySelector(":scope>.eg-genacts");
       var up=pc.querySelector('.eg-hdracts button[title^="Upgrade"]');
-      var h='<button class="eg-ga" data-ga="sync" title="Sync edge">'+mi("sync")+'<span>Sync</span></button>'+
-        (up?'<button class="eg-ga pri" data-ga="up" title="'+up.title+'">'+mi("arrow_upward")+'<span>Upgrade</span></button>':'')+
-        '<button class="eg-ga pri" data-ga="install" title="Connect this edge to an agent or install it by hand (sets Managed by)">'+mi("link")+'<span>Connect agent</span></button>'+
+      var h=(up?'<button class="eg-ga pri" data-ga="up" title="'+up.title+'">'+mi("arrow_upward")+'<span>Upgrade</span></button>':'')+ /* 26.11: Upgrade first, the rest neutral */
+        '<button class="eg-ga" data-ga="sync" title="Sync edge">'+mi("sync")+'<span>Sync</span></button>'+
+        '<button class="eg-ga" data-ga="install" title="Connect this edge to an agent or install it by hand (sets Managed by)">'+mi("link")+'<span>Connect agent</span></button>'+
         '<button class="eg-ga icon" data-ga="more" title="More actions">'+mi("more_vert")+'</button>';
       /* Managed by: an edit button at the row end opens the same window */
       [].forEach.call(sc.querySelectorAll(".eg-frow"),function(r){var l=r.querySelector(".eg-frow-l"),v=r.querySelector(".eg-frow-v");if(!l||!v||l.textContent.trim()!=="Managed by"||v.querySelector(".eg-mgdedit"))return;
