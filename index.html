@@ -10934,6 +10934,9 @@ html .tb-right-border.tb-right-border{border-right-color:rgba(0,0,0,.18)!importa
 tb-user-menu .tb-avatar.tb-avatar{background:rgba(0,0,0,.08)!important;color:rgba(0,0,0,.7)!important}
 /* grey side text (period in card titles, notes in General values): a clear gap before it */
 .eg-vt .eg-fparen,.eg-frow-v .eg-fparen{margin-left:6px}
+.eg-vt .eg-fparen.eg-fparen{color:rgba(0,0,0,.38)!important} /* period as light as the zero values */
+.eg-frow-v .eg-fparen::before{content:"– "} /* General notes: "Idle – last full sync 2 d ago" */
+.eg-lglive .live.eg-lgpaused{color:var(--eg-ok)!important} /* Paused: green text, grey dot and background */
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
