@@ -11004,6 +11004,8 @@ mat-row.eg-rowchk.eg-rowchk,mat-row.eg-rowchk.eg-rowchk>mat-cell{background:rgba
 .eg-mschart svg{display:block;width:100%}
 .eg-mschart text{font-family:Roboto,sans-serif}
 .eg-msframe.eg-msframe{container-type:inline-size}
+/* Statistics variant: the numbers live in the per-direction summaries — no value cards above */
+:is(.eg-pagecol,#egDrawer):has(.eg-msframe) .eg-vcards{display:none!important}
 @container (max-width:760px){.eg-ms-sec{grid-template-columns:1fr;gap:16px}.eg-ms-left{max-width:360px}}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
@@ -11121,7 +11123,27 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
     var NT=d.span>=10080?7:W>700?6:3,end=14*60+32;for(var k=0;k<=NT;k++){var mins=end-d.span+d.span*k/NT,xx=L+k/NT*(W-L-R),lab;
       if(k===NT)lab="now";else if(d.span>=10080)lab=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][Math.floor((mins+10080*2)/1440)%7];else{var mm=((Math.round(mins)%1440)+1440)%1440;lab=("0"+Math.floor(mm/60)).slice(-2)+":"+("0"+mm%60).slice(-2)}
       s+='<text x="'+xx+'" y="'+XA+'" text-anchor="'+(k===0?'start':k===NT?'end':'middle')+'" '+ax+'>'+lab+'</text>'}
-    var old=w.querySelector("svg");if(old)old.remove();w.insertAdjacentHTML("afterbegin",'<svg class="eg-chart" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">'+s+'</svg>')}
+    var old=w.querySelector("svg");if(old)old.remove();w.insertAdjacentHTML("afterbegin",'<svg class="eg-chart" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">'+s+'</svg>');
+    w.__ms={d:d,L:L,R:R,W:W,n:n,x:x,y1:y1,y2:y2,yt:T1,yb:T3+H3}}
+  /* hover: a cursor line across the three strips and a tooltip with every value at that moment (as the other charts) */
+  var DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  function tlab(d,i,n){var m=14*60+32-d.span+d.span*(i+1)/n,dd=new Date(2026,10,24,0,0);dd.setMinutes(Math.round(m));var hm=("0"+dd.getHours()).slice(-2)+":"+("0"+dd.getMinutes()).slice(-2);return d.span>=10080?DN[dd.getDay()]+" "+hm:hm}
+  function clear(){[].forEach.call(document.querySelectorAll(".eg-mschart .eg-mshv"),function(n){n.remove()})}
+  document.addEventListener("mousemove",function(ev){var w=ev.target.closest&&ev.target.closest(".eg-mschart");if(!w||!w.__ms||w.classList.contains("eg-wl")||w.classList.contains("loading")){clear();return}
+    var m=w.__ms,d=m.d,svg=w.querySelector("svg");if(!svg)return;var r=svg.getBoundingClientRect(),vx=ev.clientX-r.left,vy=ev.clientY-r.top;
+    if(vx<m.L||vx>m.W-m.R||vy<m.yt-8||vy>m.yb+4){clear();return}
+    var i=Math.max(0,Math.min(m.n-1,Math.round((vx-m.L)/(m.W-m.L-m.R)*(m.n-1)))),px=m.x(i);clear();
+    var ns="http://www.w3.org/2000/svg",g=document.createElementNS(ns,"g");g.setAttribute("class","eg-mshv");
+    g.innerHTML='<line x1="'+px+'" x2="'+px+'" y1="'+(m.yt-4)+'" y2="'+m.yb+'" stroke="#c62828" stroke-width="1.5"/>'+
+      '<circle cx="'+px+'" cy="'+m.y1(d.A[i])+'" r="5" fill="'+d.c+'" fill-opacity=".55"/><circle cx="'+px+'" cy="'+m.y1(d.P[i])+'" r="5" fill="'+d.c+'"/>'+
+      '<circle cx="'+px+'" cy="'+m.y2(d.Lg[i])+'" r="5" fill="'+(Math.max.apply(null,d.Lg)>0?'#e65100':'rgba(0,0,0,.38)')+'"/>';
+    svg.appendChild(g);
+    var row=function(c,l,v,dash){return '<div><i style="background:'+c+(dash?';opacity:.6':'')+'"></i>'+l+'<b>'+v+'</b></div>'},f1=function(v){return (Math.round(v*10)/10).toLocaleString("en-US")+"/min"};
+    var tip=document.createElement("div");tip.className="eg-tip eg-mshv";
+    tip.innerHTML='<div class="tt">'+tlab(d,i,m.n)+'</div>'+row(d.c,"Added",f1(d.A[i]),1)+row(d.c,"Delivered",f1(d.P[i]))+row('#e65100',"Pending",Math.round(d.Lg[i]).toLocaleString("en-US"))+
+      row('#ffc107',"Retries",(d.T[i]||0).toLocaleString("en-US"))+row('#d12730',"Failed",(d.F[i]||0).toLocaleString("en-US"));
+    w.appendChild(tip);var left=px+12;if(left+tip.offsetWidth>w.clientWidth)left=px-12-tip.offsetWidth;tip.style.left=left+"px";tip.style.top=Math.max(0,Math.min(w.clientHeight-tip.offsetHeight,vy-tip.offsetHeight/2))+"px"});
+  document.addEventListener("mouseleave",clear,true);
   function all(){[].forEach.call(document.querySelectorAll(".eg-mschart[data-ms]"),function(w){if(w.offsetParent)draw(w)})}
   var t=0;new MutationObserver(function(){clearTimeout(t);t=setTimeout(all,0)}).observe(document.body,{childList:true,subtree:true});
   addEventListener("resize",function(){[].forEach.call(document.querySelectorAll(".eg-mschart"),function(w){w.removeAttribute("data-msw")});all()});all();
