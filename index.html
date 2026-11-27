@@ -9297,7 +9297,9 @@ function statusParts(id){
             '<div class="eg-ms-big'+(pend?'':' eg-vzero')+'">'+fmt(pend)+'</div><div class="eg-ms-u">pending now</div>'+
             (pend?'<div class="eg-ms-trend">Since '+clock(on)+', growing about '+fmt(rate)+' an hour</div>':'<div class="eg-ms-trend ok">Delivered keeps up with added</div>')+
             '<div class="eg-ms-tot"><div class="eg-ms-k">'+TWL2+'</div><div class="eg-ms-row"><span>Delivered</span><b>'+(function(){var cm=up?CM.u:CM.d;return cm&&cm.push!==null&&e.st?fullN(cm.push):fmt(del)})()+'</b></div><div class="eg-ms-row"><span>Retries</span><b class="'+(se.tT?'warn':'zero')+'">'+fmt(se.tT)+'</b></div><div class="eg-ms-row"><span>Failed</span><b class="'+(se.tP?'err':'zero')+'">'+fmt(se.tP)+'</b></div></div></div>'+
-            '<div class="eg-ms-right"><div class="eg-chartwrap eg-mschart loading" data-ms=\''+JSON.stringify(data)+'\'></div></div></div>'};
+            '<div class="eg-ms-right"><div class="eg-chartwrap eg-mschart loading" data-ms=\''+JSON.stringify(data)+'\'></div>'+
+            /* legend under the chart: what each mark means */
+            '<div class="eg-mslegend"><span><i class="ln dot" style="color:'+data.c+'"></i>Added</span><span><i class="ln" style="background:'+data.c+'"></i>Delivered</span><span><i class="sq" style="background:rgba(230,81,0,.18)"></i>Gap</span><span><i class="ln" style="background:#e65100"></i>Pending</span><span><i class="br"></i>Retries</span><span><i class="dt"></i>Failed</span></div></div></div>'};
         return '<div class="eg-metpair"><div class="eg-metpair-in"><div class="eg-dirsec eg-metsec"><div class="eg-lagrow eg-onecol"><div class="eg-chsec eg-mschsec"><div class="eg-dirsec-h eg-msh"><span class="t">Message statistics</span><span class="note">Last report at 14:32</span></div><div class="tb-form-panel eg-chframe eg-msframe">'+msSec("up")+'<div class="eg-ms-div"></div>'+msSec("down")+'</div></div></div></div></div></div>'}
       if(LV!=="sep"&&LV!=="stat"&&!flat){
         var trf=function(t,note,u,d,hasU,hasD){var sU3=hasU?sU:null,sD3=hasD?sD:null,t3=(sU3?sU3.tT:0)+(sD3?sD3.tT:0),p3=(sU3?sU3.tP:0)+(sD3?sD3.tP:0),aF=e.st&&(t3+p3)>0,AX3=0;
@@ -11007,6 +11009,14 @@ html.eg-cvw .eg-dirsec-h.eg-msh{padding:0 12px}
 .eg-ms-row b.warn{color:var(--tb-caution,#f57c00)}.eg-ms-row b.err{color:#d12730}.eg-ms-row b.zero{color:rgba(0,0,0,.38)}
 .eg-ms-right{min-width:0}
 .eg-mschart{position:relative;min-height:300px}
+.eg-mslegend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 0 56px;font:400 12px/16px Roboto,sans-serif;color:rgba(0,0,0,.6)}
+.eg-mslegend span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.eg-mslegend i{display:inline-block;flex:none}
+.eg-mslegend i.ln{width:16px;height:2px;border-radius:1px}
+.eg-mslegend i.ln.dot{height:0;border-top:2px dotted currentColor;opacity:.7}
+.eg-mslegend i.sq{width:12px;height:10px;border-radius:2px}
+.eg-mslegend i.br{width:4px;height:10px;background:#ffc107;border-radius:1px}
+.eg-mslegend i.dt{width:6px;height:6px;border-radius:50%;background:#d12730}
 .eg-mschart svg{display:block;width:100%}
 .eg-mschart text{font-family:Roboto,sans-serif}
 .eg-msframe.eg-msframe{container-type:inline-size}
