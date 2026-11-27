@@ -8680,7 +8680,7 @@ function comboChart(x){
   /* axis width = the longest label; x.AX keeps the charts of one card on the same axis */
   var axis=function(){L=Math.max(x.AX||0,8+Math.max.apply(null,steps.map(function(g){return glab(g).length}))*7);XC.lastL=L};
   var frame=function(){var y=function(v){return T+(1-v/top)*(H-T-MB)};
-    var grid=steps.map(function(g){var lv=top*g;return '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(lv)+'" y2="'+y(lv)+'" stroke="'+GC+'"/><text x="'+(L-6)+'" y="'+(y(lv)+4)+'" text-anchor="end" '+ax+'>'+glab(g)+'</text>'}).join("");
+    var grid=steps.map(function(g){var lv=top*g;return (x.kind==="fail"&&g===1?'':'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(lv)+'" y2="'+y(lv)+'" stroke="'+GC+'"/>') /* 26.11: failures strip — no top grid line, the label stays */+'<text x="'+(L-6)+'" y="'+(y(lv)+4)+'" text-anchor="end" '+ax+'>'+glab(g)+'</text>'}).join("");
     var NT=span>=10080?(W>800?7:3):(W>800?6:3),tk="";
     if(!x.noX)for(var k=0;k<=NT;k++){var mins=end-span+span*k/NT,xx=L+k/NT*(W-L-R),lab;
       if(span>=10080){lab=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][Math.floor((mins+10080*2)/1440)%7]}else{var m=((Math.round(mins)%1440)+1440)%1440;lab=("0"+Math.floor(m/60)).slice(-2)+":"+("0"+m%60).slice(-2)}
@@ -9298,7 +9298,7 @@ function statusParts(id){
             (pend?'<div class="eg-ms-trend">Since '+clock(on)+', growing about '+fmt(rate)+' an hour</div>':'<div class="eg-ms-trend ok">Delivered keeps up with added</div>')+
             '<div class="eg-ms-tot"><div class="eg-ms-k">'+TWL2+'</div><div class="eg-ms-row"><span>Delivered</span><b>'+(function(){var cm=up?CM.u:CM.d;return cm&&cm.push!==null&&e.st?fullN(cm.push):fmt(del)})()+'</b></div><div class="eg-ms-row"><span>Retries</span><b class="'+(se.tT?'warn':'zero')+'">'+fmt(se.tT)+'</b></div><div class="eg-ms-row"><span>Failed</span><b class="'+(se.tP?'err':'zero')+'">'+fmt(se.tP)+'</b></div></div></div>'+
             '<div class="eg-ms-right"><div class="eg-chartwrap eg-mschart loading" data-ms=\''+JSON.stringify(data)+'\'></div></div></div>'};
-        return '<div class="eg-metpair"><div class="eg-metpair-in"><div class="eg-dirsec eg-metsec"><div class="eg-lagrow eg-onecol"><div class="eg-chsec"><div class="eg-chsec-h"><span class="t">Message statistics</span><span class="note">Last report at 14:32</span></div><div class="tb-form-panel eg-chframe eg-msframe">'+msSec("up")+'<div class="eg-ms-div"></div>'+msSec("down")+'</div></div></div></div></div></div>'}
+        return '<div class="eg-metpair"><div class="eg-metpair-in"><div class="eg-dirsec eg-metsec"><div class="eg-lagrow eg-onecol"><div class="eg-chsec eg-mschsec"><div class="eg-dirsec-h eg-msh"><span class="t">Message statistics</span><span class="note">Last report at 14:32</span></div><div class="tb-form-panel eg-chframe eg-msframe">'+msSec("up")+'<div class="eg-ms-div"></div>'+msSec("down")+'</div></div></div></div></div></div>'}
       if(LV!=="sep"&&LV!=="stat"&&!flat){
         var trf=function(t,note,u,d,hasU,hasD){var sU3=hasU?sU:null,sD3=hasD?sD:null,t3=(sU3?sU3.tT:0)+(sD3?sD3.tT:0),p3=(sU3?sU3.tP:0)+(sD3?sD3.tP:0),aF=e.st&&(t3+p3)>0,AX3=0;
           if(aF){comboChart({kind:"traffic",fill:1,lag:1,up:u,down:d,W:1100,H:340,noX:1});AX3=XC.lastL;comboChart({kind:"fail",up:u,down:d,W:1100,H:72});AX3=Math.max(AX3,XC.lastL)}
@@ -10657,7 +10657,7 @@ document.addEventListener("click",function(ev){var t=ev.target,b=t.closest&&t.cl
 })();
 /* 26.11 dashboard: chart / activity descriptions become a tooltip on an info icon after the title */
 (function(){
-  window.egNoteDecor=function(){[].forEach.call(document.querySelectorAll(".eg-chframe>.eg-chsec-h>.note,.eg-acth>.note"),function(n){var h=n.parentElement;if(h.querySelector(":scope>.eg-noteic"))return;var t=h.querySelector(":scope>.t");if(!t)return;
+  window.egNoteDecor=function(){[].forEach.call(document.querySelectorAll(".eg-chframe>.eg-chsec-h>.note,.eg-acth>.note,.eg-msh>.note"),function(n){var h=n.parentElement;if(h.querySelector(":scope>.eg-noteic"))return;var t=h.querySelector(":scope>.t");if(!t)return;
     var i=document.createElement("span");i.className="eg-noteic";i.title=n.textContent.trim();i.innerHTML='<mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">info_outline</mat-icon>';t.after(i)})};
   var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(function(){try{egNoteDecor()}catch(e){}},60)}).observe(document.querySelector(".tb-workarea")||document.body,{childList:true,subtree:true});
   try{egNoteDecor()}catch(e){}
@@ -10986,7 +10986,13 @@ mat-row.eg-rowchk.eg-rowchk,mat-row.eg-rowchk.eg-rowchk>mat-cell{background:rgba
 /* Statistics variant (wireframe in the platform styles) */
 :is(#egDrawer,.eg-pagecard) .eg-chsec>.tb-form-panel.eg-chframe.eg-msframe.eg-msframe.eg-msframe.eg-msframe,.eg-msframe.eg-msframe{padding:16px!important;gap:0!important}
 .eg-ms-sec{display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px;align-items:start}
-.eg-ms-div{height:1px;background:rgba(0,0,0,.12);margin:20px 0}
+.eg-ms-div{height:1px;background:rgba(0,0,0,.12);margin:20px -16px} /* edge to edge of the frame */
+/* Statistics heading: outside the frame, as Activity */
+.eg-dirsec-h.eg-dirsec-h.eg-msh{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-start!important;text-align:left!important;padding:4px 16px 0!important;margin:0 0 12px!important}
+.eg-dirsec-h.eg-msh>.t{font:700 18px/24px Roboto,sans-serif!important;color:rgba(0,0,0,.87)}
+.eg-dirsec-h.eg-msh>.note{display:none!important}
+.eg-dirsec-h.eg-msh>.eg-noteic{margin-left:8px}
+html.eg-cvw .eg-dirsec-h.eg-msh{padding:0 12px}
 .eg-ms-t{font:500 16px/24px Roboto,sans-serif;color:rgba(0,0,0,.87)}
 .eg-ms-s{font:400 13px/18px Roboto,sans-serif;color:rgba(0,0,0,.54);margin-bottom:12px}
 .eg-ms-left .eg-vpill{height:28px;padding:0 12px 0 8px;border-radius:14px;font:500 13px/16px Roboto,sans-serif}
