@@ -10960,6 +10960,8 @@ tb-user-menu .tb-avatar.tb-avatar{background:rgba(0,0,0,.08)!important;color:rgb
 .eg-lglive .live.eg-lgpaused{color:var(--eg-ok)!important} /* Paused: green text, grey dot and background */
 /* lag series inside the traffic charts: legend toggles */
 .eg-xoff-lup svg [data-s="lup"],.eg-xoff-ldown svg [data-s="ldown"]{display:none}
+/* table rows selected with their checkbox */
+mat-row.eg-rowchk.eg-rowchk,mat-row.eg-rowchk.eg-rowchk>mat-cell{background:rgba(0,105,92,.06)!important}
 /* time range row: 36px high, the toggle centred */
 .eg-pagecol .eg-twrow.eg-twrow{height:36px!important;min-height:36px;align-items:center!important;box-sizing:border-box}
 /* Managed by: edit button at the row end, same size as the copy buttons */
@@ -11040,6 +11042,22 @@ a.mdc-tab.eg-tabnoclick .mdc-tab__ripple,a.mdc-tab.eg-tabnoclick .mat-mdc-tab-ri
 .eg-frow-ed .mat-mdc-text-field-wrapper,.eg-frow-ed .mat-mdc-form-field-flex{height:48px!important}
 .eg-frow-ed .mat-mdc-form-field-infix{min-height:48px!important;padding-top:14px!important;padding-bottom:14px!important}
 </style>
+<script id="pd-fx30-js">
+/* 26.11 table checkboxes as in the platform: header = select all (visible rows), rows update the header (all / some = indeterminate / none), selected rows tinted */
+(function(){
+  function set(c,on){var i=c.querySelector("input");if(i){i.checked=on;i.indeterminate=false}c.classList.toggle("checked",on);var r=c.closest("mat-row");if(r)r.classList.toggle("eg-rowchk",on)}
+  function box(r){return r.querySelector(".mat-column-select .mdc-checkbox")||r.querySelector(".mdc-checkbox")}
+  function parts(el){var cont=el.closest(".eg-tbl,.table-container,mat-table,.mat-mdc-table")||el.parentElement;
+    var rows=[].slice.call(cont.querySelectorAll("mat-row")).filter(function(r){return r.offsetParent&&box(r)}),h=cont.querySelector("mat-header-row");return {rows:rows,hc:h&&box(h)}}
+  function sync(p){if(!p.hc)return;var n=p.rows.filter(function(r){var i=box(r).querySelector("input");return i&&i.checked}).length,all=n>0&&n===p.rows.length,i=p.hc.querySelector("input");
+    if(i){i.checked=all;i.indeterminate=n>0&&!all}p.hc.classList.toggle("checked",all);p.hc.classList.toggle("eg-indet",n>0&&!all)}
+  /* window, bubble phase: after the native toggle and the generic handler, so the state read here is the final one */
+  window.addEventListener("click",function(ev){var cb=ev.target.closest&&ev.target.closest(".mdc-checkbox");if(!cb)return;var hdr=cb.closest("mat-header-row"),row=cb.closest("mat-row");if(!hdr&&!row)return;
+    var i=cb.querySelector("input"),on=i?i.checked:cb.classList.contains("checked"),p=parts(hdr||row);
+    if(hdr){if(i&&i.indeterminate===false&&!on&&cb.classList.contains("eg-indet"))on=false;p.rows.forEach(function(r){set(box(r),on)})}else set(cb,on);
+    sync(p)});
+})();
+</script>
 <script id="pd-fx29-js">
 /* 26.11 A/B "Lag": Separate / In traffic / By direction (S.lagv) */
 (function(){
